@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="/node_modules/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chivo+Mono&family=Open+Sans:wght@500&display=swap" rel="stylesheet">
+    <style>
+        *{
+            cursor: not-allowed;
+        }
+    </style>
+    <script>
+        let music = new Audio("./Audio/oopsie.mp3");
+        function playMusic(){
+            music.play();
+        }
+    </script>
+    <title>Document</title>
+</head>
+<body class=" bg-primary text-center text-white" style="height: 100vh;">
+    <div class=" container h-100">
+        <div class="row justify-content-center align-items-center h-100">
+            <div class="col-10">
+                <div class="w-10 h-100 d-flex align-items-center justify-content-center flex-column ">
+                    <div class=" w-50 fs-4 text-start">
+                        <h1 class=" display-1 fw-bold text-start" style="font-family: Open Sans;">: (</h1>
+                        <p class=" mt-3"> Oopsie Woopsie! Uwu We made a fucky wucky!! A wittle fucko boingo! The code monkeys at our headquarters are working VEWY HAWD to fix this! </p>
+                    </div>
+                    <div class=" mt-5 text-start fw-light mx-auto w-100 d-flex justify-content-center">
+                        <p class=" w-50 text-start"> If you'd like to know more, you can search online later for this error: 0OOPSIE_WOOPSIE </p>
+                    </div>
+                    <button id="play" class=" btn btn-outline-warning" onclick="playMusic();">Hear Sound!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+</html>

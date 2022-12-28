@@ -1,0 +1,17 @@
+.none-shadow:focus-visible{
+    border: none;
+    border-color: none;
+    background-color: rgb(80, 76, 76);
+    border: none;
+    box-shadow: none;
+    caret-color: white;
+
+}
+.none-shadow:focus{
+    background-color: rgb(80, 76, 76);
+    
+}
+.bg-color{
+    background-color: rgb(80, 76, 76);
+    
+}

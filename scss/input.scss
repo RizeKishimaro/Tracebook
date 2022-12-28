@@ -1,0 +1,16 @@
+@import "/home/rize/learn-scss/node_modules/bootstrap/scss/bootstrap.scss";
+$font-size-base: 3rem;
+$c-black:  rgb(80, 76, 76);
+$c-grey: rgb(66, 59, 59);
+$c-white: rgb(189, 183, 183);
+$pale-blue: rgb(107, 175, 240);
+//color variable
+$primary:       $pale-blue;
+$secondary:     $gray-600;
+$success:       $green;
+$info:          $cyan;
+$warning:       $yellow;
+$danger:        $red;
+$light:         $gray-100;
+$dark:          $gray-900;
+
