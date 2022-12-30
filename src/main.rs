@@ -19,15 +19,9 @@ impl Pages {
             .content_type("text/html; charset=utf-8")
             .body(include_str!("../profile.html")))
     }
-
-    async fn notfound() -> Result<HttpResponse, Error> {
-        Ok(HttpResponse::build(StatusCode::NOT_FOUND)
-            .content_type("text/html; charset=utf-8")
-            .body(include_str!("../404.html")))
-    }
 }
 
-async fn file(req: HttpRequest) -> HttpResponse {
+async fn get_file(req: HttpRequest) -> HttpResponse {
     let path: PathBuf = req.match_info().query("filename").parse().unwrap();
     match NamedFile::open(path) {
         Ok(nm) => nm.into_response(&req),
@@ -42,8 +36,7 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .route("/", web::get().to(Pages::home))
             .route("/profile", web::get().to(Pages::profile))
-            .route("/{filename:.*}", web::get().to(file))
-            .default_service(web::get().to(Pages::notfound))
+            .route("/{filename:.*}", web::get().to(get_file))
             .wrap(Logger::default())
     })
     .bind("127.0.0.1:8888")?
