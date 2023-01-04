@@ -123,8 +123,17 @@ body{
 .emoji-react-leap{
     margin-left: -5px;
 }
-@media screen and (max-width:800px) {
+.scroll-bar{
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+}
+@media screen and (max-width: 700px) {
     .small-device{
+        display: none !important;
+    }
+}
+@media screen and (max-width: 1000px) {
+    .md-device{
         display: none !important;
     }
 }

@@ -16,7 +16,7 @@ if(is_dir($json_Folder_Name)):
 <div class=" block-color rounded-3 d-flex flex-column mb-3 shadow">
               <div class=" d-flex align-items-center justify-content-between px-3" style="vertical-align: middle;">
                 <div class=" d-flex " style="vertical-align: middle;">
-                  <img src="/assests/s-luka.jpg" class=" rounded-circle online-room border border-primary border-3 mx-auto mt-1" alt="nukasa">
+                  <img src="/assests/s-luka.jpg" class=" rounded-circle online-room border border-primary border-3 mx-auto mt-1 ms-2" alt="nukasa">
                   <div class=" d-flex flex-column ps-2 custom-fs my-auto">
                     <span class=" text-white fw-bold">Hatsune Miku</span>
                     <span class=" text-white opacity-50 time-fs">4h &diams; <i class=" bi bi-globe"></i></span>
@@ -27,7 +27,7 @@ if(is_dir($json_Folder_Name)):
                     <i class="bi bi-three-dots"></i>
                   </div>
                   <div class=" normal-icon-fs me-3">
-                    <i class=" bi bi-x-lg"></i>
+                    <a href="./post-remove.php?id=<?= $read_File_Array['user_id']."&". "file_name=". $read_File_Array['user_files'] ?>" name="ghost"><i class=" bi bi-x-lg"></i></a>
                   </div>
                 </div>
               </div>
@@ -44,7 +44,7 @@ if(is_dir($json_Folder_Name)):
               <div class="px-3 py-2">
                 <div class=" d-flex">
                   <div class="d-flex">
-                    <div class=" d-flex flex-row-reverse me-auto">
+                    <div class=" d-flex flex-row-reverse ms-3 ms-lg-0 me-auto">
                       <div class=" ms-2">
                         <a href="" class=" text-decoration-none page-icon-fade react-counter line-o-hover">Miss Siska and 179 others</a>
                       </div>

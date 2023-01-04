@@ -17,15 +17,15 @@
 <body style="height: 100vh;">
   <div class=" container-fluid border-bottom fixed-top border-dark d-block" style=" background-color: rgb(41, 39, 39);">
     <div class=" row d-flex">
-      <div class="col-lg-3 col-2 d-flex align-items-center">
-        <div class="  small-device bg-white text-center d-flex align-items-center justify-content-center  small-device" style="border-radius: 50%; height: 39px; width: 40px;">
+      <div class="col-md-3 col-2 d-flex align-items-center md-device">
+        <div class="  small-device  bg-white text-center d-flex align-items-center justify-content-center  small-device" style="border-radius: 50%; height: 39px; width: 40px;">
           <i class="  small-device bi bi-facebook text-primary" style="font-size: 40px;"></i>
         </div>
         <div class=" ms-auto col-10 d-flex align-items-center  small-device">
           <input type="text" class="  small-device search-bar form-control p-2 rounded-pill" placeholder="   Search Facebook">
         </div>
       </div>
-      <div class="col-5 d-flex text-center fs-4 text-white align-items-center mx-auto justify-content-center">
+      <div class="col-12 col-lg-5 d-flex text-center fs-4 text-white align-items-center mx-auto justify-content-center">
         <div class=" d-flex justify-content-around w-75">
           <div class=" text-center m-1 border-bottom border-3 border-primary"><a href="#"><i class=" bi bi-house-fill"></i></a></div>
           <div class=" m-1"><a href="#"><i class=" bi bi-tv"></i></a></div>
@@ -34,7 +34,7 @@
         </div>
         
       </div>
-      <div class=" col-3 d-flex justify-content-end text-center align-items-center">
+      <div class=" col-3 d-flex justify-content-end text-center align-items-center small-device md-device">
         <div class=" icon-container"><a href="#"><i class="bi bi-list icons rounded-circle fs-5 text-white"></i></a></div>
         <div class=" fs-5 icon-container"><a href="#"><i class="bi bi-messenger icons rounded-circle text-white"></i></a></div>
         <div class=" fs-5 icon-container"><a href="#"><i class="bi bi-app-indicator icons rounded-circle text-light"></i></a></div>
@@ -48,8 +48,8 @@
     <div class="row"><div class="col-12"></div></div>
   </div>
   <div class=" container-fluid">
-    <div class=" row">
-      <div class="col-lg-3 ms-2  small-device " style="overflow-y: scroll; height: 87vh; position: sticky; top: 100px;">
+    <div class=" row flex-row" style="height: 87vh; overflow-y: hidden;">
+      <div class="col-md-3 col-12 ms-2  small-device scroll-bar" style="height:88vh; overflow-y: scroll;">
         <div class=" small-device">
           <div class=" d-flex flex-column">
             <a href="" class=" text-decoration-none mb-3">
@@ -173,7 +173,7 @@
           </div>
         </div>
       </div>
-    <div class="col-10 mx-auto col-lg-5 justify-content-center" style="height: 88vh; overflow-x: hidden !important; overflow-y: scroll;">
+    <div class="col-12 mx-lg-auto px-md-5 col-md-7 px-lg-1 px-sm-5 col-lg-5 justify-content-center m-1 p-1 scroll-bar" style="height: 90vh; overflow-y: scroll;">
       <div class="row">
         <div class="col-12">
           <div class=" d-flex justify-content-around">
@@ -195,7 +195,7 @@
               </div>
               <p class=" custom-fs ms-2 mt-4 mb-0 position-absolute start-0 bottom-0 mb-2">Taeyai</p>
             </div>
-             <div class=" d-flex overflow-hidden flex-column child-select rounded-3 me-2 position-relative" style="width: 150px; height: 200px;">
+             <div class=" d-flex overflow-hidden flex-column child-select rounded-3 me-2 position-relative md-device" style="width: 150px; height: 200px;">
               <div class=" d-flex justify-content-center align-items-center">
                 <img src="/assests/ad3fe34741966b12eb48c238bac9501e.png" class=" story-image" width="100%" alt="person">
               </div>
@@ -224,14 +224,14 @@
             </div>
           </div>
         </div>
-        <div class="row mt-4 ">
-          <div class="col-11 mx-auto justify-content-center" style="overflow-x: hidden !important;">
-            <div class=" block-color p-3 rounded-3 d-flex flex-column">
-              <div class=" d-flex flex-column">
+        <div class="row mt-4 p-0 p-lg-1 mx-lg-3">
+          <div class="col-12 mx-lg-auto m-0 p-0 px-lg-3 justify-content-center">
+            <div class=" block-color justify-content-center p-4 p-md-3  w-100 rounded-3 d-flex flex-column">
+              <div class=" d-flex flex-column justify-content-center">
                 <img src="/assests/luka.jpg" class=" rounded-circle my-auto mx-auto" width="12%" alt="YO!">
-                <div class=" w-100 h-100">
-                  <div class="">
-                    <form action="server.php" class=" mb-3 mt-3 p-4 border border-4 border-primary" style="border-radius: 8px 50px 8px 50px;" method="post" enctype="multipart/form-data">
+                <div class=" w-100 h-100 mx-auto">
+                  <div class="mb-3 mt-3 px-3 p-4 border border-4 border-primary mx-auto" style="border-radius: 8px 50px 8px 50px;">
+                    <form action="server.php" class="" method="post" enctype="multipart/form-data">
                         <div class="">
                             <h3 class=" text-center text-white" style="font-family: 'Dancing Script', cursive;">Upload Your Feelings</h3>
                         </div>
@@ -279,14 +279,14 @@
               </div>
             </div>
           </div>
-            <div class=" my-3 block-color p-3 rounded-3 d-flex flex-row justify-content-between">
-              <div class=" border border-primary border-2 d-flex text-center rounded-pill ustify-content-center align-items-center px-2 py-1">
+            <div class=" my-3 block-color p-3 rounded-3 d-flex flex-row justify-content-between small-device">
+              <div class=" border border-primary border-2 d-flex text-center rounded-pill ustify-content-center align-items-center px-2 py-1 small-device">
                 <div class=" d-flex p-1">
                   <i class=" bi bi-camera-video-fill cool-icon-color"></i>
                   <p class=" my-auto ps-2 text-white">Create Room</p>
                 </div>
               </div>
-              <div class=" d-flex flex-row">
+              <div class=" d-flex flex-row small-device">
                 <div class=""><img src="/assests/hatsune.jpg" class=" rounded-circle online-room me-2" alt=""></div>
                 <div class=""><img src="/assests/hatsune.jpg" class=" rounded-circle online-room me-2" alt=""></div>
                 <div class=""><img src="/assests/hatsune.jpg" class=" rounded-circle online-room me-2" alt=""></div>
@@ -297,11 +297,11 @@
               </div>
               
             </div>
-            <div class=" d-flex flex-column-reverse">
+            <div class=" d-flex mx-1 flex-column-reverse ps-3 px-sm-0 justify-content-center mt-4 mt-sm-1">
               <div class=" block-color rounded-3 d-flex flex-column mb-3 shadow">
                 <div class=" d-flex align-items-center justify-content-between px-3">
                   <div class=" d-flex">
-                    <img src="/assests/hatsune.jpg" class=" rounded-circle online-room border border-primary border-3 mx-auto mt-1" alt="nukasa">
+                    <img src="/assests/hatsune.jpg" class=" rounded-circle online-room border border-primary border-3 mx-auto mt-1 ms-2" alt="nukasa">
                     <div class=" d-flex flex-column ps-2 custom-fs">
                       <span class=" text-white fw-bold">Nukasa</span>
                       <span class=" text-white opacity-50 time-fs">4h &diams; <i class=" bi bi-globe"></i></span>
@@ -316,7 +316,7 @@
                     </div>
                   </div>
                 </div>
-                <div class=" text-white mt-2 ">
+                <div class=" text-white ps-2 mt-2 ">
                   <p class=" px-3">Song name: Aishite(Miku > Materu ) &#128147;</p>
                   <video class=" w-100" controls>
                     <source src="/assests/Videos/Aishite.mp4" type="video/mp4">
@@ -324,7 +324,7 @@
                 <div class="px-3 py-2">
                   <div class=" d-flex">
                     <div class="d-flex">
-                      <div class=" d-flex flex-row-reverse me-auto">
+                      <div class=" d-flex flex-row-reverse ms-3 ms-lg-0 me-auto">
                         <div class=" ms-2">
                           <a href="" class=" text-decoration-none page-icon-fade react-counter line-o-hover">Miss Siska and 179 others</a>
                         </div>
@@ -348,10 +348,10 @@
                 </div>
               </div>
               <!-- end of first newfeed -->
-              <div class=" block-color rounded-3 d-flex flex-column mb-3 shadow">
+              <div class=" block-color rounded-3 d-flex flex-column mb-3 mb-lg-3 shadow">
                 <div class=" d-flex align-items-center justify-content-between px-3">
                   <div class=" d-flex">
-                    <img src="/assests/nikusa.jpg" class=" rounded-circle online-room border border-primary border-3 mx-auto mt-1" alt="nukasa">
+                    <img src="/assests/nikusa.jpg" class=" rounded-circle online-room border border-primary border-3 mx-auto mt-1 ms-2" alt="nukasa">
                     <div class=" d-flex flex-column ps-2 custom-fs">
                       <span class=" text-white fw-bold">Nukasa</span>
                       <span class=" text-white opacity-50 time-fs">4h &diams; <i class=" bi bi-globe"></i></span>
@@ -366,7 +366,7 @@
                     </div>
                   </div>
                 </div>
-                <div class=" text-white mt-2 ">
+                <div class=" text-white mt-2 ps-2 ">
                   <p class=" px-3">Song name: Akahitoha (Megurine Luka) &#128147;</p>
                   <video class=" w-100" controls>
                     <source src="/assests/Videos/luka.mp4" type="video/mp4">
@@ -374,7 +374,7 @@
                 <div class="px-3 py-2">
                   <div class=" d-flex">
                     <div class="d-flex">
-                      <div class=" d-flex flex-row-reverse me-auto">
+                      <div class=" d-flex flex-row-reverse me-aut ms-3 ms-lg-0o">
                         <div class=" ms-2">
                           <a href="" class=" text-decoration-none page-icon-fade react-counter line-o-hover">Miss Siska and 179 others</a>
                         </div>
@@ -400,7 +400,7 @@
               <div class=" block-color rounded-3 d-flex flex-column mb-3 shadow">
                 <div class=" d-flex align-items-center justify-content-between px-3">
                   <div class=" d-flex">
-                    <img src="/assests/nikusa.jpg" class=" rounded-circle online-room border border-primary border-3 mx-auto mt-1" alt="nukasa">
+                    <img src="/assests/nikusa.jpg" class=" rounded-circle online-room border border-primary border-3 mx-auto mt-1 ms-2" alt="nukasa">
                     <div class=" d-flex flex-column ps-2 custom-fs">
                       <span class=" text-white fw-bold">Nukasa</span>
                       <span class=" text-white opacity-50 time-fs">4h &diams; <i class=" bi bi-globe"></i></span>
@@ -415,7 +415,7 @@
                     </div>
                   </div>
                 </div>
-                <div class=" text-white mt-2 ">
+                <div class=" text-white mt-2 ps-2 ">
                   <p class=" px-3">Song name: Akahitoha (Megurine Luka) &#128147;</p>
                   <video class=" w-100" controls>
                     <source src="/assests/Videos/padoru.mp4" type="video/mp4">
@@ -423,7 +423,7 @@
                 <div class="px-3 py-2">
                   <div class=" d-flex">
                     <div class="d-flex">
-                      <div class=" d-flex flex-row-reverse me-auto">
+                      <div class=" d-flex flex-row-reverse me-aut ms-3 ms-lg-0o">
                         <div class=" ms-2">
                           <a href="" class=" text-decoration-none page-icon-fade react-counter line-o-hover">Miss Siska and 179 others</a>
                         </div>
@@ -445,10 +445,11 @@
                     <a href="" class=" py-1 h-100 px-3 hover-effect flex-grow-1 text-center rounded-2"><i class=" bi bi-arrow-90deg-right py-3 me-1"></i> Share</a>
                   </div>
                 </div>
-                <div class=" block-color rounded-3 d-flex flex-column mb-3 shadow">
+              </div>
+              <div class=" block-color rounded-3 d-flex flex-column mb-3 shadow">
                   <div class=" d-flex align-items-center justify-content-between px-3">
                     <div class=" d-flex">
-                      <img src="/assests/nikusa.jpg" class=" rounded-circle online-room border border-primary border-3 mx-auto mt-1" alt="nukasa">
+                      <img src="/assests/nikusa.jpg" class=" rounded-circle online-room border border-primary border-3 mx-auto mt-1 ms-2" alt="nukasa">
                       <div class=" d-flex flex-column ps-2 custom-fs">
                         <span class=" text-white fw-bold">Nukasa</span>
                         <span class=" text-white opacity-50 time-fs">4h &diams; <i class=" bi bi-globe"></i></span>
@@ -463,14 +464,14 @@
                       </div>
                     </div>
                   </div>
-                  <div class=" text-white mt-2 ">
+                  <div class=" text-white mt-2 ps-2 ">
                     <p class=" px-3">Until we meet again&#128219;</p>
                     <img src="/assests/meme/skeletor.webp" alt=" skeletor" class=" w-100">
                   </div>
                   <div class="px-3 py-2">
                     <div class=" d-flex">
                       <div class="d-flex">
-                        <div class=" d-flex flex-row-reverse me-auto">
+                        <div class=" d-flex flex-row-reverse ms-3 ms-lg-0 me-auto">
                           <div class=" ms-2">
                             <a href="" class=" text-decoration-none page-icon-fade react-counter line-o-hover">Miss Siska and 179 others</a>
                           </div>
@@ -493,11 +494,10 @@
                     </div>
                   </div>
                 </div>
-              </div>
               <div class=" block-color rounded-3 d-flex flex-column mb-3 shadow">
-                <div class=" d-flex align-items-center justify-content-between px-3" style="vertical-align: middle;">
+                <div class=" d-flex align-items-center ps-3 ms-lg-1 justify-content-between px-3" style="vertical-align: middle;">
                   <div class=" d-flex " style="vertical-align: middle;">
-                    <img src="/assests/ohno.jpg" class=" rounded-circle online-room border border-primary border-3 mx-auto mt-1" alt="nukasa">
+                    <img src="/assests/ohno.jpg" class=" rounded-circle online-room border border-primary border-3 mx-auto mt-1 ms-2" alt="nukasa">
                     <div class=" d-flex flex-column ps-2 custom-fs my-auto">
                       <span class=" text-white fw-bold">Kyaw Zin Htet</span>
                       <span class=" text-white opacity-50 time-fs">4h &diams; <i class=" bi bi-globe"></i></span>
@@ -512,14 +512,14 @@
                     </div>
                   </div>
                 </div>
-                <div class=" text-white mt-2 ">
+                <div class=" text-white mt-2 ps-2 ">
                   <p class=" px-3">Sussy Baka</p>
                   <img src="/assests/meme/lee.jpg" alt="sus" class=" w-100 ">
                 </div>
                 <div class="px-3 py-2">
                   <div class=" d-flex">
                     <div class="d-flex">
-                      <div class=" d-flex flex-row-reverse me-auto">
+                      <div class=" d-flex flex-row-reverse me-aut ms-3 ms-lg-0o">
                         <div class=" ms-2">
                           <a href="" class=" text-decoration-none page-icon-fade react-counter line-o-hover">Miss Siska and 179 others</a>
                         </div>
@@ -606,7 +606,7 @@
 
 
     </div>
-    <div class="col-3 sticky-top small-device" style="height: 88vh; overflow-y: scroll;">
+    <div class="col-3 sticky-top small-device md-device" style="height: 88vh; overflow-y: scroll;">
       <h5 class=" page-icon-fade fw-bold">Sponsored</h5>
       <div class=" d-flex mb-3">
         <img src="/assests/b54.jpg" class=" rounded-3" width="100px" height="100%" alt="troll">

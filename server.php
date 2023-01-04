@@ -20,30 +20,30 @@ if($_SERVER["REQUEST_METHOD"]=== "POST"){
             $json_Folder_Name = "Server_Logs";
             $json_File_Name = $user_Id.".json";
             $json_File_Path = $json_Folder_Name."/".$json_File_Name;
-            global $json_Folder_Name;
+            $json_Folder_Name;
             //creating files
             {
-                if(!is_dir($json_Folder_Name)){
-                    mkdir($json_Folder_Name);
-                    $server_Logs_Folder = fopen($json_File_Path,"w");
-                    $server_Logs_Files = fwrite($server_Logs_Folder,$json_store);
-                    fclose($server_Logs_Folder);
-                    // fclose($server_Logs_Folder);
-                }else{
-                    $server_Logs_Folder = fopen($json_File_Path,"w");
-                    $server_Logs_Files = fwrite($server_Logs_Folder,$json_store);
-                    fclose($server_Logs_Folder);
-                }
-                
                 if($files_Images["upload_Files"]["error"] === 0){
                     if($files_Images["upload_Files"]["size"] > 0){
                         $file_Extensions = array("image/png","image/jpeg","image/jpeg","image/webp","video/mp4","video/mkv");
                         if(in_array($files_Images["upload_Files"]["type"],$file_Extensions)){
                             //create folder for storing files
                             $media_Folder = "Media/";
+                            if(!is_dir($json_Folder_Name)){
+                                mkdir($json_Folder_Name);
+                                $server_Logs_Folder = fopen($json_File_Path,"w");
+                                $server_Logs_Files = fwrite($server_Logs_Folder,$json_store);
+                                fclose($server_Logs_Folder);
+                                // fclose($server_Logs_Folder);
+                            }else{
+                                $server_Logs_Folder = fopen($json_File_Path,"w");
+                                $server_Logs_Files = fwrite($server_Logs_Folder,$json_store);
+                                fclose($server_Logs_Folder);
+                            }
                             //check if the file is exist
                             if(!is_dir($media_Folder)){
                                 mkdir($media_Folder);
+                                
                             }
                             //making user file name
                             $users_Files_Path = $user_Id.".".pathinfo($files_Images["upload_Files"]["name"],PATHINFO_EXTENSION);//taking file extension
@@ -55,22 +55,34 @@ if($_SERVER["REQUEST_METHOD"]=== "POST"){
                                 header("Location: index.php");
 
                             }else{
-                                // $err_Var = "Your Files upload failed!!!!";
-                                // echo $err_Var;
+                                header("Location: 404.html");
                             }
         
                         }else{
                             // echo "You should upload image video files not other files!";
+                            header("Location: 404.html");
+
                         }
                     }
                     else{
                         // echo "This files are invalid";
+                        header("Location: 404.html");
+
                     }
                 }else{
                     // echo "Your files was invalid the server removed it!";
+                    header("Location: 404.html");
+
                 }
             }
     }
+    else{
+                                header("Location: 404.html");
+
     }
+}else{
+    header("Location: 404.html");
+
+}
     
 ?>
