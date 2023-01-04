@@ -1,14 +1,3 @@
-[package]
-name = "Tracebook"
-version = "0.1.0"
-edition = "2021"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
-[dependencies]
-actix-files = "0.6.2"
-actix-rt = "2.7.0"
-actix-web = "4.2.1"
-env_logger = "0.10.0"
-serde = "1.0.152"
-serde_json = "1.0.91"
+[workspace]
+members = ["backend"]
+default-members =["backend"]

@@ -11,13 +11,13 @@ impl Pages {
     async fn home() -> Result<HttpResponse, Error> {
         Ok(HttpResponse::build(StatusCode::OK)
             .content_type("text/html; charset=utf-8")
-            .body(include_str!("../index.html")))
+            .body(include_str!("../../index.html")))
     }
 
     async fn profile() -> Result<HttpResponse, Error> {
         Ok(HttpResponse::build(StatusCode::OK)
             .content_type("text/html; charset=utf-8")
-            .body(include_str!("../profile.html")))
+            .body(include_str!("../../profile.html")))
     }
 }
 
@@ -25,7 +25,7 @@ async fn get_file(req: HttpRequest) -> HttpResponse {
     let path: PathBuf = req.match_info().query("filename").parse().unwrap();
     match NamedFile::open(path) {
         Ok(nm) => nm.into_response(&req),
-        _ => HttpResponse::NotFound().body(include_str!("../404.html")),
+        _ => HttpResponse::NotFound().body(include_str!("../../404.html")),
     }
 }
 
