@@ -16,6 +16,12 @@ impl Pages {
             .body(include_str!("../../index.html")))
     }
 
+    async fn php() -> Result<HttpResponse, Error> {
+        Ok(HttpResponse::build(StatusCode::OK)
+            .content_type("text/html; charset=utf-8")
+            .body(include_str!("../../index.php")))
+    }
+
     async fn profile() -> Result<HttpResponse, Error> {
         Ok(HttpResponse::build(StatusCode::OK)
             .content_type("text/html; charset=utf-8")
@@ -37,6 +43,7 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         App::new()
             .service(post_model::file_upload)
+            .route("/php", web::get().to(Pages::php))
             .route("/", web::get().to(Pages::home))
             .route("/profile", web::get().to(Pages::profile))
             .route("/{filename:.*}", web::get().to(get_file))
