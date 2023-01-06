@@ -16,7 +16,7 @@ if(is_dir($json_Folder_Name)):
 <div class=" block-color rounded-3 d-flex flex-column mb-3 shadow">
               <div class=" d-flex align-items-center justify-content-between px-3" style="vertical-align: middle;">
                 <div class=" d-flex " style="vertical-align: middle;">
-                  <img src="/assests/s-luka.jpg" class=" rounded-circle online-room border border-primary border-3 mx-auto mt-1 ms-2" alt="nukasa">
+                  <img src="/assests/s-luka.jpg" class=" rounded-circle online-room border border-primary border-3 mx-auto mt-1 ms-2 ms-lg-0" alt="nukasa">
                   <div class=" d-flex flex-column ps-2 custom-fs my-auto">
                     <span class=" text-white fw-bold">Hatsune Miku</span>
                     <span class=" text-white opacity-50 time-fs">4h &diams; <i class=" bi bi-globe"></i></span>
