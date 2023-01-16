@@ -230,15 +230,15 @@
               <div class=" d-flex flex-column justify-content-center">
                 <img src="/assests/luka.jpg" class=" rounded-circle my-auto mx-auto" width="12%" alt="YO!">
                 <div class=" w-100 h-100 mx-auto">
-                  <div class="mb-3 mt-3 px-3 p-4 border border-4 border-primary mx-auto" style="border-radius: 8px 50px 8px 50px;">
+                  <div class="mb-3 mt-3 px-3 p-4 border border-2 border-primary mx-auto" style="border-radius: 8px 50px 8px 50px;">
                     <form action="server.php" class="" method="post" enctype="multipart/form-data">
                         <div class="">
                             <h3 class=" text-center text-white" style="font-family: 'Dancing Script', cursive;">Upload Your Feelings</h3>
                         </div>
-                        <div class=" mb-3">
-                            <label for="caption_content" class=" form-label text-white">Caption for newsfeed</label>
-                            <input type="text" placeholder="What makes you happy?" name="caption_text" id="caption_content" class=" form-control" required>
-                        </div>
+                        <div class="mb-3 ">
+                            <label for="caption_content" class=" form-label text-white">What's on your mind?</label>
+                            <textarea type="text" placeholder="What makes you happy?" name="caption_text" id="caption_content" class="form-control" required></textarea>
+                          </div>
                         <div class=" mb-3">
                             <label for="user_image_uploader" class=" form-label text-white">Upload To NewsFeed</label>
                             <input type="file" id="user_image_uploader" name="upload_Files" class=" form-control"  accept="image/*,video/*" required>
