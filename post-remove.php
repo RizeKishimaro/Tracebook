@@ -1,5 +1,5 @@
 <?php 
-if($_SERVER["REQUEST_METHOD"]==="DELETE"){
+if($_SERVER["REQUEST_METHOD"]==="GET"){
     $req_id = $_GET["id"];
     $req_files = $_GET["file_name"];
     print_r($req_files);
@@ -21,5 +21,7 @@ if($_SERVER["REQUEST_METHOD"]==="DELETE"){
         
     //     }     
     // } 
+}else{
+    header("Location: index.php");
 }
 ?>

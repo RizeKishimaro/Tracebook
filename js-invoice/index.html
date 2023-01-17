@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="./node_modules/bootstrap/dist/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="./node_modules/bootstrap-icons/font/bootstrap-icons.css"
+    />
+  </head>
+  <style>
+    .loading {
+      border: 16px solid #f3f3f3; /* Light gray */
+      border-top: 16px solid #3498db; /* Blue */
+      border-radius: 50%;
+      width: 120px;
+      height: 120px;
+      animation: spin 2s linear;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+  <body>
+    <div class="loading"></div>
+    <form 
+      class="col-5 d-flex flex-column mx-auto mt-5 justify-content-center mb-3"
+      id="formParent"
+    >
+      <div class="col-12 d-flex justify-content-center mb-3">
+        <img
+          src="./assests/nagatoro.png"
+          alt="nagatoro"
+          style="width: 100px"
+          class="mx-auto rounded-circle"
+        />
+      </div>
+      <label for="" class="form-label">Insert Products</label>
+        <input
+          type="text"
+          name="name"
+          class="form-control"
+          id="productName"
+          required
+        />
+      <div class="mb-3">
+        <label for="" class="form-label">Enter Price</label>
+        <input
+          type="number"
+          name="price"
+          class="form-control"
+          id="amountInput"
+        />
+      </div>
+      <button class="btn btn-primary w-100" id="submitBtn">Insert</button>
+    </form>
+    <div class="col-5 mx-auto">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Products</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody id="productPriceTable"></tbody>
+      </table>
+    </div>
+  </body>
+  <script src="./script.js"></script>
+  <!-- <script src="./test.js"></script> -->
+</html>
