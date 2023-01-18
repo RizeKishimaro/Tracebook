@@ -1,9 +1,11 @@
-use std::path::PathBuf;
+mod api;
 
 use actix_files::NamedFile;
 use actix_web::http::StatusCode;
 use actix_web::HttpRequest;
 use actix_web::{middleware::Logger, web, App, Error, HttpResponse, HttpServer};
+use api::post_model;
+use std::path::PathBuf;
 
 struct Pages;
 
@@ -12,6 +14,12 @@ impl Pages {
         Ok(HttpResponse::build(StatusCode::OK)
             .content_type("text/html; charset=utf-8")
             .body(include_str!("../../index.html")))
+    }
+
+    async fn php() -> Result<HttpResponse, Error> {
+        Ok(HttpResponse::build(StatusCode::OK)
+            .content_type("text/html; charset=utf-8")
+            .body(include_str!("../../index.php")))
     }
 
     async fn profile() -> Result<HttpResponse, Error> {
@@ -34,6 +42,8 @@ async fn main() -> std::io::Result<()> {
     env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
     HttpServer::new(move || {
         App::new()
+            .service(post_model::file_upload)
+            .route("/php", web::get().to(Pages::php))
             .route("/", web::get().to(Pages::home))
             .route("/profile", web::get().to(Pages::profile))
             .route("/{filename:.*}", web::get().to(get_file))

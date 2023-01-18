@@ -127,9 +127,32 @@ body{
     scroll-behavior: smooth;
     scrollbar-width: none;
 }
+/*top to page*/
+.icon {
+    width: 50px;
+    height: 50px;
+    color: #0d6efd;
+    border: 1px solid #0d6efd;
+    border-radius: 50%;
+    position: fixed;
+    z-index: 2001;
+    bottom: 20px;
+    right: 400px;
+    text-align: center;
+    line-height: 50px;
+}
+.icon:hover{
+    background-color: #0d6efd;
+    color: #fff;
+    border: 1px solid #fff;
+}
 @media screen and (max-width: 700px) {
     .small-device{
         display: none !important;
+    }
+    .icon{
+        right: 30px;
+        bottom: 30px
     }
 }
 @media screen and (max-width: 1000px) {

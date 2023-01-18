@@ -225,20 +225,20 @@
           </div>
         </div>
         <div class="row mt-4 p-0 p-lg-1 mx-lg-3">
-          <div class="col-12 mx-lg-auto m-0 p-0 px-lg-3 justify-content-center">
+          <div class="col-12 mx-lg-auto m-0 p-0 px-lg-3 justify-content-center" id="post">
             <div class=" block-color justify-content-center p-4 p-md-3  w-100 rounded-3 d-flex flex-column">
               <div class=" d-flex flex-column justify-content-center">
                 <img src="/assests/luka.jpg" class=" rounded-circle my-auto mx-auto" width="12%" alt="YO!">
                 <div class=" w-100 h-100 mx-auto">
-                  <div class="mb-3 mt-3 px-3 p-4 border border-4 border-primary mx-auto" style="border-radius: 8px 50px 8px 50px;">
+                  <div class="mb-3 mt-3 px-3 p-4 border border-2 border-primary mx-auto" style="border-radius: 8px 50px 8px 50px;">
                     <form action="server.php" class="" method="post" enctype="multipart/form-data">
                         <div class="">
                             <h3 class=" text-center text-white" style="font-family: 'Dancing Script', cursive;">Upload Your Feelings</h3>
                         </div>
-                        <div class=" mb-3">
-                            <label for="caption_content" class=" form-label text-white">Caption for newsfeed</label>
-                            <input type="text" placeholder="What makes you happy?" name="caption_text" id="caption_content" class=" form-control" required>
-                        </div>
+                        <div class="mb-3 ">
+                            <label for="caption_content" class=" form-label text-white">What's on your mind?</label>
+                            <textarea type="text" placeholder="What makes you happy?" name="caption_text" id="caption_content" class="form-control" required></textarea>
+                          </div>
                         <div class=" mb-3">
                             <label for="user_image_uploader" class=" form-label text-white">Upload To NewsFeed</label>
                             <input type="file" id="user_image_uploader" name="upload_Files" class=" form-control"  accept="image/*,video/*" required>
@@ -297,6 +297,8 @@
               </div>
               
             </div>
+            <a href="#post"><span class="up-to-top icon"><i class="bi bi-arrow-up"></i></span></a>
+
             <div class=" d-flex mx-1 flex-column-reverse ps-3 px-sm-0 justify-content-center mt-4 mt-sm-1">
               <div class=" block-color rounded-3 d-flex flex-column mb-3 shadow">
                 <div class=" d-flex align-items-center justify-content-between px-3">
