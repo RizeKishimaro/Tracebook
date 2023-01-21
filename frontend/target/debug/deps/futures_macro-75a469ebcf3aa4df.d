@@ -1,9 +1,0 @@
-/home/walker/rust/apps/Tracebook/frontend/target/debug/deps/libfutures_macro-75a469ebcf3aa4df.so: /home/walker/.local/share/cargo/registry/src/github.com-1ecc6299db9ec823/futures-macro-0.3.25/src/lib.rs /home/walker/.local/share/cargo/registry/src/github.com-1ecc6299db9ec823/futures-macro-0.3.25/src/executor.rs /home/walker/.local/share/cargo/registry/src/github.com-1ecc6299db9ec823/futures-macro-0.3.25/src/join.rs /home/walker/.local/share/cargo/registry/src/github.com-1ecc6299db9ec823/futures-macro-0.3.25/src/select.rs /home/walker/.local/share/cargo/registry/src/github.com-1ecc6299db9ec823/futures-macro-0.3.25/src/stream_select.rs
-
-/home/walker/rust/apps/Tracebook/frontend/target/debug/deps/futures_macro-75a469ebcf3aa4df.d: /home/walker/.local/share/cargo/registry/src/github.com-1ecc6299db9ec823/futures-macro-0.3.25/src/lib.rs /home/walker/.local/share/cargo/registry/src/github.com-1ecc6299db9ec823/futures-macro-0.3.25/src/executor.rs /home/walker/.local/share/cargo/registry/src/github.com-1ecc6299db9ec823/futures-macro-0.3.25/src/join.rs /home/walker/.local/share/cargo/registry/src/github.com-1ecc6299db9ec823/futures-macro-0.3.25/src/select.rs /home/walker/.local/share/cargo/registry/src/github.com-1ecc6299db9ec823/futures-macro-0.3.25/src/stream_select.rs
-
-/home/walker/.local/share/cargo/registry/src/github.com-1ecc6299db9ec823/futures-macro-0.3.25/src/lib.rs:
-/home/walker/.local/share/cargo/registry/src/github.com-1ecc6299db9ec823/futures-macro-0.3.25/src/executor.rs:
-/home/walker/.local/share/cargo/registry/src/github.com-1ecc6299db9ec823/futures-macro-0.3.25/src/join.rs:
-/home/walker/.local/share/cargo/registry/src/github.com-1ecc6299db9ec823/futures-macro-0.3.25/src/select.rs:
-/home/walker/.local/share/cargo/registry/src/github.com-1ecc6299db9ec823/futures-macro-0.3.25/src/stream_select.rs:
