@@ -1,7 +1,6 @@
 use web_sys::HtmlInputElement;
 use yew::prelude::*;
 
-impl Data {}
 
 #[function_component]
 fn App() -> Html {
