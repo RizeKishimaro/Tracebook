@@ -1,0 +1,10 @@
+/home/walker/rust/apps/Tracebook/frontend/target/wasm32-unknown-unknown/debug/deps/serde_wasm_bindgen-f1d30f30990c2155.rmeta: /home/walker/.local/share/cargo/registry/src/github.com-1ecc6299db9ec823/serde-wasm-bindgen-0.3.1/src/lib.rs /home/walker/.local/share/cargo/registry/src/github.com-1ecc6299db9ec823/serde-wasm-bindgen-0.3.1/src/de.rs /home/walker/.local/share/cargo/registry/src/github.com-1ecc6299db9ec823/serde-wasm-bindgen-0.3.1/src/error.rs /home/walker/.local/share/cargo/registry/src/github.com-1ecc6299db9ec823/serde-wasm-bindgen-0.3.1/src/ser.rs
+
+/home/walker/rust/apps/Tracebook/frontend/target/wasm32-unknown-unknown/debug/deps/libserde_wasm_bindgen-f1d30f30990c2155.rlib: /home/walker/.local/share/cargo/registry/src/github.com-1ecc6299db9ec823/serde-wasm-bindgen-0.3.1/src/lib.rs /home/walker/.local/share/cargo/registry/src/github.com-1ecc6299db9ec823/serde-wasm-bindgen-0.3.1/src/de.rs /home/walker/.local/share/cargo/registry/src/github.com-1ecc6299db9ec823/serde-wasm-bindgen-0.3.1/src/error.rs /home/walker/.local/share/cargo/registry/src/github.com-1ecc6299db9ec823/serde-wasm-bindgen-0.3.1/src/ser.rs
+
+/home/walker/rust/apps/Tracebook/frontend/target/wasm32-unknown-unknown/debug/deps/serde_wasm_bindgen-f1d30f30990c2155.d: /home/walker/.local/share/cargo/registry/src/github.com-1ecc6299db9ec823/serde-wasm-bindgen-0.3.1/src/lib.rs /home/walker/.local/share/cargo/registry/src/github.com-1ecc6299db9ec823/serde-wasm-bindgen-0.3.1/src/de.rs /home/walker/.local/share/cargo/registry/src/github.com-1ecc6299db9ec823/serde-wasm-bindgen-0.3.1/src/error.rs /home/walker/.local/share/cargo/registry/src/github.com-1ecc6299db9ec823/serde-wasm-bindgen-0.3.1/src/ser.rs
+
+/home/walker/.local/share/cargo/registry/src/github.com-1ecc6299db9ec823/serde-wasm-bindgen-0.3.1/src/lib.rs:
+/home/walker/.local/share/cargo/registry/src/github.com-1ecc6299db9ec823/serde-wasm-bindgen-0.3.1/src/de.rs:
+/home/walker/.local/share/cargo/registry/src/github.com-1ecc6299db9ec823/serde-wasm-bindgen-0.3.1/src/error.rs:
+/home/walker/.local/share/cargo/registry/src/github.com-1ecc6299db9ec823/serde-wasm-bindgen-0.3.1/src/ser.rs:
