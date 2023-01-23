@@ -173,8 +173,8 @@
           </div>
         </div>
       </div>
-    <div class="col-12 mx-lg-auto px-md-5 col-md-7 px-lg-1 px-sm-5 col-lg-5 justify-content-center m-1 p-1 scroll-bar" style="height: 90vh; overflow-y: scroll;">
-      <div class="row">
+    <div class="col-12 mx-lg-auto px-md-5 px-lg-0 col-md-7 px-lg-1 px-sm-5 col-lg-5 mx-auto justify-content-center m-1 p-1 scroll-bar" style="height: 90vh; overflow-y: scroll; overflow-x:hidden;">
+      <div class="row justify-content-center">
         <div class="col-12">
           <div class=" d-flex justify-content-around">
             <div class=" d-flex overflow-hidden flex-column rounded-3 me-2 child-select position-relative add-story-image" style="width: 150px; height: 200px;">
@@ -608,7 +608,7 @@
 
 
     </div>
-    <div class="col-3 sticky-top small-device md-device" style="height: 88vh; overflow-y: scroll;">
+    <div class="col-3 ms-lg-auto sticky-top small-device md-device" style="height: 88vh; overflow-y: scroll;">
       <h5 class=" page-icon-fade fw-bold">Sponsored</h5>
       <div class=" d-flex mb-3">
         <img src="/assests/b54.jpg" class=" rounded-3" width="100px" height="100%" alt="troll">
