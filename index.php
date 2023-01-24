@@ -22,7 +22,7 @@
           <i class="  small-device bi bi-facebook text-primary" style="font-size: 40px;"></i>
         </div>
         <div class=" ms-auto col-10 d-flex align-items-center  small-device">
-          <input type="text" class="  small-device search-bar form-control p-2 rounded-pill" placeholder="   Search Facebook">
+          <input type="text" class="small-device search-bar text-center form-control p-2 rounded-pill" style="color: white;" placeholder="Search Facebook">
         </div>
       </div>
       <div class="col-12 col-lg-5 d-flex text-center fs-4 text-white align-items-center mx-auto justify-content-center">
