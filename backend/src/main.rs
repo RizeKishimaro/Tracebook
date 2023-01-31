@@ -7,7 +7,9 @@ mod extractors;
 async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         App::new()
-            .app_data(web::Data::new(String::from("secret")))
+            .app_data(web::Data::new(String::from(
+                "abcdefghijklmnopqrstuvwxyzwalkerize0123456789walkerizeABCDEFGHIJKLMNOPQRSTUVWXYZ",
+            )))
             .service(user_scope())
     })
     .bind(("127.0.0.1", 8090))?
