@@ -16,8 +16,8 @@ pub fn user_scope() -> Scope {
 
 #[derive(Serialize, Deserialize)]
 pub struct Claims {
-    id: usize,
-    exp: usize,
+    pub id: usize,
+    pub exp: usize,
 }
 
 #[derive(Serialize, Deserialize)]
