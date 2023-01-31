@@ -76,7 +76,8 @@ async fn decode_token(body: web::Json<DecodeBody>, secret: web::Data<String>) ->
     }
 }
 
-async fn protected() -> HttpResponse {
+async fn protected(aut_token: AuthToken) -> HttpResponse {
+    println!("{}", aut_token.id);
     HttpResponse::Ok().json(Response {
         message: String::from("protected"),
     })

@@ -23,12 +23,12 @@ impl FromRequest for AuthToken {
     type Error = ActixWebError;
     type Future = Ready<Result<Self, Self::Error>>;
 
-    fn from_request(req: &HttpRequest, payload: &mut Payload) -> Self::Future {
+    fn from_request(req: &HttpRequest, _: &mut Payload) -> Self::Future {
         let auth_header: Option<&HeaderValue> = req.headers().get(http::header::AUTHORIZATION);
         let auth_token: String = auth_header.unwrap().to_str().unwrap_or("").to_string();
 
         if auth_token.is_empty() {
-            return Err(ErrorUnauthorized("Invaild auth token!"));
+            return ready(Err(ErrorUnauthorized("Invaild auth token!")));
         }
 
         let secret: String = req.app_data::<Data<String>>().unwrap().to_string();
