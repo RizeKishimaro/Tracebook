@@ -1,6 +1,7 @@
 use actix_web::{web, App, HttpServer};
 mod scopes;
 use scopes::user::user_scope;
+mod extractors;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
