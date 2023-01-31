@@ -1,3 +1,4 @@
+use crate::extractors::auth_token::AuthToken;
 use actix_web::{web, HttpResponse, Scope};
 use chrono::{Duration, Utc};
 use jsonwebtoken::{
@@ -14,7 +15,7 @@ pub fn user_scope() -> Scope {
 }
 
 #[derive(Serialize, Deserialize)]
-struct Claims {
+pub struct Claims {
     id: usize,
     exp: usize,
 }
