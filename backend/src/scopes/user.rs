@@ -33,6 +33,7 @@ struct Response {
 struct EncodeResponse {
     message: String,
     token: String,
+    info: String,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -52,6 +53,9 @@ struct Info {
 async fn encode_token(body: web::Json<Info>, secret: web::Data<String>) -> HttpResponse {
     let id = Uuid::new_v4();
     let exp: usize = (Utc::now() + Duration::days(365)).timestamp() as usize;
+    let create_user = create_user(id, body.username.clone(), body.password.clone())
+        .await
+        .unwrap();
     let claim: Claims = Claims {
         id,
         exp,
@@ -67,6 +71,7 @@ async fn encode_token(body: web::Json<Info>, secret: web::Data<String>) -> HttpR
     HttpResponse::Ok().json(EncodeResponse {
         message: String::from("success"),
         token,
+        info: create_user,
     })
 }
 
@@ -110,6 +115,6 @@ async fn create_user(id: Uuid, username: String, password: String) -> Result<Str
         "CREATE user:{} SET username = {}, password = {}",
         id, username, password
     );
-    let exec = ds
-    Ok("Test Ok".to_owned())
+    let exec = ds.execute(&sql_cmd, ses, None, false).await?;
+    Ok(format!("{exec:?}"))
 }
