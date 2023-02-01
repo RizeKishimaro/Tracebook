@@ -5,9 +5,9 @@ use jsonwebtoken::{
     decode, encode, errors::Error, Algorithm, DecodingKey, EncodingKey, Header, TokenData,
     Validation,
 };
+use rand::random;
 use serde::{Deserialize, Serialize};
 use surrealdb::{Datastore, Session};
-use uuid::Uuid;
 
 pub fn user_scope() -> Scope {
     web::scope("/user")
@@ -18,7 +18,7 @@ pub fn user_scope() -> Scope {
 
 #[derive(Serialize, Deserialize)]
 pub struct Claims {
-    pub id: Uuid,
+    pub id: u128,
     pub exp: usize,
     pub username: String,
     pub password: String,
@@ -39,7 +39,7 @@ struct EncodeResponse {
 #[derive(Serialize, Deserialize)]
 struct DecodeResponse {
     message: String,
-    id: Uuid,
+    id: u128,
     username: String,
     password: String,
 }
@@ -51,7 +51,7 @@ struct Info {
 }
 
 async fn encode_token(body: web::Json<Info>, secret: web::Data<String>) -> HttpResponse {
-    let id = Uuid::new_v4();
+    let id = random::<u128>();
     let exp: usize = (Utc::now() + Duration::days(365)).timestamp() as usize;
     let create_user = create_user(id, body.username.clone(), body.password.clone())
         .await
@@ -106,13 +106,13 @@ async fn protected(aut_token: AuthToken) -> HttpResponse {
     })
 }
 
-async fn create_user(id: Uuid, username: String, password: String) -> Result<String, String> {
+async fn create_user(id: u128, username: String, password: String) -> Result<String, String> {
     type DB = (Datastore, Session);
     let db: &DB = &(Datastore::new("memory").await?, Session::for_db("ns", "nm"));
     let (ds, ses) = db;
 
     let sql_cmd = format!(
-        "CREATE user:{} SET username = {}, password = {}",
+        "CREATE user:{:?} SET username = {}, password = {}",
         id, username, password
     );
     let exec = ds.execute(&sql_cmd, ses, None, false).await?;

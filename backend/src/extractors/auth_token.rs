@@ -11,13 +11,12 @@ use jsonwebtoken::{
     decode, errors::Error as JwtError, Algorithm, DecodingKey, TokenData, Validation,
 };
 use serde::{Deserialize, Serialize};
-use uuid::Uuid;
 
 use crate::scopes::user::Claims;
 
 #[derive(Serialize, Deserialize)]
 pub struct AuthToken {
-    pub id: Uuid,
+    pub id: u128,
 }
 
 impl FromRequest for AuthToken {
