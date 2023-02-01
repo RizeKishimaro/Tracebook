@@ -6,6 +6,7 @@ use jsonwebtoken::{
     Validation,
 };
 use serde::{Deserialize, Serialize};
+use surrealdb::{Datastore, Session};
 use uuid::Uuid;
 
 pub fn user_scope() -> Scope {
@@ -98,4 +99,17 @@ async fn protected(aut_token: AuthToken) -> HttpResponse {
     HttpResponse::Ok().json(Response {
         message: String::from("protected"),
     })
+}
+
+async fn create_user(id: Uuid, username: String, password: String) -> Result<String, String> {
+    type DB = (Datastore, Session);
+    let db: &DB = &(Datastore::new("memory").await?, Session::for_db("ns", "nm"));
+    let (ds, ses) = db;
+
+    let sql_cmd = format!(
+        "CREATE user:{} SET username = {}, password = {}",
+        id, username, password
+    );
+    let exec = ds
+    Ok("Test Ok".to_owned())
 }
