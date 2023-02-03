@@ -2,9 +2,8 @@ use gloo::{console::log, dialogs::alert};
 use reqwasm::http::Request;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
-use wasm_bindgen_futures::spawn_local;
 use web_sys::HtmlInputElement;
-use yew::prelude::*;
+use yew::{platform::spawn_local, prelude::*};
 
 #[derive(Deserialize, Serialize)]
 struct Response {
@@ -46,7 +45,7 @@ fn MyComponent() -> Html {
     let on_submit = {
         spawn_local(async move {
             let res = login(name_input_value.clone(), pass_input_value.clone()).await;
-            alert(&res.token);
+            log!("Su");
         })
     };
 
@@ -84,8 +83,8 @@ fn MyComponent() -> Html {
                     id="dangerous-input"
                     type="text"
                 />
-            </label>
-            <button onclick={Callback::from(move |_| on_submit)}>{"Click Me!"}</button>
+            </label><br/><br/><br/><br/><div>
+            <button onclick={Callback::from(move |_| on_submit)}>{"Click Me!"}</button></div>
         </>
     }
 }
