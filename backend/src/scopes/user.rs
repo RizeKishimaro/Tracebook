@@ -46,13 +46,14 @@ struct DecodeResponse {
 
 #[derive(Serialize, Deserialize)]
 struct Info {
-    username: String,
     password: String,
+    username: String,
 }
 
 async fn encode_token(body: web::Json<Info>, secret: web::Data<String>) -> HttpResponse {
     let id = random::<u128>();
     let exp: usize = (Utc::now() + Duration::days(365)).timestamp() as usize;
+    println!("{} {}", body.username, body.password);
     let create_user = create_user(id, body.username.clone(), body.password.clone())
         .await
         .unwrap();
@@ -112,7 +113,7 @@ async fn create_user(id: u128, username: String, password: String) -> Result<Str
     let (ds, ses) = db;
 
     let sql_cmd = format!(
-        "CREATE user:{:?} SET username = {}, password = {}",
+        "CREATE user:{} SET username = {}, password = {}",
         id, username, password
     );
     let exec = ds.execute(&sql_cmd, ses, None, false).await?;
