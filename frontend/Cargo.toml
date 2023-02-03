@@ -7,6 +7,7 @@ edition = "2021"
 
 [dependencies]
 gloo = "0.8.0"
+reqwest = "0.11.14"
 serde = { version = "1.0.152", features = ["derive"] }
 wasm-bindgen = { version = "0.2.84", features = ["serde"] }
 web-sys = { version = "0.3.61", features = ["HtmlInputElement"] }

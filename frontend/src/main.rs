@@ -1,3 +1,4 @@
+use gloo::console::log;
 use web_sys::HtmlInputElement;
 use yew::prelude::*;
 
@@ -13,7 +14,8 @@ fn MyComponent() -> Html {
             let input = e.target_dyn_into::<HtmlInputElement>();
 
             if let Some(input) = input {
-                input_value_handle.set(input.value());
+                input_value_handle.set(input.value().clone());
+                log!(input.value());
             }
         })
     };
@@ -49,4 +51,3 @@ fn MyComponent() -> Html {
 fn main() {
     yew::Renderer::<MyComponent>::new().render();
 }
-
