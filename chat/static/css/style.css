@@ -1,0 +1,9 @@
+*{
+    width: 100%;
+    margin: auto;
+}
+
+#show-msg
+{
+    display: block;
+}
