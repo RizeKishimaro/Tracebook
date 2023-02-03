@@ -112,7 +112,7 @@ async fn create_user(id: u128, username: String, password: String) -> Result<Str
     let (ds, ses) = db;
 
     let sql_cmd = format!(
-        "CREATE user:{:?} SET username = {}, password = {}",
+        "CREATE user:{} SET username = {}, password = {}",
         id, username, password
     );
     let exec = ds.execute(&sql_cmd, ses, None, false).await?;
