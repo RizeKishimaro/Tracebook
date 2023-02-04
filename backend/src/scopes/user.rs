@@ -18,7 +18,7 @@ pub fn user_scope() -> Scope {
 
 #[derive(Serialize, Deserialize)]
 pub struct Claims {
-    pub id: u128,
+    pub id: u32,
     pub exp: usize,
     pub username: String,
     pub password: String,
@@ -39,7 +39,7 @@ struct EncodeResponse {
 #[derive(Serialize, Deserialize)]
 struct DecodeResponse {
     message: String,
-    id: u128,
+    id: u32,
     username: String,
     password: String,
 }
@@ -51,7 +51,7 @@ struct Info {
 }
 
 async fn encode_token(body: web::Json<Info>, secret: web::Data<String>) -> HttpResponse {
-    let id = random::<u128>();
+    let id = random::<u32>();
     let exp: usize = (Utc::now() + Duration::days(365)).timestamp() as usize;
     println!("{} {}", body.username, body.password);
     let db = DB::use_db("memory", ("ses", "db"));
@@ -128,13 +128,14 @@ impl DB {
 
     async fn create_user(
         self,
-        id: u128,
+        id: u32,
         username: String,
         password: String,
     ) -> Result<String, String> {
+        let id = format!("{id}{username}");
         let (ds, ses) = &self.db;
         let sql_cmd = format!(
-            "CREATE user:{} SET username = {}, password = {}",
+            "CREATE user:{} SET username = '{}', password = '{}';",
             id, username, password
         );
         let exec = ds.execute(&sql_cmd, ses, None, false).await?;

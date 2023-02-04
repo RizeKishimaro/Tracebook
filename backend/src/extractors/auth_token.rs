@@ -16,7 +16,7 @@ use crate::scopes::user::Claims;
 
 #[derive(Serialize, Deserialize)]
 pub struct AuthToken {
-    pub id: u128,
+    pub id: u32,
 }
 
 impl FromRequest for AuthToken {
