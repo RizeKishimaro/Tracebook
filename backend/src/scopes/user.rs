@@ -54,7 +54,7 @@ async fn encode_token(body: web::Json<Info>, secret: web::Data<String>) -> HttpR
     let id = random::<u128>();
     let exp: usize = (Utc::now() + Duration::days(365)).timestamp() as usize;
     println!("{} {}", body.username, body.password);
-    let create_user = create_user(id, body.username.clone(), body.password.clone())
+    let create_user = DB::create_user(id, body.username.clone(), body.password.clone())
         .await
         .unwrap();
     let claim: Claims = Claims {
@@ -107,15 +107,34 @@ async fn protected(aut_token: AuthToken) -> HttpResponse {
     })
 }
 
-async fn create_user(id: u128, username: String, password: String) -> Result<String, String> {
-    type DB = (Datastore, Session);
-    let db: &DB = &(Datastore::new("memory").await?, Session::for_db("ns", "nm"));
-    let (ds, ses) = db;
+struct DB {
+    db: (Datastore, Session),
+}
 
-    let sql_cmd = format!(
-        "CREATE user:{} SET username = {}, password = {}",
-        id, username, password
-    );
-    let exec = ds.execute(&sql_cmd, ses, None, false).await?;
-    Ok(format!("{exec:?}"))
+impl DB {
+    async fn new(ds: &str, ses: (&str, &str)) -> Self {
+        Self {
+            db: (
+                Datastore::new(ds).await.unwrap(),
+                Session::for_db(ses.0, ses.1),
+            ),
+        }
+    }
+    async fn create_user(
+        self,
+        id: u128,
+        username: String,
+        password: String,
+    ) -> Result<String, String> {
+        type DB = (Datastore, Session);
+        let db: &DB = &(Datastore::new("memory").await?, Session::for_db("ns", "nm"));
+        let (ds, ses) = db;
+
+        let sql_cmd = format!(
+            "CREATE user:{} SET username = {}, password = {}",
+            id, username, password
+        );
+        let exec = ds.execute(&sql_cmd, ses, None, false).await?;
+        Ok(format!("{exec:?}"))
+    }
 }
