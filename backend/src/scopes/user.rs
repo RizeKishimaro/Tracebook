@@ -9,6 +9,8 @@ use rand::random;
 use serde::{Deserialize, Serialize};
 use surrealdb::{Datastore, Session};
 
+type TYDB = (Datastore, Session);
+
 pub fn user_scope() -> Scope {
     web::scope("/user")
         .route("/encode-token", web::post().to(encode_token))
@@ -54,8 +56,11 @@ async fn encode_token(body: web::Json<Info>, secret: web::Data<String>) -> HttpR
     let id = random::<u32>();
     let exp: usize = (Utc::now() + Duration::days(365)).timestamp() as usize;
     println!("{} {}", body.username, body.password);
-    let db = DB::use_db("memory", ("ses", "db"));
-    let create_user = DB::create_user(db.await, id, body.username.clone(), body.password.clone())
+    let db: &TYDB = &(
+        Datastore::new("memory").await.unwrap(),
+        Session::for_db("ses", "db"),
+    );
+    let create_user = DB::create_user(db, id, body.username.clone(), body.password.clone())
         .await
         .unwrap();
     let claim: Claims = Claims {
@@ -70,9 +75,7 @@ async fn encode_token(body: web::Json<Info>, secret: web::Data<String>) -> HttpR
         &EncodingKey::from_secret(secret.as_str().as_ref()),
     )
     .unwrap();
-    let select = DB::select_user(DB::use_db("memory", ("ses", "db")).await)
-        .await
-        .unwrap();
+    let select = DB::select_user(db).await.unwrap();
     println!("{select}");
     HttpResponse::Ok().json(EncodeResponse {
         message: String::from("success"),
@@ -112,38 +115,27 @@ async fn protected(aut_token: AuthToken) -> HttpResponse {
     })
 }
 
-struct DB {
-    db: (Datastore, Session),
-}
+struct DB {}
 
 impl DB {
-    async fn use_db(ds: &str, ses: (&str, &str)) -> Self {
-        Self {
-            db: (
-                Datastore::new(ds).await.unwrap(),
-                Session::for_db(ses.0, ses.1),
-            ),
-        }
-    }
-
     async fn create_user(
-        self,
+        (ds, ses): &TYDB,
         id: u32,
         username: String,
         password: String,
     ) -> Result<String, String> {
         let id = format!("{id}{username}");
-        let (ds, ses) = &self.db;
         let sql_cmd = format!(
             "CREATE user:{} SET username = '{}', password = '{}';",
             id, username, password
         );
         let exec = ds.execute(&sql_cmd, ses, None, false).await?;
+        let select = ds.execute("SELECT * FROM user;", &ses, None, false).await?;
+        println!("{select:?}");
         Ok(format!("{exec:?}"))
     }
 
-    async fn select_user(self) -> Result<String, String> {
-        let (ds, ses) = &self.db;
+    async fn select_user((ds, ses): &TYDB) -> Result<String, String> {
         let sql_cmd = "SELECT * FROM user;";
         let exec = ds.execute(&sql_cmd, ses, None, false).await?;
         Ok(format!("{exec:?}"))

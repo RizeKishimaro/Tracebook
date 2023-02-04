@@ -13,7 +13,6 @@ async fn main() -> std::io::Result<()> {
             .app_data(web::Data::new(String::from(
                 "abcdefghijklmnopqrstuvwxyzwalkerize0123456789walkerizeABCDEFGHIJKLMNOPQRSTUVWXYZ",
             )))
-            .route("/", web::get().to(root))
             .service(user_scope())
     })
     .bind(("127.0.0.1", 8090))?
@@ -21,6 +20,3 @@ async fn main() -> std::io::Result<()> {
     .await
 }
 
-async fn root() -> HttpResponse {
-    HttpResponse::Ok().body(include_str!("./login/login.html"))
-}
