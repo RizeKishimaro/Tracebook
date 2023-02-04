@@ -54,7 +54,8 @@ async fn encode_token(body: web::Json<Info>, secret: web::Data<String>) -> HttpR
     let id = random::<u128>();
     let exp: usize = (Utc::now() + Duration::days(365)).timestamp() as usize;
     println!("{} {}", body.username, body.password);
-    let create_user = DB::create_user(id, body.username.clone(), body.password.clone())
+    let db = DB::use_db("memory", ("ses", "db"));
+    let create_user = DB::create_user(db.await, id, body.username.clone(), body.password.clone())
         .await
         .unwrap();
     let claim: Claims = Claims {
@@ -112,7 +113,7 @@ struct DB {
 }
 
 impl DB {
-    async fn new(ds: &str, ses: (&str, &str)) -> Self {
+    async fn use_db(ds: &str, ses: (&str, &str)) -> Self {
         Self {
             db: (
                 Datastore::new(ds).await.unwrap(),
@@ -126,10 +127,7 @@ impl DB {
         username: String,
         password: String,
     ) -> Result<String, String> {
-        type DB = (Datastore, Session);
-        let db: &DB = &(Datastore::new("memory").await?, Session::for_db("ns", "nm"));
-        let (ds, ses) = db;
-
+        let (ds, ses) = &self.db;
         let sql_cmd = format!(
             "CREATE user:{} SET username = {}, password = {}",
             id, username, password
