@@ -18,7 +18,7 @@ pub fn user_scope() -> Scope {
 
 #[derive(Serialize, Deserialize)]
 pub struct Claims {
-    pub id: u128,
+    pub id: u32,
     pub exp: usize,
     pub username: String,
     pub password: String,
@@ -39,7 +39,7 @@ struct EncodeResponse {
 #[derive(Serialize, Deserialize)]
 struct DecodeResponse {
     message: String,
-    id: u128,
+    id: u32,
     username: String,
     password: String,
 }
@@ -51,10 +51,11 @@ struct Info {
 }
 
 async fn encode_token(body: web::Json<Info>, secret: web::Data<String>) -> HttpResponse {
-    let id = random::<u128>();
+    let id = random::<u32>();
     let exp: usize = (Utc::now() + Duration::days(365)).timestamp() as usize;
     println!("{} {}", body.username, body.password);
-    let create_user = create_user(id, body.username.clone(), body.password.clone())
+    let db = DB::use_db("memory", ("ses", "db"));
+    let create_user = DB::create_user(db.await, id, body.username.clone(), body.password.clone())
         .await
         .unwrap();
     let claim: Claims = Claims {
@@ -69,6 +70,10 @@ async fn encode_token(body: web::Json<Info>, secret: web::Data<String>) -> HttpR
         &EncodingKey::from_secret(secret.as_str().as_ref()),
     )
     .unwrap();
+    let select = DB::select_user(DB::use_db("memory", ("ses", "db")).await)
+        .await
+        .unwrap();
+    println!("{select}");
     HttpResponse::Ok().json(EncodeResponse {
         message: String::from("success"),
         token,
@@ -107,15 +112,40 @@ async fn protected(aut_token: AuthToken) -> HttpResponse {
     })
 }
 
-async fn create_user(id: u128, username: String, password: String) -> Result<String, String> {
-    type DB = (Datastore, Session);
-    let db: &DB = &(Datastore::new("memory").await?, Session::for_db("ns", "nm"));
-    let (ds, ses) = db;
+struct DB {
+    db: (Datastore, Session),
+}
 
-    let sql_cmd = format!(
-        "CREATE user:{} SET username = {}, password = {}",
-        id, username, password
-    );
-    let exec = ds.execute(&sql_cmd, ses, None, false).await?;
-    Ok(format!("{exec:?}"))
+impl DB {
+    async fn use_db(ds: &str, ses: (&str, &str)) -> Self {
+        Self {
+            db: (
+                Datastore::new(ds).await.unwrap(),
+                Session::for_db(ses.0, ses.1),
+            ),
+        }
+    }
+
+    async fn create_user(
+        self,
+        id: u32,
+        username: String,
+        password: String,
+    ) -> Result<String, String> {
+        let id = format!("{id}{username}");
+        let (ds, ses) = &self.db;
+        let sql_cmd = format!(
+            "CREATE user:{} SET username = '{}', password = '{}';",
+            id, username, password
+        );
+        let exec = ds.execute(&sql_cmd, ses, None, false).await?;
+        Ok(format!("{exec:?}"))
+    }
+
+    async fn select_user(self) -> Result<String, String> {
+        let (ds, ses) = &self.db;
+        let sql_cmd = "SELECT * FROM user;";
+        let exec = ds.execute(&sql_cmd, ses, None, false).await?;
+        Ok(format!("{exec:?}"))
+    }
 }

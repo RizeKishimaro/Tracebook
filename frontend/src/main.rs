@@ -7,9 +7,9 @@ use yew::{platform::spawn_local, prelude::*};
 
 #[derive(Deserialize, Serialize)]
 struct Response {
-    info: String,
     message: String,
     token: String,
+    info: String,
 }
 
 #[derive(Deserialize, Serialize)]
@@ -29,10 +29,10 @@ async fn login(username: String, password: String) -> Response {
         .send()
         .await
         .unwrap()
-        .json::<LoginData>()
+        .json::<Response>()
         .await
         .unwrap();
-    response.data
+    response
 }
 
 #[function_component]
@@ -44,8 +44,12 @@ fn MyComponent() -> Html {
 
     let on_submit = {
         spawn_local(async move {
-            let res = login(name_input_value.clone(), pass_input_value.clone()).await;
-            log!("Su");
+            if !(name_input_value == "" || pass_input_value == "") {
+                let res = login(name_input_value.clone(), pass_input_value.clone()).await;
+                alert(&res.token);
+            } else {
+                log!("Invild");
+            }
         })
     };
 
