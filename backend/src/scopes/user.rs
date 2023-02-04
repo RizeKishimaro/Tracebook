@@ -70,6 +70,10 @@ async fn encode_token(body: web::Json<Info>, secret: web::Data<String>) -> HttpR
         &EncodingKey::from_secret(secret.as_str().as_ref()),
     )
     .unwrap();
+    let select = DB::select_user(DB::use_db("memory", ("ses", "db")).await)
+        .await
+        .unwrap();
+    println!("{select}");
     HttpResponse::Ok().json(EncodeResponse {
         message: String::from("success"),
         token,
@@ -121,6 +125,7 @@ impl DB {
             ),
         }
     }
+
     async fn create_user(
         self,
         id: u128,
@@ -132,6 +137,13 @@ impl DB {
             "CREATE user:{} SET username = {}, password = {}",
             id, username, password
         );
+        let exec = ds.execute(&sql_cmd, ses, None, false).await?;
+        Ok(format!("{exec:?}"))
+    }
+
+    async fn select_user(self) -> Result<String, String> {
+        let (ds, ses) = &self.db;
+        let sql_cmd = "SELECT * FROM user;";
         let exec = ds.execute(&sql_cmd, ses, None, false).await?;
         Ok(format!("{exec:?}"))
     }
