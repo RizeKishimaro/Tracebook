@@ -3,7 +3,7 @@ use actix_web::{web, HttpResponse, Scope};
 use serde::{Deserialize, Serialize};
 use surrealdb::{Datastore, Session};
 
-type DB = (Datastore, Session);
+pub type DB = (Datastore, Session);
 
 #[derive(Serialize, Deserialize)]
 pub struct Claims {
@@ -37,9 +37,8 @@ pub async fn branch(
         Datastore::new("memory").await.unwrap(),
         Session::for_db("trace", "book"),
     );
-    let (ds, ses) = db;
     if method.as_str() == "encode-token" {
-        encode_token(body, secret).await
+        encode_token(db, body, secret).await
     } else {
         HttpResponse::BadRequest().await.unwrap()
     }
