@@ -62,7 +62,7 @@ pub async fn branch(
     if method.as_str() == "encode-token" {
         encode_token(db, body, secret).await
     } else if method.as_str() == "decode-token" {
-        decode_token(db, body, secret).await
+        decode_token(body, secret).await
     } else {
         HttpResponse::BadRequest().await.unwrap()
     }
