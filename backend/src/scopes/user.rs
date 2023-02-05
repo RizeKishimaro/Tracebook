@@ -56,13 +56,6 @@ async fn encode_token(body: web::Json<Info>, secret: web::Data<String>) -> HttpR
     let id = random::<u32>();
     let exp: usize = (Utc::now() + Duration::days(365)).timestamp() as usize;
     println!("{} {}", body.username, body.password);
-    let db: &TYDB = &(
-        Datastore::new("memory").await.unwrap(),
-        Session::for_db("ses", "db"),
-    );
-    let create_user = DB::create_user(db, id, body.username.clone(), body.password.clone())
-        .await
-        .unwrap();
     let claim: Claims = Claims {
         id,
         exp,
@@ -75,8 +68,7 @@ async fn encode_token(body: web::Json<Info>, secret: web::Data<String>) -> HttpR
         &EncodingKey::from_secret(secret.as_str().as_ref()),
     )
     .unwrap();
-    let select = DB::select_user(db).await.unwrap();
-    println!("{select}");
+    let create_user = "asdasdas".to_owned();
     HttpResponse::Ok().json(EncodeResponse {
         message: String::from("success"),
         token,
