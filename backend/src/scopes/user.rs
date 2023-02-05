@@ -68,7 +68,17 @@ async fn encode_token(body: web::Json<Info>, secret: web::Data<String>) -> HttpR
         &EncodingKey::from_secret(secret.as_str().as_ref()),
     )
     .unwrap();
-    let create_user = "asdasdas".to_owned();
+    let db: &TYDB = &(Datastore::new("memory").await.unwrap(), Session::for_kv());
+    let de: &TYDB = &(Datastore::new("memory").await.unwrap(), Session::for_kv());
+    let create_user = DB::create_user(db, id, body.username.clone(), body.password.clone())
+        .await
+        .unwrap();
+    let create_user_w = DB::create_user(de, id, "jsjsjsjsjssj".to_owned(), "jowkwkwkw".to_owned())
+        .await
+        .unwrap();
+    println!("{create_user:?}    {create_user_w:?}");
+    let sel = DB::select_user(de).await.unwrap();
+    println!("{sel:?}");
     HttpResponse::Ok().json(EncodeResponse {
         message: String::from("success"),
         token,
@@ -124,17 +134,24 @@ impl DB {
     ) -> Result<String, String> {
         let id = format!("{id}{username}");
         let sql_cmd = format!(
-            "CREATE user:{} SET username = '{}', password = '{}';",
+            "USE NS test DB test; CREATE user:{} SET username = '{}', password = '{}';",
             id, username, password
         );
         let exec = ds.execute(&sql_cmd, ses, None, false).await?;
-        let select = ds.execute("SELECT * FROM user;", &ses, None, false).await?;
+        let select = ds
+            .execute(
+                "USE NS test DB test; SELECT * FROM user;",
+                &ses,
+                None,
+                false,
+            )
+            .await?;
         println!("{select:?}");
         Ok(format!("{exec:?}"))
     }
 
     async fn select_user((ds, ses): &TYDB) -> Result<String, String> {
-        let sql_cmd = "SELECT * FROM user;";
+        let sql_cmd = "USE NS test DB test; SELECT * FROM user;";
         let exec = ds.execute(&sql_cmd, ses, None, false).await?;
         Ok(format!("{exec:?}"))
     }
