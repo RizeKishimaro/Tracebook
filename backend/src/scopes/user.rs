@@ -22,6 +22,7 @@ pub struct EncodeResponse {
 
 #[derive(Serialize, Deserialize)]
 pub struct Info {
+    pub token: String,
     pub username: String,
     pub password: String,
 }
@@ -50,7 +51,6 @@ pub fn user_scope() -> Scope {
 
 pub async fn branch(
     method: web::Path<String>,
-    debody: web::Json<DecodeBody>,
     body: web::Json<Info>,
     secret: web::Data<String>,
 ) -> HttpResponse {
@@ -61,7 +61,7 @@ pub async fn branch(
     if method.as_str() == "encode-token" {
         encode_token(db, body, secret).await
     } else if method.as_str() == "decode-token" {
-        decode_token(debody, secret).await
+        decode_token(body, secret).await
     } else {
         HttpResponse::BadRequest().await.unwrap()
     }
