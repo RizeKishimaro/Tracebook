@@ -29,8 +29,7 @@ pub async fn encode_token(
     )
     .unwrap();
 
-    let resul = ds.execute(&sql, ses, None, false).await.unwrap();
-    println!("{resul:?}");
+    ds.execute(&sql, ses, None, false).await.unwrap();
 
     HttpResponse::Ok().json(EncodeResponse {
         message: String::from("success"),
