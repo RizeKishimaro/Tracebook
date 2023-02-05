@@ -1,15 +1,27 @@
 use crate::extractors::auth_token::AuthToken;
-use actix_web::{web, HttpResponse, Scope};
+use actix_web::{rt::Runtime, web, HttpResponse, Scope};
 use chrono::{Duration, Utc};
 use jsonwebtoken::{
     decode, encode, errors::Error, Algorithm, DecodingKey, EncodingKey, Header, TokenData,
     Validation,
 };
+use lazy_static::lazy_static;
 use rand::random;
 use serde::{Deserialize, Serialize};
 use surrealdb::{Datastore, Session};
 
 type TYDB = (Datastore, Session);
+lazy_static! {
+    static ref DTS: TYDB = {
+        Runtime::new().unwrap().block_on(async {
+            let db: TYDB = (
+                Datastore::new("memory").await.unwrap(),
+                Session::for_db("ses", "db"),
+            );
+            db
+        })
+    };
+}
 
 pub fn user_scope() -> Scope {
     web::scope("/user")
@@ -60,9 +72,21 @@ async fn encode_token(body: web::Json<Info>, secret: web::Data<String>) -> HttpR
         Datastore::new("memory").await.unwrap(),
         Session::for_db("ses", "db"),
     );
+
     let create_user = DB::create_user(db, id, body.username.clone(), body.password.clone())
         .await
         .unwrap();
+    let re = DTS
+        .0
+        .execute(
+            "CREATE user:09 SET name = 'sadasdas' pass = 'asdasdasdas';",
+            &DTS.1,
+            None,
+            false,
+        )
+        .await
+        .unwrap();
+    println!("PSDJGHGHSGH: {re:?}");
     let claim: Claims = Claims {
         id,
         exp,
@@ -95,6 +119,16 @@ async fn decode_token(body: web::Json<DecodeBody>, secret: web::Data<String>) ->
         &DecodingKey::from_secret(secret.as_str().as_ref()),
         &Validation::new(Algorithm::HS256),
     );
+    let db = &(
+        Datastore::new("memory").await.unwrap(),
+        Session::for_db("ses", "db"),
+    );
+    let sep = DTS
+        .0
+        .execute("SELECT * FROM user;", &DTS.1, None, false)
+        .await
+        .unwrap();
+    println!("{sep:?}");
     match decoded {
         Ok(token) => HttpResponse::Ok().json(DecodeResponse {
             message: "Authed".to_string(),
