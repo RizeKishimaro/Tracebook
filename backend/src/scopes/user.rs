@@ -69,7 +69,7 @@ async fn encode_token(body: web::Json<Info>, secret: web::Data<String>) -> HttpR
     )
     .unwrap();
     let db: &TYDB = &(Datastore::new("memory").await.unwrap(), Session::for_kv());
-    let de: &TYDB = &(Datastore::new("memory").await.unwrap(), Session::for_kv());
+    let de: &TYDB = &(db.0, Session::for_kv());
     let create_user = DB::create_user(db, id, body.username.clone(), body.password.clone())
         .await
         .unwrap();
