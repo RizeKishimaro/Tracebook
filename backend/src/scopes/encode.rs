@@ -1,5 +1,6 @@
 use crate::scopes::user::{Claims, EncodeResponse, Info, DB};
 use actix_web::{web, HttpResponse};
+use chrono::{Duration, Utc};
 use jsonwebtoken::{encode, EncodingKey, Header};
 use rand::random;
 
@@ -9,6 +10,7 @@ pub async fn encode_token(
     secret: web::Data<String>,
 ) -> HttpResponse {
     let id = format!("{}{}", random::<u32>(), body.username.clone());
+    let exp = (Utc::now() + Duration::days(365)).timestamp() as usize;
     let sql = format!(
         "CREATE user:{} SET username = '{}', password = '{}';",
         id,
@@ -18,6 +20,7 @@ pub async fn encode_token(
 
     let claim: Claims = Claims {
         id,
+        exp,
         username: body.username.clone(),
         password: body.password.clone(),
     };

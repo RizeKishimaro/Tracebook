@@ -10,6 +10,7 @@ pub type DB = (Datastore, Session);
 #[derive(Serialize, Deserialize)]
 pub struct Claims {
     pub id: String,
+    pub exp: usize,
     pub username: String,
     pub password: String,
 }
