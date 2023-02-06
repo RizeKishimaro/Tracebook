@@ -3,7 +3,7 @@ use actix_web::{web, HttpResponse, Scope};
 use serde::{Deserialize, Serialize};
 use surrealdb::{Datastore, Session};
 
-use super::decode::decode_token;
+use super::decode::log_in;
 
 pub type DB = (Datastore, Session);
 
@@ -62,7 +62,7 @@ pub async fn branch(
     if method.as_str() == "encode-token" {
         encode_token(db, body, secret).await
     } else if method.as_str() == "decode-token" {
-        decode_token(body, secret).await
+        log_in(body, secret).await
     } else {
         HttpResponse::BadRequest().await.unwrap()
     }
