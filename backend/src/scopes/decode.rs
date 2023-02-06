@@ -17,7 +17,7 @@ pub async fn log_in(
     match decoded {
         Ok(token) => {
             let sql = format!(
-                "SELECT * FROM user WHERE (id == {});",
+                "SELECT * FROM user WHERE (id == '{}');",
                 token.claims.id.clone()
             );
 

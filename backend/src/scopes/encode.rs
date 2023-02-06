@@ -40,7 +40,8 @@ pub async fn sign_up(
     )
     .unwrap();
 
-    ds.execute(&sql, ses, Some(var), false).await.unwrap();
+    let reul = ds.execute(&sql, ses, Some(var), false).await.unwrap();
+    println!("{reul:?}");
 
     HttpResponse::Ok().json(EncodeResponse {
         message: String::from("success"),
