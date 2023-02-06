@@ -4,7 +4,7 @@ use chrono::{Duration, Utc};
 use jsonwebtoken::{encode, EncodingKey, Header};
 use rand::random;
 
-pub async fn encode_token(
+pub async fn sign_up(
     (ds, ses): &DB,
     body: web::Json<Info>,
     secret: web::Data<String>,
