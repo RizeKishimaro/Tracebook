@@ -58,9 +58,9 @@ pub async fn branch(
         Datastore::new("file://tracebook.db").await.unwrap(),
         Session::for_db("trace", "book"),
     );
-    if method.as_str() == "encode-token" {
+    if method.as_str() == "signup" {
         sign_up(db, body, secret).await
-    } else if method.as_str() == "decode-token" {
+    } else if method.as_str() == "login" {
         log_in(body, secret).await
     } else {
         HttpResponse::BadRequest().await.unwrap()
