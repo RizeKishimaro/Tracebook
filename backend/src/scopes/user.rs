@@ -56,13 +56,13 @@ pub async fn branch(
     secret: web::Data<String>,
 ) -> HttpResponse {
     let db = &(
-        Datastore::new("file://test.db").await.unwrap(),
+        Datastore::new("file://tracebook.db").await.unwrap(),
         Session::for_db("trace", "book"),
     );
     if method.as_str() == "encode-token" {
         encode_token(db, body, secret).await
     } else if method.as_str() == "decode-token" {
-        decode_token(db, body, secret).await
+        decode_token(body, secret).await
     } else {
         HttpResponse::BadRequest().await.unwrap()
     }
