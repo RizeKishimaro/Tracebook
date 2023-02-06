@@ -1,9 +1,8 @@
-use crate::scopes::encode::encode_token;
 use actix_web::{web, HttpResponse, Scope};
 use serde::{Deserialize, Serialize};
 use surrealdb::{Datastore, Session};
 
-use super::decode::log_in;
+use super::{decode::log_in, encode::sign_up};
 
 pub type DB = (Datastore, Session);
 
@@ -60,7 +59,7 @@ pub async fn branch(
         Session::for_db("trace", "book"),
     );
     if method.as_str() == "encode-token" {
-        encode_token(db, body, secret).await
+        sign_up(db, body, secret).await
     } else if method.as_str() == "decode-token" {
         log_in(body, secret).await
     } else {
