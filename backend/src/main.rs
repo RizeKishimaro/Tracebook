@@ -10,10 +10,10 @@ async fn main() -> std::io::Result<()> {
     dotenv().expect("Error due to: .env File not found");
     HttpServer::new(|| {
         let cors = Cors::permissive();
-        let l = dotenvy::var("SECRET").unwrap();
+        let secret = dotenvy::var("SECRET").unwrap();
         App::new()
             .wrap(cors)
-            .app_data(web::Data::new(l))
+            .app_data(web::Data::new(secret))
             .service(user_scope())
     })
     .bind(("127.0.0.1", 8090))?
