@@ -1,9 +1,13 @@
 use actix_web::{web, HttpResponse};
 use jsonwebtoken::{decode, errors::Error, DecodingKey, TokenData, Validation};
 
-use super::user::{Claims, DecodeResponse, Info, Response};
+use super::user::{Claims, DecodeResponse, Info, Response, DB};
 
-pub async fn log_in(body: web::Json<Info>, secret: web::Data<String>) -> HttpResponse {
+pub async fn log_in(
+    (ds, ses): &DB,
+    body: web::Json<Info>,
+    secret: web::Data<String>,
+) -> HttpResponse {
     let decoded: Result<TokenData<Claims>, Error> = decode(
         &body.token,
         &DecodingKey::from_secret(secret.as_str().as_ref()),
