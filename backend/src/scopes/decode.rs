@@ -15,12 +15,22 @@ pub async fn log_in(
     );
 
     match decoded {
-        Ok(token) => HttpResponse::Ok().json(DecodeResponse {
-            message: "Authed".to_string(),
-            id: token.claims.id,
-            username: token.claims.username,
-            password: token.claims.password,
-        }),
+        Ok(token) => {
+            let sql = format!(
+                "SELECT * FROM user WHERE (id == {});",
+                token.claims.id.clone()
+            );
+
+            let resul = ds.execute(&sql, ses, None, false).await.unwrap();
+            println!("{resul:?}");
+
+            HttpResponse::Ok().json(DecodeResponse {
+                message: "Authed".to_string(),
+                id: token.claims.id,
+                username: token.claims.username,
+                password: token.claims.password,
+            })
+        }
         Err(e) => HttpResponse::BadRequest().json(Response {
             message: e.to_string(),
         }),
