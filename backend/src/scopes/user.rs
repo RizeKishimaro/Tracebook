@@ -61,7 +61,7 @@ pub async fn branch(
     if method.as_str() == "signup" {
         sign_up(db, body, secret).await
     } else if method.as_str() == "login" {
-        log_in(body, secret).await
+        log_in(db, body, secret).await
     } else {
         HttpResponse::BadRequest().await.unwrap()
     }
