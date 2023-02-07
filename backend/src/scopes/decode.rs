@@ -1,5 +1,5 @@
 use super::{
-    into_obj::into_obj,
+    into_obj::get_value,
     user::{Claims, DecodeResponse, Info, Response, DB},
 };
 use actix_web::{web, HttpResponse};
@@ -22,12 +22,8 @@ pub async fn log_in(
 
             let resul = ds.execute(&sql, ses, None, false).await.unwrap();
             println!("{resul:?}");
-            let res_value = into_obj(resul)
-                .unwrap()
-                .next()
-                .transpose()
-                .unwrap()
-                .and_then(|obj| obj.get("user_id").map(|id| id.to_string()));
+            let res_value = get_value(resul, "user_id").unwrap();
+            println!("{res_value}");
 
             HttpResponse::Ok().json(DecodeResponse {
                 message: "Authed".to_string(),
