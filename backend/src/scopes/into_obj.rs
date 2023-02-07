@@ -24,7 +24,7 @@ pub fn into_obj(
     }
 }
 
-fn get_value(resul: Vec<Response>, field: &str) -> Result<String> {
+pub fn get_value(resul: Vec<Response>, field: &str) -> Result<String> {
     Ok(into_obj(resul)?
         .next()
         .transpose()?
