@@ -1,5 +1,5 @@
 use super::{
-    into_obj::into_obj,
+    into_obj::{get_value, obj_str},
     user::{Claims, DecodeResponse, Info, Response, DB},
 };
 use actix_web::{web, HttpResponse};
@@ -18,23 +18,27 @@ pub async fn log_in(
 
     match decoded {
         Ok(token) => {
-            let sql = format!("SELECT * FROM user:{}", token.claims.id.clone());
+            let data = token.claims;
+            let sql = format!("SELECT * FROM user:{}", data.id);
 
             let resul = ds.execute(&sql, ses, None, false).await.unwrap();
-            println!("{resul:?}");
-            let res_value = into_obj(resul)
-                .unwrap()
-                .next()
-                .transpose()
-                .unwrap()
-                .and_then(|obj| obj.get("user_id").map(|id| id.to_string()));
 
-            HttpResponse::Ok().json(DecodeResponse {
-                message: "Authed".to_string(),
-                id: token.claims.id,
-                username: token.claims.username,
-                password: token.claims.password,
-            })
+            let id_value = get_value(resul).unwrap();
+            let obj_str = obj_str(id_value, "user_id".to_string()).unwrap();
+            let ch_id = format!("\"{}\"", data.id);
+
+            if obj_str == ch_id {
+                HttpResponse::Ok().json(DecodeResponse {
+                    message: "Authed".to_string(),
+                    id: data.id,
+                    username: data.username,
+                    password: data.password,
+                })
+            } else {
+                HttpResponse::Unauthorized().json(Response {
+                    message: "Unauthorized!".to_string(),
+                })
+            }
         }
         Err(e) => HttpResponse::BadRequest().json(Response {
             message: e.to_string(),
