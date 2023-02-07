@@ -23,3 +23,11 @@ pub fn into_obj(
         _ => Err(anyhow!("No record found!")),
     }
 }
+
+pub fn get_value(resul: Vec<Response>, field: &str) -> Result<String> {
+    Ok(into_obj(resul)?
+        .next()
+        .transpose()?
+        .and_then(|obj| obj.get(field).map(|val| val.to_string()))
+        .unwrap())
+}
