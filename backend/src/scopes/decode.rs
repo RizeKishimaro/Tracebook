@@ -1,7 +1,6 @@
+use super::user::{Claims, DecodeResponse, Info, Response, DB};
 use actix_web::{web, HttpResponse};
 use jsonwebtoken::{decode, errors::Error, DecodingKey, TokenData, Validation};
-
-use super::user::{Claims, DecodeResponse, Info, Response, DB};
 
 pub async fn log_in(
     (ds, ses): &DB,
