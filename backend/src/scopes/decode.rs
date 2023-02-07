@@ -21,10 +21,15 @@ pub async fn log_in(
             let sql = format!("SELECT * FROM user:{}", token.claims.id.clone());
 
             let resul = ds.execute(&sql, ses, None, false).await.unwrap();
+            println!("{resul:?}");
             let res_value = into_obj(resul)
                 .unwrap()
                 .next()
-                .map(|v| println!("{:?}", v.unwrap().get("id")));
+                .transpose()
+                .unwrap()
+                .and_then(|obj| obj.get("id").map(|id| id.to_string()));
+
+            println!("{}", res_value.unwrap());
 
             HttpResponse::Ok().json(DecodeResponse {
                 message: "Authed".to_string(),

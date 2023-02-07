@@ -18,7 +18,7 @@ pub async fn sign_up(
     let sql = format!("CREATE user:{} CONTENT $data", id);
 
     let data: BTreeMap<String, Value> = [
-        ("id".into(), id.clone().into()),
+        ("user_id".into(), id.clone().into()),
         ("username".into(), body.username.clone().into()),
         ("password".into(), body.password.clone().into()),
     ]
@@ -40,8 +40,7 @@ pub async fn sign_up(
     )
     .unwrap();
 
-    let reul = ds.execute(&sql, ses, Some(var), false).await.unwrap();
-    println!("{reul:?}");
+    ds.execute(&sql, ses, Some(var), false).await.unwrap();
 
     HttpResponse::Ok().json(EncodeResponse {
         message: String::from("success"),
