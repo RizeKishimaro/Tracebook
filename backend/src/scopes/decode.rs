@@ -27,7 +27,7 @@ pub async fn log_in(
                 .next()
                 .transpose()
                 .unwrap()
-                .and_then(|obj| obj.get("id").map(|id| id.to_string()));
+                .and_then(|obj| obj.get("user_id").map(|id| id.to_string()));
 
             println!("{}", res_value.unwrap());
 

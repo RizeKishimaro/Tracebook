@@ -1,3 +1,5 @@
 /target
+/.env
+/tracebook.db
 /Cargo.lock
 /frontend/target
