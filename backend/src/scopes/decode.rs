@@ -21,9 +21,8 @@ pub async fn log_in(
             let sql = format!("SELECT * FROM user:{}", token.claims.id.clone());
 
             let resul = ds.execute(&sql, ses, None, false).await.unwrap();
-            println!("{resul:?}");
-            let res_value = get_value(resul, "user_id").unwrap();
-            println!("{res_value}");
+
+            let id_value = get_value(resul).unwrap();
 
             HttpResponse::Ok().json(DecodeResponse {
                 message: "Authed".to_string(),

@@ -24,10 +24,8 @@ pub fn into_obj(
     }
 }
 
-pub fn get_value(resul: Vec<Response>, field: &str) -> Result<String> {
-    Ok(into_obj(resul)?
-        .next()
-        .transpose()?
-        .and_then(|obj| obj.get(field).map(|val| val.to_string()))
-        .unwrap())
+pub fn get_value(resul: Vec<Response>) -> Result<String> {
+    let re = into_obj(resul)?.into_iter().next().unwrap().unwrap();
+    println!("{re}");
+    Ok("asdsdas".to_string())
 }
