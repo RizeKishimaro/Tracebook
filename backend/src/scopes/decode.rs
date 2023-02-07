@@ -29,8 +29,6 @@ pub async fn log_in(
                 .unwrap()
                 .and_then(|obj| obj.get("user_id").map(|id| id.to_string()));
 
-            println!("{}", res_value.unwrap());
-
             HttpResponse::Ok().json(DecodeResponse {
                 message: "Authed".to_string(),
                 id: token.claims.id,
