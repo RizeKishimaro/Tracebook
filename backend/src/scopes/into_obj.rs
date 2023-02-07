@@ -24,8 +24,11 @@ pub fn into_obj(
     }
 }
 
-pub fn get_value(resul: Vec<Response>) -> Result<String> {
-    let re = into_obj(resul)?.into_iter().next().unwrap().unwrap();
-    println!("{re}");
-    Ok("asdsdas".to_string())
+pub fn get_value(resul: Vec<Response>) -> Result<surrealdb::sql::Object> {
+    let resul = into_obj(resul)?.into_iter().next().unwrap().unwrap();
+    Ok(resul)
+}
+
+pub fn obj_str(obj: surrealdb::sql::Object, key: String) -> String {
+    obj.get(&key).unwrap().to_string()
 }
