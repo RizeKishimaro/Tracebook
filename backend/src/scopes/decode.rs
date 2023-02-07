@@ -1,4 +1,7 @@
-use super::user::{Claims, DecodeResponse, Info, Response, DB};
+use super::{
+    into_obj::into_obj,
+    user::{Claims, DecodeResponse, Info, Response, DB},
+};
 use actix_web::{web, HttpResponse};
 use jsonwebtoken::{decode, errors::Error, DecodingKey, TokenData, Validation};
 
@@ -18,6 +21,10 @@ pub async fn log_in(
             let sql = format!("SELECT * FROM user:{}", token.claims.id.clone());
 
             let resul = ds.execute(&sql, ses, None, false).await.unwrap();
+            let res_value = into_obj(resul)
+                .unwrap()
+                .next()
+                .map(|v| println!("{:?}", v.unwrap().get("id")));
 
             HttpResponse::Ok().json(DecodeResponse {
                 message: "Authed".to_string(),
