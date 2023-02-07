@@ -1,7 +1,6 @@
+use super::user::{Claims, DecodeResponse, Info, Response, DB};
 use actix_web::{web, HttpResponse};
 use jsonwebtoken::{decode, errors::Error, DecodingKey, TokenData, Validation};
-
-use super::user::{Claims, DecodeResponse, Info, Response, DB};
 
 pub async fn log_in(
     (ds, ses): &DB,
@@ -16,13 +15,9 @@ pub async fn log_in(
 
     match decoded {
         Ok(token) => {
-            let sql = format!(
-                "SELECT * FROM user WHERE (id == '{}');",
-                token.claims.id.clone()
-            );
+            let sql = format!("SELECT * FROM user:{}", token.claims.id.clone());
 
             let resul = ds.execute(&sql, ses, None, false).await.unwrap();
-            println!("{resul:?}");
 
             HttpResponse::Ok().json(DecodeResponse {
                 message: "Authed".to_string(),
