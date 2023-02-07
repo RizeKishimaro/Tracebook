@@ -16,10 +16,7 @@ pub async fn log_in(
 
     match decoded {
         Ok(token) => {
-            let sql = format!(
-                "SELECT * FROM user WHERE (id == '{}');",
-                token.claims.id.clone()
-            );
+            let sql = format!("SELECT * FROM user:{}", token.claims.id.clone());
 
             let resul = ds.execute(&sql, ses, None, false).await.unwrap();
             println!("{resul:?}");
