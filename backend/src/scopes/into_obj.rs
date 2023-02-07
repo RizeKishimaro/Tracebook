@@ -2,7 +2,9 @@ use anyhow::{anyhow, Result};
 use surrealdb::sql::Value::{Array, Object};
 use surrealdb::Response;
 
-fn into_obj(ress: Vec<Response>) -> Result<impl Iterator<Item = Result<surrealdb::sql::Object>>> {
+pub fn into_obj(
+    ress: Vec<Response>,
+) -> Result<impl Iterator<Item = Result<surrealdb::sql::Object>>> {
     let res = ress
         .into_iter()
         .next()
