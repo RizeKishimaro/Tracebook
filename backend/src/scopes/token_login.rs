@@ -26,14 +26,18 @@ pub async fn token_login(
             let id_value = get_value(resul).unwrap();
             let vec_field = vec![
                 "user_id".to_string(),
+                "emnum".to_string(),
                 "username".to_string(),
                 "password".to_string(),
+                "sex".to_string(),
             ];
             let vec_data = obj_str(id_value, vec_field);
             let datas = vec![
                 format!("\"{}\"", data.id),
+                format!("\"{}\"", data.emnum),
                 format!("\"{}\"", data.username),
                 format!("\"{}\"", data.password),
+                format!("\"{}\"", data.sex),
             ];
 
             if vec_data == datas {

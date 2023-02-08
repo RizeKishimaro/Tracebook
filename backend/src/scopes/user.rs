@@ -10,6 +10,8 @@ pub type DB = (Datastore, Session);
 pub struct Claims {
     pub id: String,
     pub exp: usize,
+    pub emnum: String,
+    pub sex: String,
     pub username: String,
     pub password: String,
 }
@@ -23,8 +25,10 @@ pub struct EncodeResponse {
 #[derive(Serialize, Deserialize)]
 pub struct Info {
     pub token: String,
+    pub emnum: String,
     pub username: String,
     pub password: String,
+    pub sex: String,
 }
 
 #[derive(Serialize, Deserialize)]

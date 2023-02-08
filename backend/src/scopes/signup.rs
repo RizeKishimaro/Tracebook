@@ -19,8 +19,10 @@ pub async fn sign_up(
 
     let data: BTreeMap<String, Value> = [
         ("user_id".into(), id.clone().into()),
+        ("emnum".into(), body.emnum.clone().into()),
         ("username".into(), body.username.clone().into()),
         ("password".into(), body.password.clone().into()),
+        ("sex".into(), body.sex.clone().into()),
     ]
     .into();
 
@@ -29,6 +31,8 @@ pub async fn sign_up(
     let claim: Claims = Claims {
         id,
         exp,
+        emnum: body.emnum.clone(),
+        sex: body.sex.clone(),
         username: body.username.clone(),
         password: body.password.clone(),
     };
