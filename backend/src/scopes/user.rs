@@ -41,8 +41,7 @@ pub struct Response {
 pub struct DecodeResponse {
     pub message: String,
     pub id: String,
-    pub username: String,
-    pub password: String,
+    pub token: String,
 }
 
 pub fn user_scope() -> Scope {
