@@ -66,7 +66,7 @@ pub async fn branch(
     } else if method.as_str() == "token-login" {
         token_login(db, body, secret).await
     } else if method.as_str() == "login" {
-        login(db, body).await
+        login(db, body, secret).await
     } else {
         HttpResponse::BadRequest().await.unwrap()
     }
