@@ -2,8 +2,12 @@ use actix_web::{web, HttpResponse};
 use chrono::{Duration, Utc};
 use jsonwebtoken::{encode, EncodingKey, Header};
 use rand::random;
+use surrealdb::sql::Object;
 
-use super::user::{Claims, EncodeResponse, Info, Response, DB};
+use super::{
+    into_obj::into_obj,
+    user::{Claims, EncodeResponse, Info, Response, DB},
+};
 
 pub async fn login(
     (ds, ses): &DB,
@@ -18,11 +22,19 @@ pub async fn login(
         body.sex.clone()
     );
 
-    let resul = ds.execute(&sql, ses, None, false).await;
+    let resul = ds.execute(&sql, ses, None, false).await.unwrap();
+    let kilo = ds.execute(&sql, ses, None, false).await;
+    let check = into_obj(resul).unwrap();
 
-    println!("{resul:?}");
+    println!(
+        "{:?}",
+        check
+            .into_iter()
+            .map(|p| p.unwrap())
+            .collect::<Vec<Object>>()
+    );
 
-    match resul {
+    match kilo {
         Ok(_) => {
             let id = format!("{}{}", random::<u32>(), body.username.clone());
             let exp = (Utc::now() + Duration::days(365)).timestamp() as usize;
