@@ -36,8 +36,6 @@ pub async fn log_in(
                 format!("\"{}\"", data.password),
             ];
 
-            println!("{:?}    {:?}      {}", vec_data, datas, vec_data == datas);
-
             if vec_data == datas {
                 HttpResponse::Ok().json(DecodeResponse {
                     message: "Authed".to_string(),
