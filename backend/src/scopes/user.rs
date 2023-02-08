@@ -2,7 +2,7 @@ use actix_web::{web, HttpResponse, Scope};
 use serde::{Deserialize, Serialize};
 use surrealdb::{Datastore, Session};
 
-use super::{decode::log_in, encode::sign_up};
+use super::{signup::sign_up, token_login::token_login};
 
 pub type DB = (Datastore, Session);
 
@@ -41,8 +41,7 @@ pub struct Response {
 pub struct DecodeResponse {
     pub message: String,
     pub id: String,
-    pub username: String,
-    pub password: String,
+    pub token: String,
 }
 
 pub fn user_scope() -> Scope {
@@ -61,7 +60,7 @@ pub async fn branch(
     if method.as_str() == "signup" {
         sign_up(db, body, secret).await
     } else if method.as_str() == "login" {
-        log_in(db, body, secret).await
+        token_login(db, body, secret).await
     } else {
         HttpResponse::BadRequest().await.unwrap()
     }

@@ -5,7 +5,7 @@ use super::{
 use actix_web::{web, HttpResponse};
 use jsonwebtoken::{decode, errors::Error, DecodingKey, TokenData, Validation};
 
-pub async fn log_in(
+pub async fn token_login(
     (ds, ses): &DB,
     body: web::Json<Info>,
     secret: web::Data<String>,
@@ -40,8 +40,7 @@ pub async fn log_in(
                 HttpResponse::Ok().json(DecodeResponse {
                     message: "Authed".to_string(),
                     id: data.id,
-                    username: data.username,
-                    password: data.password,
+                    token: body.token.clone(),
                 })
             } else {
                 HttpResponse::Unauthorized().json(Response {
