@@ -1,7 +1,4 @@
-use super::{
-    into_obj::{get_value, obj_str},
-    user::{Claims, DecodeResponse, Info, Response, DB},
-};
+use super::user::{Claims, DecodeResponse, Info, Response, DB};
 use actix_web::{web, HttpResponse};
 use jsonwebtoken::{decode, errors::Error, DecodingKey, TokenData, Validation};
 
@@ -19,37 +16,19 @@ pub async fn token_login(
     match decoded {
         Ok(token) => {
             let data = token.claims;
-            let sql = format!("SELECT * FROM user:{}", data.id);
+            let sql = format!("SELECT * FROM user:{} WHERE emnum = \"{}\" AND username = \"{}\" AND password = \"{}\" AND sex = \"{}\";", data.id, data.emnum, data.username, data.password, data.sex);
 
-            let resul = ds.execute(&sql, ses, None, false).await.unwrap();
+            let resul = ds.execute(&sql, ses, None, false).await;
 
-            let id_value = get_value(resul).unwrap();
-            let vec_field = vec![
-                "user_id".to_string(),
-                "emnum".to_string(),
-                "username".to_string(),
-                "password".to_string(),
-                "sex".to_string(),
-            ];
-            let vec_data = obj_str(id_value, vec_field);
-            let datas = vec![
-                format!("\"{}\"", data.id),
-                format!("\"{}\"", data.emnum),
-                format!("\"{}\"", data.username),
-                format!("\"{}\"", data.password),
-                format!("\"{}\"", data.sex),
-            ];
-
-            if vec_data == datas {
-                HttpResponse::Ok().json(DecodeResponse {
+            match resul {
+                Ok(_) => HttpResponse::Ok().json(DecodeResponse {
                     message: "Authed".to_string(),
                     id: data.id,
                     token: body.token.clone(),
-                })
-            } else {
-                HttpResponse::Unauthorized().json(Response {
-                    message: "Unauthorized!".to_string(),
-                })
+                }),
+                Err(e) => HttpResponse::BadRequest().json(Response {
+                    message: e.to_string(),
+                }),
             }
         }
         Err(e) => HttpResponse::BadRequest().json(Response {

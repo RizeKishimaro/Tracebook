@@ -1,3 +1,4 @@
+#![allow(unused)]
 use anyhow::{anyhow, Result};
 use surrealdb::sql::Value::{Array, Object};
 use surrealdb::Response;
