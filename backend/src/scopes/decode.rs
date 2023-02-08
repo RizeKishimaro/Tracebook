@@ -24,11 +24,16 @@ pub async fn log_in(
             let resul = ds.execute(&sql, ses, None, false).await.unwrap();
 
             let id_value = get_value(resul).unwrap();
-            let vec_data = obj_str(id_value, vec!["user_id", "name", "password"]);
+            let vec_field = vec![
+                "user_id".to_string(),
+                "username".to_string(),
+                "password".to_string(),
+            ];
+            let vec_data = obj_str(id_value, vec_field);
             let datas = vec![
-                data.id.clone(),
-                data.username.clone(),
-                data.password.clone(),
+                format!("\"{}\"", data.id),
+                format!("\"{}\"", data.username),
+                format!("\"{}\"", data.password),
             ];
 
             if vec_data == datas {
