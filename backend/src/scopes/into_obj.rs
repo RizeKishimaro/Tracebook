@@ -30,9 +30,5 @@ pub fn get_value(resul: Vec<Response>) -> Result<surrealdb::sql::Object> {
 }
 
 pub fn obj_str(obj: surrealdb::sql::Object, keys: Vec<&str>) -> Vec<String> {
-    keys.into_iter()
-        .next()
-        .map(|key| obj.get(key).unwrap().to_string())
-        .into_iter()
-        .collect()
+    println!("{}", obj);
 }
