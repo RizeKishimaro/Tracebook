@@ -24,10 +24,14 @@ pub async fn log_in(
             let resul = ds.execute(&sql, ses, None, false).await.unwrap();
 
             let id_value = get_value(resul).unwrap();
-            let obj_str = obj_str(id_value, "user_id".to_string()).unwrap();
-            let ch_id = format!("\"{}\"", data.id);
+            let vec_data = obj_str(id_value, vec!["user_id", "name", "password"]);
+            let datas = vec![
+                data.id.clone(),
+                data.username.clone(),
+                data.password.clone(),
+            ];
 
-            if obj_str == ch_id {
+            if vec_data == datas {
                 HttpResponse::Ok().json(DecodeResponse {
                     message: "Authed".to_string(),
                     id: data.id,
