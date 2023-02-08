@@ -24,7 +24,7 @@ pub async fn log_in(
             let resul = ds.execute(&sql, ses, None, false).await.unwrap();
 
             let id_value = get_value(resul).unwrap();
-            let obj_str = obj_str(id_value, "user_id".to_string()).unwrap();
+            let obj_str = obj_str(id_value, "user_id".to_string());
             let ch_id = format!("\"{}\"", data.id);
 
             if obj_str == ch_id {
