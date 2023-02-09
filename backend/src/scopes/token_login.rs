@@ -32,7 +32,7 @@ pub async fn token_login(
                     token: body.token.clone(),
                 }),
                 Err(e) => HttpResponse::BadRequest().json(Response {
-                    message: e.to_string(),
+                    message: e,
                 }),
             }
         }

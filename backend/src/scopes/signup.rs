@@ -15,7 +15,7 @@ pub async fn sign_up(
     let id = format!("{}{}", random::<u32>(), body.username.clone());
     let exp = (Utc::now() + Duration::days(365)).timestamp() as usize;
 
-    let sql = format!("CREATE user:{} CONTENT $data", id);
+    let sql = format!("CREATE user:{id} CONTENT $data");
 
     let data: BTreeMap<String, Value> = [
         ("user_id".into(), id.clone().into()),
