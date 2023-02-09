@@ -53,7 +53,7 @@ pub async fn login(
         }
 
         Err(e) => HttpResponse::BadRequest().json(Response {
-            message: e.to_string(),
+            message: e,
         }),
     }
 }

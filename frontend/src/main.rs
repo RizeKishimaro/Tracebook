@@ -23,7 +23,7 @@ async fn login(username: String, password: String) -> Response {
         "password": password,
     });
 
-    let response = Request::post("http://localhost:8090/user/encode-token")
+    Request::post("http://localhost:8090/user/encode-token")
         .header("content-type", "application/json")
         .body(data.to_string())
         .send()
@@ -31,8 +31,7 @@ async fn login(username: String, password: String) -> Response {
         .unwrap()
         .json::<Response>()
         .await
-        .unwrap();
-    response
+        .unwrap()
 }
 
 #[function_component]
@@ -44,8 +43,8 @@ fn MyComponent() -> Html {
 
     let on_submit = {
         spawn_local(async move {
-            if !(name_input_value == "" || pass_input_value == "") {
-                let res = login(name_input_value.clone(), pass_input_value.clone()).await;
+            if !(name_input_value.is_empty() || pass_input_value.is_empty()) {
+                let res = login(name_input_value, pass_input_value).await;
                 alert(&res.token);
             } else {
                 log!("Invild");
@@ -54,13 +53,13 @@ fn MyComponent() -> Html {
     };
 
     let on_name_change = {
-        let name_input_value_handle = name_input_value_handle.clone();
+        let name_input_value_handle = name_input_value_handle;
 
         Callback::from(move |e: Event| {
             let input = e.target_dyn_into::<HtmlInputElement>();
 
             if let Some(input) = input {
-                name_input_value_handle.set(input.value().clone());
+                name_input_value_handle.set(input.value());
                 log!(input.value());
             }
         })

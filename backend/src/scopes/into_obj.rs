@@ -27,7 +27,7 @@ pub fn into_obj(
 }
 
 pub fn get_value(resul: Vec<Response>) -> Result<surrealdb::sql::Object, String> {
-    let resul = into_obj(resul).unwrap().into_iter().next();
+    let resul = into_obj(resul).unwrap().next();
 
     match resul {
         Some(s) => match s {
