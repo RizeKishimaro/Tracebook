@@ -4,9 +4,10 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
 pub struct Model {
-    text: String,
-    images: Vec<String>,
-    videos: Vec<String>,
+    user_id: String,
+    text: Option<String>,
+    images: Option<Vec<String>>,
+    videos: Option<Vec<String>>,
 }
 
 pub fn post_scope() -> Scope {
@@ -15,7 +16,7 @@ pub fn post_scope() -> Scope {
 
 pub async fn post_handle(body: web::Json<Model>, posty: web::Path<String>) -> HttpResponse {
     match posty.as_str() {
-        "post-post" => post().await,
+        "post-post" => post(body).await,
         _ => HttpResponse::BadRequest().await.unwrap(),
     }
 }
