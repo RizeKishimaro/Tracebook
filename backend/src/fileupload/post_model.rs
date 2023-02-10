@@ -21,7 +21,28 @@ pub async fn post(model: web::Json<Model>, secret: web::Data<String>) -> HttpRes
     let data: BTreeMap<String, Value> = [
         ("post_type".into(), post_id.into()),
         ("text".into(), model.text.clone().into()),
-        ("images".into(), model.images),
+        (
+            "images".into(),
+            model
+                .images
+                .clone()
+                .unwrap_or_default()
+                .iter()
+                .map(|v| v.as_str())
+                .collect::<Vec<&str>>()
+                .into(),
+        ),
+        (
+            "videos".into(),
+            model
+                .videos
+                .clone()
+                .unwrap_or_default()
+                .iter()
+                .map(|v| v.as_str())
+                .collect::<Vec<&str>>()
+                .into(),
+        ),
     ]
     .into();
     HttpResponse::Ok().await.unwrap()

@@ -10,11 +10,11 @@ pub enum PostType {
 }
 
 #[derive(Serialize, Deserialize)]
-pub struct Model<'a> {
+pub struct Model {
     pub user_token: String,
     pub post_type: PostType,
     pub text: Option<String>,
-    pub images: Option<Vec<&'a str>>,
+    pub images: Option<Vec<String>>,
     pub videos: Option<Vec<String>>,
 }
 
