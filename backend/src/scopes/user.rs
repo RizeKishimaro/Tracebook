@@ -69,8 +69,6 @@ pub async fn branch(
         "login" => login(db, body, secret).await,
         "signup" => sign_up(db, body, secret).await,
         "token-login" => token_login(db, body, secret).await,
-        _ => HttpResponse::NotFound().json(Response {
-            message: "404 NotFound".to_string(),
-        }),
+        _ => HttpResponse::BadRequest().await.unwrap(),
     }
 }
