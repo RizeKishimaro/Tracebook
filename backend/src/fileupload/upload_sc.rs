@@ -3,8 +3,16 @@ use actix_web::{web, HttpResponse, Scope};
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
+pub enum PostType {
+    Global,
+    OnlyMe,
+    Friends,
+}
+
+#[derive(Serialize, Deserialize)]
 pub struct Model {
     user_id: String,
+    post_type: PostType,
     text: Option<String>,
     images: Option<Vec<String>>,
     videos: Option<Vec<String>>,
