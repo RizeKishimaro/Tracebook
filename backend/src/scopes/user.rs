@@ -1,9 +1,11 @@
-use crate::fileupload::post_model;
 use actix_web::{web, HttpResponse, Scope};
 use serde::{Deserialize, Serialize};
 use surrealdb::{Datastore, Session};
 
-use crate::auth::{normal_login::login, signup::sign_up, token_login::token_login};
+use crate::{
+    auth::{normal_login::login, signup::sign_up, token_login::token_login},
+    fileupload::post_model::post,
+};
 
 pub type DB = (Datastore, Session);
 
@@ -62,13 +64,13 @@ pub async fn branch(
         Datastore::new("file://tracebook.db").await.unwrap(),
         Session::for_db("trace", "book"),
     );
-    if method.as_str() == "signup" {
-        sign_up(db, body, secret).await
-    } else if method.as_str() == "token-login" {
-        token_login(db, body, secret).await
-    } else if method.as_str() == "login" {
-        login(db, body, secret).await
-    } else {
-        HttpResponse::BadRequest().await.unwrap()
+
+    match method.as_str() {
+        "login" => login(db, body, secret).await,
+        "signup" => sign_up(db, body, secret).await,
+        "token-login" => token_login(db, body, secret).await,
+        _ => HttpResponse::NotFound().json(Response {
+            message: "404 NotFound".to_string(),
+        }),
     }
 }
