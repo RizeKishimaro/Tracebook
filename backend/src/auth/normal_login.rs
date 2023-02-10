@@ -3,9 +3,9 @@ use chrono::{Duration, Utc};
 use jsonwebtoken::{encode, EncodingKey, Header};
 use rand::random;
 
-use super::{
-    into_obj::get_value,
-    user::{Claims, EncodeResponse, Info, Response, DB},
+use crate::{
+    extra::into_obj::get_value,
+    scopes::user::{Claims, EncodeResponse, Info, Response, DB},
 };
 
 pub async fn login(
@@ -52,8 +52,6 @@ pub async fn login(
             })
         }
 
-        Err(e) => HttpResponse::BadRequest().json(Response {
-            message: e,
-        }),
+        Err(e) => HttpResponse::BadRequest().json(Response { message: e }),
     }
 }

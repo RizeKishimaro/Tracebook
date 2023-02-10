@@ -1,8 +1,9 @@
+use crate::fileupload::post_model;
 use actix_web::{web, HttpResponse, Scope};
 use serde::{Deserialize, Serialize};
 use surrealdb::{Datastore, Session};
 
-use super::{normal_login::login, signup::sign_up, token_login::token_login};
+use crate::auth::{normal_login::login, signup::sign_up, token_login::token_login};
 
 pub type DB = (Datastore, Session);
 
