@@ -1,6 +1,6 @@
-use super::{
-    into_obj::get_value,
-    user::{Claims, DecodeResponse, Info, Response, DB},
+use crate::{
+    extra::into_obj::get_value,
+    scopes::user::{Claims, DecodeResponse, Info, Response, DB},
 };
 use actix_web::{web, HttpResponse};
 use jsonwebtoken::{decode, errors::Error, DecodingKey, TokenData, Validation};
@@ -31,9 +31,7 @@ pub async fn token_login(
                     id: data.id,
                     token: body.token.clone(),
                 }),
-                Err(e) => HttpResponse::BadRequest().json(Response {
-                    message: e,
-                }),
+                Err(e) => HttpResponse::BadRequest().json(Response { message: e }),
             }
         }
         Err(e) => HttpResponse::BadRequest().json(Response {
