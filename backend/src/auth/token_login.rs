@@ -26,7 +26,7 @@ pub async fn token_login(
                 Emnum::Mail(mail) => mail,
             };
 
-            let sql = format!("SELECT * FROM user:{} WHERE emnum = \"{}\" AND username = \"{}\" AND password = \"{}\" AND sex = \"{}\";", data.id, emnum, data.username, data.password, format!("{:?}", data.sex));
+            let sql = format!("SELECT * FROM user:{} WHERE emnum = \"{}\" AND username = \"{}\" AND password = \"{}\" AND sex = \"{:?}\";", data.id, emnum, data.username, data.password, data.sex);
 
             let resul = ds.execute(&sql, ses, None, false).await.unwrap();
 
