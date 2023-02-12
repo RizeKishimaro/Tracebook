@@ -12,6 +12,7 @@ pub async fn sign_up(
     body: web::Json<Info>,
     secret: web::Data<String>,
 ) -> HttpResponse {
+    let body = body.user.as_ref().unwrap();
     let id = format!("{}{}", random::<u32>(), body.username.clone());
     let exp = (Utc::now() + Duration::days(365)).timestamp() as usize;
 

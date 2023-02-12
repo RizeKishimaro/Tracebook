@@ -23,12 +23,17 @@ pub struct EncodeResponse {
 }
 
 #[derive(Serialize, Deserialize)]
-pub struct Info {
-    pub token: String,
+pub struct UserInfo {
     pub emnum: String,
     pub username: String,
     pub password: String,
     pub sex: String,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct Info {
+    pub token: Option<String>,
+    pub user: Option<UserInfo>,
 }
 
 #[derive(Serialize, Deserialize)]
