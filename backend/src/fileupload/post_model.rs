@@ -35,6 +35,6 @@ pub async fn post(
     .into();
 
     let var: BTreeMap<String, Value> = [("data".into(), data.into())].into();
-    let _post = ds.execute(&sql, ses, Some(var), false).await.unwrap();
+    let post = ds.execute(&sql, ses, Some(var), false).await.unwrap();
     HttpResponse::Ok().await.unwrap()
 }
