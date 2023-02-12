@@ -20,11 +20,11 @@ pub async fn login(
         Emnum::Num(num) => num.to_string(),
     };
     let sql = format!(
-        "SELECT * FROM user WHERE emnum = \"{}\" AND username = \"{}\" AND password = \"{}\" AND sex = \"{}\";",
+        "SELECT * FROM user WHERE emnum = \"{}\" AND username = \"{}\" AND password = \"{}\" AND sex = \"{:?}\";",
         emnum,
         body.username.clone(),
         body.password.clone(),
-        format!("{:?}", body.sex.clone())
+        body.sex.clone()
     );
 
     let resul = ds.execute(&sql, ses, None, true).await.unwrap();
