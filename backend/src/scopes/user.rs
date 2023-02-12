@@ -2,10 +2,7 @@ use actix_web::{web, HttpResponse, Scope};
 use serde::{Deserialize, Serialize};
 use surrealdb::{Datastore, Session};
 
-use crate::{
-    auth::{normal_login::login, signup::sign_up, token_login::token_login},
-    fileupload::post_model::post,
-};
+use crate::auth::{normal_login::login, signup::sign_up, token_login::token_login};
 
 pub type DB = (Datastore, Session);
 

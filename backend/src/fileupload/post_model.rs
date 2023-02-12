@@ -5,11 +5,18 @@ use jsonwebtoken::{decode, errors::Error, DecodingKey, TokenData, Validation};
 use rand::random;
 use surrealdb::sql::Value;
 
-use crate::scopes::user::Claims;
+use crate::{
+    extra::into_obj::get_value,
+    scopes::user::{Claims, Response, DB},
+};
 
 use super::upload_sc::Model;
 
-pub async fn post(model: web::Json<Model>, secret: web::Data<String>) -> HttpResponse {
+pub async fn post(
+    (ds, ses): &DB,
+    model: web::Json<Model>,
+    secret: web::Data<String>,
+) -> HttpResponse {
     let post_id = random::<u64>();
     let user_info: Result<TokenData<Claims>, Error> = decode(
         &model.user_token,
@@ -21,29 +28,17 @@ pub async fn post(model: web::Json<Model>, secret: web::Data<String>) -> HttpRes
     let data: BTreeMap<String, Value> = [
         ("post_type".into(), post_id.into()),
         ("text".into(), model.text.clone().into()),
+        //("images".into(), model.images.clone().into()),
+        ("videos".into(), model.videos.clone().into()),
         (
-            "images".into(),
-            model
-                .images
-                .clone()
-                .unwrap_or_default()
-                .iter()
-                .map(|v| v.as_str())
-                .collect::<Vec<&str>>()
-                .into(),
-        ),
-        (
-            "videos".into(),
-            model
-                .videos
-                .clone()
-                .unwrap_or_default()
-                .iter()
-                .map(|v| v.as_str())
-                .collect::<Vec<&str>>()
-                .into(),
+            "user_poster".into(),
+            format!("user:{}", user_info.unwrap().claims.id).into(),
         ),
     ]
     .into();
+
+    let var: BTreeMap<String, Value> = [("data".into(), data.into())].into();
+    let post = ds.execute(&sql, ses, Some(var), false).await.unwrap();
+    println!("{post:?}");
     HttpResponse::Ok().await.unwrap()
 }
