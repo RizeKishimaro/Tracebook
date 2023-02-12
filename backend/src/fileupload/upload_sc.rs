@@ -1,8 +1,6 @@
 use super::post_model::post;
 use actix_web::{web, HttpResponse, Scope};
 use serde::*;
-use std::fmt;
-use std::marker::PhantomData;
 use surrealdb::{Datastore, Session};
 
 type DB = (Datastore, Session);
