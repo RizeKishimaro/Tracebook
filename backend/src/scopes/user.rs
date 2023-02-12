@@ -7,11 +7,25 @@ use crate::auth::{normal_login::login, signup::sign_up, token_login::token_login
 pub type DB = (Datastore, Session);
 
 #[derive(Serialize, Deserialize)]
+pub enum Sex {
+    Male,
+    Female,
+    Intersex,
+    Nonbin,
+    Genderqueer,
+    Twospirit,
+    Androgynous,
+    Bigender,
+    Thirdgender,
+    Notshow,
+}
+
+#[derive(Serialize, Deserialize)]
 pub struct Claims {
     pub id: String,
     pub exp: usize,
     pub emnum: String,
-    pub sex: String,
+    pub sex: Sex,
     pub username: String,
     pub password: String,
 }
@@ -22,7 +36,7 @@ pub struct EncodeResponse {
     pub token: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize)]
 pub struct UserInfo {
     pub emnum: String,
     pub username: String,
