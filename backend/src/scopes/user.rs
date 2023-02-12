@@ -2,10 +2,7 @@ use actix_web::{web, HttpResponse, Scope};
 use serde::{Deserialize, Serialize};
 use surrealdb::{Datastore, Session};
 
-use crate::{
-    auth::{normal_login::login, signup::sign_up, token_login::token_login},
-    fileupload::post_model::post,
-};
+use crate::auth::{normal_login::login, signup::sign_up, token_login::token_login};
 
 pub type DB = (Datastore, Session);
 
@@ -25,13 +22,18 @@ pub struct EncodeResponse {
     pub token: String,
 }
 
-#[derive(Serialize, Deserialize)]
-pub struct Info {
-    pub token: String,
+#[derive(Serialize, Deserialize, Debug)]
+pub struct UserInfo {
     pub emnum: String,
     pub username: String,
     pub password: String,
     pub sex: String,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct Info {
+    pub token: Option<String>,
+    pub user: Option<UserInfo>,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -69,6 +71,8 @@ pub async fn branch(
         "login" => login(db, body, secret).await,
         "signup" => sign_up(db, body, secret).await,
         "token-login" => token_login(db, body, secret).await,
-        _ => HttpResponse::BadRequest().await.unwrap(),
+        _ => HttpResponse::BadRequest().json(Response {
+            message: "idk".to_string(),
+        }),
     }
 }
