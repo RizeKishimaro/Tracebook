@@ -3,7 +3,7 @@ use actix_web::{web, App, HttpServer};
 use dotenvy::dotenv;
 use fileupload::upload_sc::post_scope;
 use scopes::user::user_scope;
-use surrealdb::{Datastore, Session};
+
 mod auth;
 mod extra;
 mod extractors;

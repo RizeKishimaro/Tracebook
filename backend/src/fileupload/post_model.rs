@@ -5,10 +5,7 @@ use jsonwebtoken::{decode, errors::Error, DecodingKey, TokenData, Validation};
 use rand::random;
 use surrealdb::sql::Value;
 
-use crate::{
-    extra::into_obj::get_value,
-    scopes::user::{Claims, Response, DB},
-};
+use crate::scopes::user::{Claims, DB};
 
 use super::upload_sc::Model;
 
@@ -29,7 +26,7 @@ pub async fn post(
         ("post_type".into(), post_id.into()),
         ("text".into(), model.text.clone().into()),
         //("images".into(), model.images.clone().into()),
-        ("videos".into(), model.videos.clone().into()),
+        //("videos".into(), model.videos.clone().into()),
         (
             "user_poster".into(),
             format!("user:{}", user_info.unwrap().claims.id).into(),
@@ -39,6 +36,5 @@ pub async fn post(
 
     let var: BTreeMap<String, Value> = [("data".into(), data.into())].into();
     let post = ds.execute(&sql, ses, Some(var), false).await.unwrap();
-    println!("{post:?}");
     HttpResponse::Ok().await.unwrap()
 }

@@ -1,6 +1,6 @@
 use crate::{
     extra::into_obj::get_value,
-    scopes::user::{Claims, DecodeResponse, Info, Response, DB},
+    scopes::user::{Claims, DecodeResponse, Emnum, Info, Response, DB},
 };
 use actix_web::{web, HttpResponse};
 use jsonwebtoken::{decode, errors::Error, DecodingKey, TokenData, Validation};
@@ -20,7 +20,13 @@ pub async fn token_login(
     match decoded {
         Ok(token) => {
             let data = token.claims;
-            let sql = format!("SELECT * FROM user:{} WHERE emnum = \"{}\" AND username = \"{}\" AND password = \"{}\" AND sex = \"{}\";", data.id, data.emnum, data.username, data.password, data.sex);
+
+            let emnum = match data.emnum {
+                Emnum::Num(num) => num.to_string(),
+                Emnum::Mail(mail) => mail,
+            };
+
+            let sql = format!("SELECT * FROM user:{} WHERE emnum = \"{}\" AND username = \"{}\" AND password = \"{}\" AND sex = \"{}\";", data.id, emnum, data.username, data.password, format!("{:?}", data.sex));
 
             let resul = ds.execute(&sql, ses, None, false).await.unwrap();
 

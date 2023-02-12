@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use crate::scopes::user::{Claims, EncodeResponse, Info, DB};
+use crate::scopes::user::{Claims, Emnum, EncodeResponse, Info, DB};
 use actix_web::{web, HttpResponse};
 use chrono::{Duration, Utc};
 use jsonwebtoken::{encode, EncodingKey, Header};
@@ -18,12 +18,17 @@ pub async fn sign_up(
 
     let sql = format!("CREATE user:{id} CONTENT $data");
 
+    let emnum = match body.emnum.clone() {
+        Emnum::Mail(mail) => mail,
+        Emnum::Num(num) => num.to_string(),
+    };
+
     let data: BTreeMap<String, Value> = [
         ("user_id".into(), id.clone().into()),
-        ("emnum".into(), body.emnum.clone().into()),
+        ("emnum".into(), emnum.into()),
         ("username".into(), body.username.clone().into()),
         ("password".into(), body.password.clone().into()),
-        ("sex".into(), body.sex.clone().into()),
+        ("sex".into(), format!("{:?}", body.sex).into()),
     ]
     .into();
 
