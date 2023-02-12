@@ -22,7 +22,7 @@ pub struct EncodeResponse {
     pub token: String,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct UserInfo {
     pub emnum: String,
     pub username: String,
@@ -71,6 +71,8 @@ pub async fn branch(
         "login" => login(db, body, secret).await,
         "signup" => sign_up(db, body, secret).await,
         "token-login" => token_login(db, body, secret).await,
-        _ => HttpResponse::BadRequest().await.unwrap(),
+        _ => HttpResponse::BadRequest().json(Response {
+            message: "idk".to_string(),
+        }),
     }
 }

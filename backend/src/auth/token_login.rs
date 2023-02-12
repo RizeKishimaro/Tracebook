@@ -10,8 +10,9 @@ pub async fn token_login(
     body: web::Json<Info>,
     secret: web::Data<String>,
 ) -> HttpResponse {
+    let token_stru = body.token.clone().unwrap();
     let decoded: Result<TokenData<Claims>, Error> = decode(
-        &body.token,
+        &token_stru,
         &DecodingKey::from_secret(secret.as_str().as_ref()),
         &Validation::new(jsonwebtoken::Algorithm::HS256),
     );
@@ -29,7 +30,7 @@ pub async fn token_login(
                 Ok(_) => HttpResponse::Ok().json(DecodeResponse {
                     message: "Authed".to_string(),
                     id: data.id,
-                    token: body.token.clone(),
+                    token: token_stru,
                 }),
                 Err(e) => HttpResponse::BadRequest().json(Response { message: e }),
             }

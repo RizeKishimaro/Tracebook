@@ -13,6 +13,7 @@ pub async fn login(
     body: web::Json<Info>,
     secret: web::Data<String>,
 ) -> HttpResponse {
+    let body = body.user.as_ref().unwrap();
     let sql = format!(
         "SELECT * FROM user WHERE emnum = \"{}\" AND username = \"{}\" AND password = \"{}\" AND sex = \"{}\";",
         body.emnum.clone(),
