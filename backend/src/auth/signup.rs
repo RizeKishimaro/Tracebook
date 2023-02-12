@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use crate::scopes::user::{Claims, Emnum, EncodeResponse, Info, Sex, DB};
+use crate::scopes::user::{Claims, Emnum, EncodeResponse, Info, DB};
 use actix_web::{web, HttpResponse};
 use chrono::{Duration, Utc};
 use jsonwebtoken::{encode, EncodingKey, Header};
@@ -12,7 +12,7 @@ pub async fn sign_up(
     body: web::Json<Info>,
     secret: web::Data<String>,
 ) -> HttpResponse {
-    let body = body.user.unwrap();
+    let body = body.user.as_ref().unwrap();
     let id = format!("{}{}", random::<u32>(), body.username.clone());
     let exp = (Utc::now() + Duration::days(365)).timestamp() as usize;
 
@@ -37,8 +37,8 @@ pub async fn sign_up(
     let claim: Claims = Claims {
         id,
         exp,
-        emnum: body.emnum,
-        sex: body.sex,
+        emnum: body.emnum.clone(),
+        sex: body.sex.clone(),
         username: body.username.clone(),
         password: body.password.clone(),
     };
