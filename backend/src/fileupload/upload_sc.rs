@@ -12,6 +12,10 @@ pub enum PostType {
     Friends,
 }
 
+impl From for PostType {
+    fn from(value: T) -> Self {}
+}
+
 #[derive(Serialize, Deserialize)]
 pub struct PostResponse {
     pub post_type: PostType,
@@ -35,6 +39,15 @@ pub struct Model {
     pub videos: Option<Links>,
 }
 
+#[derive(Serialize, Deserialize)]
+pub struct ResponsePost {
+    pub post_id: u64,
+    pub post_type: PostType,
+    pub text: Option<String>,
+    pub images: Option<Links>,
+    pub videos: Option<Links>,
+}
+
 pub fn post_scope() -> Scope {
     web::scope("/post").route("{posty}", web::post().to(post_handle))
 }
@@ -44,8 +57,6 @@ pub async fn post_handle(
     posty: web::Path<String>,
     secret: web::Data<String>,
 ) -> HttpResponse {
-    println!("{body:?}");
-
     let db: &DB = &(
         Datastore::new("file://tracebook.db").await.unwrap(),
         Session::for_db("trace", "book"),
