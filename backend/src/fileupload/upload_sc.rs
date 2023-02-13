@@ -1,6 +1,7 @@
 use super::post_model::post;
 use actix_web::{web, HttpResponse, Scope};
 use serde::*;
+use serde_json::{self, from_str};
 use surrealdb::{Datastore, Session};
 
 type DB = (Datastore, Session);
@@ -12,22 +13,30 @@ pub enum PostType {
     Friends,
 }
 
-impl From for PostType {
-    fn from(value: T) -> Self {}
-}
-
-#[derive(Serialize, Deserialize)]
-pub struct PostResponse {
-    pub post_type: PostType,
-    pub post_id: i32,
-    pub text: String,
-    pub images: String,
-    pub videos: String,
+impl From<String> for PostType {
+    fn from(value: String) -> Self {
+        match value.as_str() {
+            "Global" => PostType::Global,
+            "OnlyMe" => PostType::OnlyMe,
+            "Friends" => PostType::Friends,
+            _ => PostType::Global,
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum Links {
     Links(Vec<String>),
+    None,
+}
+
+impl From<String> for Links {
+    fn from(value: String) -> Self {
+        match value.as_str() {
+            "None" => Links::None,
+            _ => Links::Links(from_str(&value).unwrap()),
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -35,8 +44,8 @@ pub struct Model {
     pub user_token: String,
     pub post_type: PostType,
     pub text: Option<String>,
-    pub images: Option<Links>,
-    pub videos: Option<Links>,
+    pub images: Links,
+    pub videos: Links,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -44,8 +53,8 @@ pub struct ResponsePost {
     pub post_id: u64,
     pub post_type: PostType,
     pub text: Option<String>,
-    pub images: Option<Links>,
-    pub videos: Option<Links>,
+    pub images: Links,
+    pub videos: Links,
 }
 
 pub fn post_scope() -> Scope {

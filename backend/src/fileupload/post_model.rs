@@ -65,13 +65,18 @@ pub async fn post(
 
                     let resul = ds.execute(&user_sql, ses, None, false).await;
 
+                    println!("{:?}", vec_str_resul);
+
                     match resul {
-                        OK(_) => HttpResponse::Ok().json(ResponsePost {
+                        Ok(_) => HttpResponse::Ok().json(ResponsePost {
                             post_id: vec_str_resul[0].parse().unwrap_or(0712404404403),
-                            post_type: vec_str_resul[1].into(),
-                            text: vec_str_resul[2].into(),
-                            images: vec_str_resul[3],
-                            videos: vec_str_resul[4],
+                            post_type: vec_str_resul[1].clone().into(),
+                            text: vec_str_resul[2].clone().into(),
+                            images: vec_str_resul[3].clone().into(),
+                            videos: vec_str_resul[4].clone().into(),
+                        }),
+                        Err(e) => HttpResponse::InternalServerError().json(Response {
+                            message: e.to_string(),
                         }),
                     }
                 }
@@ -83,5 +88,12 @@ pub async fn post(
         Err(e) => HttpResponse::InternalServerError().json(Response {
             message: e.to_string(),
         }),
+    }
+}
+
+fn match_links(links: Links) -> String {
+    match links {
+        Links::None => "None".to_string(),
+        Links::Links(links) => format!("{links:?}"),
     }
 }
