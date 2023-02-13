@@ -21,13 +21,18 @@ pub struct PostResponse {
     pub videos: String,
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub enum Links {
+    Links(Vec<String>),
+}
+
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Model {
     pub user_token: String,
     pub post_type: PostType,
     pub text: Option<String>,
-    pub images: Option<Vec<String>>,
-    pub videos: Option<Vec<String>>,
+    pub images: Option<Links>,
+    pub videos: Option<Links>,
 }
 
 pub fn post_scope() -> Scope {
@@ -39,6 +44,8 @@ pub async fn post_handle(
     posty: web::Path<String>,
     secret: web::Data<String>,
 ) -> HttpResponse {
+    println!("{body:?}");
+
     let db: &DB = &(
         Datastore::new("file://tracebook.db").await.unwrap(),
         Session::for_db("trace", "book"),
