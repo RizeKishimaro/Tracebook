@@ -34,7 +34,7 @@ impl From<String> for Links {
     fn from(value: String) -> Self {
         match value.as_str() {
             "None" => Links::None,
-            _ => Links::Links(from_str(&value).unwrap()),
+            _ => Links::Links(from_str(&value[1..value.len() - 1]).unwrap()),
         }
     }
 }

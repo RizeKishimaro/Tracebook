@@ -10,7 +10,7 @@ use crate::{
     scopes::user::{Claims, Response, DB},
 };
 
-use super::upload_sc::{Links, Model, PostType, ResponsePost};
+use super::upload_sc::{Links, Model, ResponsePost};
 
 pub async fn post(
     (ds, ses): &DB,
@@ -29,8 +29,8 @@ pub async fn post(
         ("post_id".into(), post_id.into()),
         ("post_type".into(), format!("{:?}", model.post_type).into()),
         ("text".into(), model.text.clone().into()),
-        ("images".into(), format!("{:?}", model.images).into()),
-        ("videos".into(), format!("{:?}", model.videos).into()),
+        ("images".into(), match_links(model.images.clone()).into()),
+        ("videos".into(), match_links(model.videos.clone()).into()),
         (
             "user_poster".into(),
             format!("user:{}", user_info.unwrap().claims.id).into(),
@@ -65,11 +65,11 @@ pub async fn post(
 
                     let resul = ds.execute(&user_sql, ses, None, false).await;
 
-                    println!("{:?}", vec_str_resul);
+                    println!("{vec_str_resul:?}");
 
                     match resul {
                         Ok(_) => HttpResponse::Ok().json(ResponsePost {
-                            post_id: vec_str_resul[0].parse().unwrap_or(0712404404403),
+                            post_id: vec_str_resul[0].parse().unwrap_or(0o712404404403),
                             post_type: vec_str_resul[1].clone().into(),
                             text: vec_str_resul[2].clone().into(),
                             images: vec_str_resul[3].clone().into(),
@@ -80,9 +80,7 @@ pub async fn post(
                         }),
                     }
                 }
-                Err(e) => HttpResponse::InternalServerError().json(Response {
-                    message: e.to_string(),
-                }),
+                Err(e) => HttpResponse::InternalServerError().json(Response { message: e }),
             }
         }
         Err(e) => HttpResponse::InternalServerError().json(Response {
