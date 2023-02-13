@@ -20,7 +20,7 @@ pub enum Sex {
     Notshow,
 }
 
-#[derive(Serialize, Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub enum Emnum {
     Mail(String),
     Num(u32),

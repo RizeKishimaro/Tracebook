@@ -5,7 +5,7 @@ use rand::random;
 
 use crate::{
     extra::into_obj::get_value,
-    scopes::user::{Claims, Emnum, EncodeResponse, Info, Response, DB},
+    scopes::user::{Claims, EncodeResponse, Info, Response, DB},
 };
 
 pub async fn login(
@@ -15,13 +15,9 @@ pub async fn login(
 ) -> HttpResponse {
     let body = body.user.as_ref().unwrap();
 
-    let emnum = match body.emnum.clone() {
-        Emnum::Mail(mail) => mail,
-        Emnum::Num(num) => num.to_string(),
-    };
     let sql = format!(
-        "SELECT * FROM user WHERE emnum = \"{}\" AND username = \"{}\" AND password = \"{}\" AND sex = \"{:?}\";",
-        emnum,
+        "SELECT * FROM user WHERE emnum = \"{:?}\" AND username = \"{}\" AND password = \"{}\" AND sex = \"{:?}\";",
+        body.emnum,
         body.username.clone(),
         body.password.clone(),
         body.sex.clone()
