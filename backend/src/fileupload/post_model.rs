@@ -65,12 +65,6 @@ pub async fn post(
 
                     let resul = ds.execute(&user_sql, ses, None, false).await;
 
-                    println!("{:?}                 {post_id}", vec_str_resul[0]);
-
-                    let check = format!("SELECT * FROM {};", vec_str_resul[5]);
-                    let check_db = ds.execute(&check, ses, None, false).await.unwrap();
-                    println!("{check_db:?}");
-
                     match resul {
                         Ok(_) => HttpResponse::Ok().json(ResponsePost {
                             post_id: vec_str_resul[0].parse().unwrap_or(0o712404404),

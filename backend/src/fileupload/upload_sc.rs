@@ -32,9 +32,10 @@ pub enum Links {
 
 impl From<String> for Links {
     fn from(value: String) -> Self {
-        match value.as_str() {
+        let value = &value[1..value.len() - 1];
+        match value {
             "None" => Links::None("None".to_string()),
-            _ => Links::Links(from_str(&value[1..value.len() - 1]).unwrap()),
+            _ => Links::Links(from_str(&value).unwrap()),
         }
     }
 }
