@@ -35,7 +35,7 @@ impl From<String> for Links {
         let value = &value[1..value.len() - 1];
         match value {
             "None" => Links::None("None".to_string()),
-            _ => Links::Links(from_str(&value).unwrap()),
+            _ => Links::Links(from_str(value).unwrap()),
         }
     }
 }
