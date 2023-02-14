@@ -50,7 +50,7 @@ pub struct Model {
 
 #[derive(Serialize, Deserialize)]
 pub struct ResponsePost {
-    pub post_id: u64,
+    pub post_id: u32,
     pub post_type: PostType,
     pub text: Option<String>,
     pub images: Links,
