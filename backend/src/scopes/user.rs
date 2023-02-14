@@ -20,7 +20,7 @@ pub enum Sex {
     Notshow,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct Claims {
     pub id: String,
     pub exp: usize,

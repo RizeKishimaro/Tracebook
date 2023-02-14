@@ -36,13 +36,7 @@ pub async fn login(
 
     println!("{resul:?}");
 
-    let sql = format!(
-        "SELECT * FROM user WHERE emnum = {} AND username = {} AND password = {} AND sex = {:?};",
-        body.emnum,
-        body.username.clone(),
-        body.password.clone(),
-        body.sex.clone()
-    );
+    let sql = format!("SELECT * FROM user;",);
 
     let rewq = ds.execute(&sql, ses, None, true).await.unwrap();
 
