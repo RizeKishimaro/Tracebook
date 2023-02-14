@@ -95,7 +95,7 @@ pub async fn post(
 
 fn match_links(links: Links) -> String {
     match links {
-        Links::None => "None".to_string(),
+        Links::None(_) => "None".to_string(),
         Links::Links(links) => format!("{links:?}"),
     }
 }
