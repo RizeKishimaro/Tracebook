@@ -1,8 +1,7 @@
 use actix_cors::Cors;
 use actix_web::{web, App, HttpServer};
 use dotenvy::dotenv;
-use fileupload::upload_sc::post_scope;
-use scopes::user::user_scope;
+use scopes::{upload_sc::post_scope, user::user_scope};
 
 mod auth;
 mod extra;
