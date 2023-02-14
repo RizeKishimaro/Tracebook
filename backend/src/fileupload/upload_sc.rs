@@ -27,14 +27,15 @@ impl From<String> for PostType {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum Links {
     Links(Vec<String>),
-    None,
+    None(String),
 }
 
 impl From<String> for Links {
     fn from(value: String) -> Self {
-        match value.as_str() {
-            "None" => Links::None,
-            _ => Links::Links(from_str(&value[1..value.len() - 1]).unwrap()),
+        let value = &value[1..value.len() - 1];
+        match value {
+            "None" => Links::None("None".to_string()),
+            _ => Links::Links(from_str(value).unwrap()),
         }
     }
 }
@@ -50,7 +51,7 @@ pub struct Model {
 
 #[derive(Serialize, Deserialize)]
 pub struct ResponsePost {
-    pub post_id: u64,
+    pub post_id: u32,
     pub post_type: PostType,
     pub text: Option<String>,
     pub images: Links,

@@ -17,7 +17,7 @@ pub async fn post(
     model: web::Json<Model>,
     secret: web::Data<String>,
 ) -> HttpResponse {
-    let post_id = random::<u64>();
+    let post_id = random::<u32>();
     let user_info: Result<TokenData<Claims>, Error> = decode(
         &model.user_token,
         &DecodingKey::from_secret(secret.as_str().as_ref()),
@@ -65,11 +65,9 @@ pub async fn post(
 
                     let resul = ds.execute(&user_sql, ses, None, false).await;
 
-                    println!("{vec_str_resul:?}");
-
                     match resul {
                         Ok(_) => HttpResponse::Ok().json(ResponsePost {
-                            post_id: vec_str_resul[0].parse().unwrap_or(0o712404404403),
+                            post_id: vec_str_resul[0].parse().unwrap_or(0o712404404),
                             post_type: vec_str_resul[1].clone().into(),
                             text: vec_str_resul[2].clone().into(),
                             images: vec_str_resul[3].clone().into(),
@@ -91,7 +89,7 @@ pub async fn post(
 
 fn match_links(links: Links) -> String {
     match links {
-        Links::None => "None".to_string(),
+        Links::None(_) => "None".to_string(),
         Links::Links(links) => format!("{links:?}"),
     }
 }
