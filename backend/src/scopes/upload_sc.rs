@@ -1,4 +1,4 @@
-use super::post_model::post;
+use crate::fileupload::post_model::post;
 use actix_web::{web, HttpResponse, Scope};
 use serde::*;
 use serde_json::{self, from_str};
