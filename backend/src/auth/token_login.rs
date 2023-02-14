@@ -21,7 +21,10 @@ pub async fn token_login(
         Ok(token) => {
             let data = token.claims;
 
-            let sql = format!("SELECT * FROM user:{} WHERE emnum = \"{:?}\" AND username = \"{}\" AND password = \"{}\" AND sex = \"{:?}\";", data.id, data.emnum, data.username, data.password, data.sex);
+            let ch_sql = format!("SELECT * FROM user:{};", data.id);
+            let ch_resul = ds.execute(&ch_sql, ses, None, false).await.unwrap();
+            println!("{ch_resul:?}");
+            let sql = format!("SELECT * FROM user:{} WHERE emnum = {:?} AND username = {} AND password = {} AND sex = {:?};", data.id, data.emnum, data.username, data.password, data.sex);
 
             let resul = ds.execute(&sql, ses, None, false).await.unwrap();
 
