@@ -5,7 +5,6 @@ use crate::{
 use actix_web::{web, HttpResponse};
 use jsonwebtoken::{decode, errors::Error, DecodingKey, TokenData, Validation};
 
-
 pub async fn token_login(
     (ds, ses): &DB,
     body: web::Json<Info>,
@@ -16,6 +15,13 @@ pub async fn token_login(
         &token_stru,
         &DecodingKey::from_secret(secret.as_str().as_ref()),
         &Validation::new(jsonwebtoken::Algorithm::HS256),
+    );
+
+    let data = decoded.as_ref().unwrap().claims.clone();
+
+    println!(
+        r#"{decoded:?}     /|\/|\         {}      /|\/|\      {}      /|\/|\      {}       /|\/|\      {}      /|\/|\      {:?}      /|\"#,
+        data.id, data.username, data.password, data.emnum, data.sex
     );
 
     match decoded {
