@@ -21,13 +21,19 @@ pub async fn token_login(
 
     match decoded {
         Ok(token) => {
-            let data = token.claims;
+            let data = token.claims.clone();
 
-            let sql = format!("SELECT * FROM user:{};", data.id);
-
+            let sql = format!(
+        "SELECT * FROM user:{} WHERE emnum = \"{}\" AND username = \"{}\" AND password = \"{}\" AND sex = \"{:?}\";",
+        data.id,
+        data.emnum,
+        data.username,
+        data.password,
+        data.sex
+    );
             let resul = ds.execute(&sql, ses, None, false).await.unwrap();
 
-            let check = check_user(data.clone(), resul);
+            let check = get_value(resul);
 
             match check {
                 Ok(_) => HttpResponse::Ok().json(DecodeResponse {

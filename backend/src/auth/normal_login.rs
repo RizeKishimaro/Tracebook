@@ -22,8 +22,6 @@ pub async fn login(
 ) -> HttpResponse {
     let body = body.user.as_ref().unwrap();
 
-    println!("{:?}", body);
-
     let sql = format!(
         "SELECT * FROM user WHERE emnum = \"{}\" AND username = \"{}\" AND password = \"{}\" AND sex = \"{:?}\";",
         body.emnum,
@@ -35,12 +33,6 @@ pub async fn login(
     let resul = ds.execute(&sql, ses, None, true).await;
 
     println!("{resul:?}");
-
-    let sql = format!("SELECT * FROM user;",);
-
-    let rewq = ds.execute(&sql, ses, None, true).await.unwrap();
-
-    println!("{rewq:?}");
 
     match resul {
         Ok(resp) => {
