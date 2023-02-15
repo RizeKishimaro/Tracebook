@@ -1,12 +1,10 @@
-use actix_web::{web, HttpResponse};
-use chrono::{Duration, Utc};
-use jsonwebtoken::{encode, EncodingKey, Header};
-use rand::random;
-
 use crate::{
     extra::into_obj::get_value,
     scopes::user::{Claims, EncodeResponse, Info, Response, DB},
 };
+use actix_web::{web, HttpResponse};
+use chrono::{Duration, Utc};
+use jsonwebtoken::{encode, EncodingKey, Header};
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
@@ -32,15 +30,14 @@ pub async fn login(
 
     let resul = ds.execute(&sql, ses, None, true).await;
 
-    println!("{resul:?}");
-
     match resul {
         Ok(resp) => {
             let check = get_value(resp);
 
             match check {
-                Ok(_) => {
-                    let id = format!("{}{}", random::<u32>(), body.username.clone());
+                Ok(obj) => {
+                    let id = obj.get("user_id").unwrap().to_string();
+                    let id = id[1..id.len() - 1].to_string();
                     let exp = (Utc::now() + Duration::days(365)).timestamp() as usize;
 
                     let claims: Claims = Claims {
