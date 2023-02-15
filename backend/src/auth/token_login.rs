@@ -5,7 +5,6 @@ use crate::{
 use actix_web::{web, HttpResponse};
 use jsonwebtoken::{decode, errors::Error, DecodingKey, TokenData, Validation};
 
-use super::check_user::check_user;
 
 pub async fn token_login(
     (ds, ses): &DB,
