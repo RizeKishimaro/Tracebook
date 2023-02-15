@@ -17,13 +17,6 @@ pub async fn token_login(
         &Validation::new(jsonwebtoken::Algorithm::HS256),
     );
 
-    let data = decoded.as_ref().unwrap().claims.clone();
-
-    println!(
-        r#"{decoded:?}     /|\/|\         {}      /|\/|\      {}      /|\/|\      {}       /|\/|\      {}      /|\/|\      {:?}      /|\"#,
-        data.id, data.username, data.password, data.emnum, data.sex
-    );
-
     match decoded {
         Ok(token) => {
             let data = token.claims.clone();

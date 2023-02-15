@@ -37,11 +37,11 @@ pub async fn login(
             match check {
                 Ok(obj) => {
                     let id = obj.get("user_id").unwrap().to_string();
+                    let id = id[1..id.len() - 1].to_string();
                     let exp = (Utc::now() + Duration::days(365)).timestamp() as usize;
 
-                    println!("{id}      {}", body.emnum);
                     let claims: Claims = Claims {
-                        id: id[1..id.len() - 1].to_string(),
+                        id,
                         exp,
                         emnum: body.emnum.clone(),
                         sex: body.sex.clone(),
