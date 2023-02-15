@@ -5,6 +5,7 @@ use crate::{
 use actix_web::{web, HttpResponse};
 use jsonwebtoken::{decode, errors::Error, DecodingKey, TokenData, Validation};
 
+
 pub async fn token_login(
     (ds, ses): &DB,
     body: web::Json<Info>,
@@ -19,10 +20,16 @@ pub async fn token_login(
 
     match decoded {
         Ok(token) => {
-            let data = token.claims;
+            let data = token.claims.clone();
 
-            let sql = format!("SELECT * FROM user:{} WHERE emnum = \"{:?}\" AND username = \"{}\" AND password = \"{}\" AND sex = \"{:?}\";", data.id, data.emnum, data.username, data.password, data.sex);
-
+            let sql = format!(
+        "SELECT * FROM user:{} WHERE emnum = \"{}\" AND username = \"{}\" AND password = \"{}\" AND sex = \"{:?}\";",
+        data.id,
+        data.emnum,
+        data.username,
+        data.password,
+        data.sex
+    );
             let resul = ds.execute(&sql, ses, None, false).await.unwrap();
 
             let check = get_value(resul);

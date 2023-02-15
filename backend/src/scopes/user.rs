@@ -21,16 +21,10 @@ pub enum Sex {
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
-pub enum Emnum {
-    Mail(String),
-    Num(u32),
-}
-
-#[derive(Serialize, Deserialize)]
 pub struct Claims {
     pub id: String,
     pub exp: usize,
-    pub emnum: Emnum,
+    pub emnum: String,
     pub sex: Sex,
     pub username: String,
     pub password: String,
@@ -42,9 +36,9 @@ pub struct EncodeResponse {
     pub token: String,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct UserInfo {
-    pub emnum: Emnum,
+    pub emnum: String,
     pub username: String,
     pub password: String,
     pub sex: Sex,
