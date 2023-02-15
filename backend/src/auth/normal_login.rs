@@ -41,7 +41,7 @@ pub async fn login(
 
                     println!("{id}      {}", body.emnum);
                     let claims: Claims = Claims {
-                        id,
+                        id: id[1..id.len() - 1].to_string(),
                         exp,
                         emnum: body.emnum.clone(),
                         sex: body.sex.clone(),
