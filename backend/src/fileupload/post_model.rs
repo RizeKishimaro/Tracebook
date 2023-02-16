@@ -7,8 +7,11 @@ use surrealdb::sql::Value;
 
 use crate::{
     extra::into_obj::{get_value, obj_str},
-    scopes::upload_sc::{Links, Model, ResponsePost},
     structures::auth_struct::*,
+    structures::{
+        post_enum::Links,
+        post_struct::{Model, ResponsePost},
+    },
 };
 
 pub async fn post(
