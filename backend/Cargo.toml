@@ -9,6 +9,7 @@ edition = "2021"
 actix-cors = "0.6.4"
 actix-web = "4.3.0"
 anyhow = "1.0.68"
+argon2 = "0.4.1"
 chrono = { version = "0.4.23", default-features = false, features = ["clock"] }
 dotenvy = "0.15.6"
 jsonwebtoken = "8.2.0"
