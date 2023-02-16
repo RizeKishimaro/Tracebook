@@ -1,71 +1,10 @@
 use actix_web::{web, HttpResponse, Scope};
-use serde::{Deserialize, Serialize};
 use surrealdb::{Datastore, Session};
 
-use crate::auth::{normal_login::login, signup::sign_up, token_login::token_login};
-
-pub type DB = (Datastore, Session);
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub enum Sex {
-    Male,
-    Female,
-    Intersex,
-    Nonbin,
-    Genderqueer,
-    Twospirit,
-    Androgynous,
-    Bigender,
-    Thirdgender,
-    Notshow,
-}
-
-#[derive(Serialize, Deserialize, Clone, Debug)]
-pub struct Claims {
-    pub id: String,
-    pub exp: usize,
-    pub emnum: String,
-    pub sex: Sex,
-    pub username: String,
-    pub password: String,
-}
-
-#[derive(Serialize, Deserialize)]
-pub struct EncodeResponse {
-    pub message: String,
-    pub token: String,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct UserInfo {
-    pub emnum: String,
-    pub username: String,
-    pub password: String,
-    pub sex: Sex,
-}
-
-#[derive(Serialize, Deserialize)]
-pub struct Info {
-    pub token: Option<String>,
-    pub user: Option<UserInfo>,
-}
-
-#[derive(Serialize, Deserialize)]
-pub struct DecodeBody {
-    pub token: String,
-}
-
-#[derive(Serialize, Deserialize)]
-pub struct Response {
-    pub message: String,
-}
-
-#[derive(Serialize, Deserialize)]
-pub struct DecodeResponse {
-    pub message: String,
-    pub id: String,
-    pub token: String,
-}
+use crate::{
+    auth::{normal_login::login, signup::sign_up, token_login::token_login},
+    structures::auth_struct::*,
+};
 
 pub fn user_scope() -> Scope {
     web::scope("/user").route("{method}", web::post().to(branch))

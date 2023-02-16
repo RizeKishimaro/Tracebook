@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use crate::scopes::user::{Claims, EncodeResponse, Info, DB};
+use crate::structures::auth_struct::{Claims, EncodeResponse, Info, DB};
 use actix_web::{web, HttpResponse};
 use chrono::{Duration, Utc};
 use jsonwebtoken::{encode, EncodingKey, Header};

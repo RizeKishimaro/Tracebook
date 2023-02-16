@@ -12,7 +12,7 @@ use jsonwebtoken::{
 };
 use serde::{Deserialize, Serialize};
 
-use crate::scopes::user::Claims;
+use crate::structures::auth_struct::Claims;
 
 #[derive(Serialize, Deserialize)]
 pub struct AuthToken {

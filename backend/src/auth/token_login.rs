@@ -1,6 +1,6 @@
 use crate::{
     extra::into_obj::get_value,
-    scopes::user::{Claims, DecodeResponse, Info, Response, DB},
+    structures::auth_struct::{Claims, DecodeResponse, Info, Response, DB},
 };
 use actix_web::{web, HttpResponse};
 use jsonwebtoken::{decode, errors::Error, DecodingKey, TokenData, Validation};

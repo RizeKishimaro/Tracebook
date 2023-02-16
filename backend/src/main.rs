@@ -1,6 +1,6 @@
 use actix_cors::Cors;
 use actix_web::{web, App, HttpServer};
-use dotenvy::{var};
+use dotenvy::var;
 use scopes::{upload_sc::post_scope, user::user_scope};
 
 mod auth;
@@ -8,6 +8,7 @@ mod extra;
 mod extractors;
 mod fileupload;
 mod scopes;
+mod structures;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {

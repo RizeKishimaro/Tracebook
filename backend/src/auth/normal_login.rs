@@ -1,6 +1,6 @@
 use crate::{
     extra::into_obj::get_value,
-    scopes::user::{Claims, EncodeResponse, Info, Response, DB},
+    structures::auth_struct::{Claims, EncodeResponse, Info, Response, DB},
 };
 use actix_web::{web, HttpResponse};
 use chrono::{Duration, Utc};
