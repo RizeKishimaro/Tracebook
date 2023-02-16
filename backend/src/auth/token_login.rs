@@ -31,9 +31,7 @@ pub async fn token_login(
     );
             let resul = ds.execute(&sql, ses, None, false).await.unwrap();
 
-            let check = get_value(resul);
-
-            match check {
+            match get_value(resul) {
                 Ok(_) => HttpResponse::Ok().json(DecodeResponse {
                     message: "Authed".to_string(),
                     id: data.id,

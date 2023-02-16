@@ -28,9 +28,7 @@ pub async fn login(
         body.sex.clone()
     );
 
-    let resul = ds.execute(&sql, ses, None, true).await;
-
-    match resul {
+    match ds.execute(&sql, ses, None, true).await {
         Ok(resp) => {
             let check = get_value(resp);
 
