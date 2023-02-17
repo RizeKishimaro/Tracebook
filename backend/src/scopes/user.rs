@@ -14,6 +14,7 @@ pub async fn branch(
     method: web::Path<String>,
     body: web::Json<Info>,
     secret: web::Data<String>,
+    argon_data: web::Data<Vec<String>>,
 ) -> HttpResponse {
     let db = &(
         Datastore::new("file://tracebook.db").await.unwrap(),
@@ -22,7 +23,7 @@ pub async fn branch(
 
     match method.as_str() {
         "login" => login(db, body, secret).await,
-        "signup" => sign_up(db, body, secret).await,
+        "signup" => sign_up(db, body, secret, argon_data).await,
         "token-login" => token_login(db, body, secret).await,
         _ => HttpResponse::BadRequest().json(Response {
             message: "idk".to_string(),
