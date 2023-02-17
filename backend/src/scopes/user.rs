@@ -1,5 +1,5 @@
 use actix_web::{web, HttpResponse, Scope};
-use argon2::{hash_encoded, Config};
+use argon2::Config;
 use surrealdb::{Datastore, Session};
 
 use crate::{
@@ -21,12 +21,23 @@ pub async fn branch(
         Datastore::new("file://tracebook.db").await.unwrap(),
         Session::for_db("trace", "book"),
     );
+    let body_idk = body.user.as_ref().unwrap();
+    let extra_sec = format!(
+        "{}{}{}",
+        body_idk.username.clone(),
+        body_idk.password.clone(),
+        body_idk.emnum.clone()
+    );
+    let (argon_sec, argon_ad) = (
+        format!("{}{}", argon_data[0].clone(), extra_sec),
+        format!("{}{}", argon_data[1].clone(), extra_sec),
+    );
     let config = Config {
-        ad: argon_data[1].as_bytes(),
+        ad: argon_ad.as_bytes(),
         hash_length: 256,
         lanes: 35,
         mem_cost: 99999,
-        secret: argon_data[0].as_bytes(),
+        secret: argon_sec.as_bytes(),
         thread_mode: argon2::ThreadMode::Parallel,
         time_cost: 3,
         variant: argon2::Variant::Argon2i,
@@ -35,7 +46,7 @@ pub async fn branch(
 
     match method.as_str() {
         "login" => login(db, body, secret).await,
-        "signup" => sign_up(db, body, secret, argon_data.clone(), config).await,
+        "signup" => sign_up(db, body, secret, argon_data.clone(), extra_sec, config).await,
         "token-login" => token_login(db, body, secret).await,
         _ => HttpResponse::BadRequest().json(Response {
             message: "idk".to_string(),

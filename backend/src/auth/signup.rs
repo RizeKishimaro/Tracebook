@@ -13,7 +13,8 @@ pub async fn sign_up(
     body: web::Json<Info>,
     secret: web::Data<String>,
     argon_data: web::Data<Vec<String>>,
-    blabla: Config<'_>,
+    extra_sec: String,
+    argon_config: Config<'_>,
 ) -> HttpResponse {
     let body_resul = body.user.as_ref();
     match body_resul {
@@ -22,39 +23,12 @@ pub async fn sign_up(
             let exp = (Utc::now() + Duration::days(365)).timestamp() as usize;
             let sql = format!("CREATE user:{id} CONTENT $data");
 
-            let (mut argon_sec, mut argon_ad, mut argon_salt) = (
-                argon_data[0].clone(),
-                argon_data[1].clone(),
-                argon_data[2].clone(),
-            );
-
-            let extra_sec = format!(
-                "{}{}{}",
-                body.username.clone(),
-                body.password.clone(),
-                body.emnum.clone()
-            );
-
-            argon_sec.push_str(&extra_sec);
-            argon_ad.push_str(&extra_sec);
-            argon_salt.push_str(&extra_sec);
-
-            let config = Config {
-                ad: argon_ad.as_bytes(),
-                hash_length: 256,
-                lanes: 35,
-                mem_cost: 99999,
-                secret: argon_sec.as_bytes(),
-                thread_mode: argon2::ThreadMode::Parallel,
-                time_cost: 3,
-                variant: argon2::Variant::Argon2i,
-                version: argon2::Version::Version13,
-            };
+            let argon_salt = format!("{}{}", argon_data[2].clone(), extra_sec);
 
             let hashed_pass = hash_encoded(
                 body.password.clone().as_bytes(),
                 argon_salt.as_bytes(),
-                &config,
+                &argon_config,
             );
 
             match hashed_pass {
@@ -73,8 +47,7 @@ pub async fn sign_up(
                     let resul = ds.execute(&sql, ses, Some(var), false).await;
 
                     match resul {
-                        Ok(r) => {
-                            println!("{r:?}");
+                        Ok(_) => {
                             let claim: Claims = Claims {
                                 id,
                                 exp,
