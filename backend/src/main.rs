@@ -15,7 +15,7 @@ mod structures;
 async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         let cors = Cors::permissive();
-        let vars_vec = vec!["SECRET_ARGON", "AD", "SALT"];
+        let vars_vec = vec!["SECRETARGON", "AD", "SALT"];
         App::new()
             .wrap(cors)
             .app_data(web::Data::new(vec_vars(vars_vec)))

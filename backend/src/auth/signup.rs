@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use crate::structures::auth_struct::{Claims, EncodeResponse, Info, DB};
 use actix_web::{web, HttpResponse};
-use argon2::{Config, hash_encoded};
+use argon2::{hash_encoded, verify_encoded_ext, Config};
 use chrono::{Duration, Utc};
 use jsonwebtoken::{encode, EncodingKey, Header};
 use rand::random;
@@ -18,10 +18,33 @@ pub async fn sign_up(
     let id = format!("{}{}", random::<u32>(), body.username.clone());
     let exp = (Utc::now() + Duration::days(365)).timestamp() as usize;
 
-    let config = Config {ad: argon_data[1].as_bytes(), hash_length, 256, lanes: 35, mem_cost: 99999, secret: argon_data[0].as_bytes(), thread_mode: argon2::ThreadMode::Parallel, time_cost: 5, variant: argon2::Variant::Argon2i, version: argon2::Version::Version13};
+    let config = Config {
+        ad: argon_data[1].as_bytes(),
+        hash_length: 256,
+        lanes: 35,
+        mem_cost: 99999,
+        secret: argon_data[0].as_bytes(),
+        thread_mode: argon2::ThreadMode::Parallel,
+        time_cost: 5,
+        variant: argon2::Variant::Argon2i,
+        version: argon2::Version::Version13,
+    };
 
-    let hashed_pass = hash_encoded(body.password, argon_data[2].as_bytes(), &config);
-    
+    let hashed_pass = hash_encoded(
+        body.password.clone().as_bytes(),
+        argon_data[2].as_bytes(),
+        &config,
+    )
+    .unwrap();
+    let deco = verify_encoded_ext(
+        &hashed_pass,
+        body.password.clone().as_bytes(),
+        argon_data[0].as_bytes(),
+        argon_data[1].as_bytes(),
+    )
+    .unwrap();
+
+    println!("{}\n\n{}", hashed_pass, deco);
 
     let sql = format!("CREATE user:{id} CONTENT $data");
 
