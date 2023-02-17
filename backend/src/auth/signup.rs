@@ -13,6 +13,7 @@ pub async fn sign_up(
     body: web::Json<Info>,
     secret: web::Data<String>,
     argon_data: web::Data<Vec<String>>,
+    blabla: Config<'_>,
 ) -> HttpResponse {
     let body_resul = body.user.as_ref();
     match body_resul {
