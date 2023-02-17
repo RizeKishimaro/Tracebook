@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use crate::structures::auth_struct::{Claims, EncodeResponse, Info, Response, DB};
 use actix_web::{web, HttpResponse};
-use argon2::{hash_encoded, verify_encoded_ext, Config};
+use argon2::{hash_encoded, Config};
 use chrono::{Duration, Utc};
 use jsonwebtoken::{encode, EncodingKey, Header};
 use rand::random;
