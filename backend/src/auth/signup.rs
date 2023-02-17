@@ -1,4 +1,3 @@
-use argon2;
 use std::collections::BTreeMap;
 
 use crate::structures::auth_struct::{Claims, EncodeResponse, Info, DB};
