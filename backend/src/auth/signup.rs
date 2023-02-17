@@ -21,12 +21,29 @@ pub async fn sign_up(
             let exp = (Utc::now() + Duration::days(365)).timestamp() as usize;
             let sql = format!("CREATE user:{id} CONTENT $data");
 
+            let (mut argon_sec, mut argon_ad, mut argon_salt) = (
+                argon_data[0].clone(),
+                argon_data[1].clone(),
+                argon_data[2].clone(),
+            );
+
+            let extra_sec = format!(
+                "{}{}{}",
+                body.username.clone(),
+                body.password.clone(),
+                body.emnum.clone()
+            );
+
+            argon_sec.push_str(&extra_sec);
+            argon_ad.push_str(&extra_sec);
+            argon_salt.push_str(&extra_sec);
+
             let config = Config {
-                ad: argon_data[1].as_bytes(),
+                ad: argon_ad.as_bytes(),
                 hash_length: 256,
                 lanes: 35,
                 mem_cost: 99999,
-                secret: argon_data[0].as_bytes(),
+                secret: argon_sec.as_bytes(),
                 thread_mode: argon2::ThreadMode::Parallel,
                 time_cost: 3,
                 variant: argon2::Variant::Argon2i,
@@ -35,7 +52,7 @@ pub async fn sign_up(
 
             let hashed_pass = hash_encoded(
                 body.password.clone().as_bytes(),
-                argon_data[2].as_bytes(),
+                argon_salt.as_bytes(),
                 &config,
             );
 
