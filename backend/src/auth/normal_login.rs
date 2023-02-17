@@ -1,6 +1,6 @@
 use crate::{
     extra::into_obj::get_value,
-    scopes::user::{Claims, EncodeResponse, Info, Response, DB},
+    structures::auth_struct::{Claims, EncodeResponse, Info, Response, DB},
 };
 use actix_web::{web, HttpResponse};
 use chrono::{Duration, Utc};
@@ -28,9 +28,7 @@ pub async fn login(
         body.sex.clone()
     );
 
-    let resul = ds.execute(&sql, ses, None, true).await;
-
-    match resul {
+    match ds.execute(&sql, ses, None, true).await {
         Ok(resp) => {
             let check = get_value(resp);
 

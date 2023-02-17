@@ -1,6 +1,7 @@
 use actix_cors::Cors;
 use actix_web::{web, App, HttpServer};
-use dotenvy::dotenv;
+use dotenvy::var;
+use extra::config::vec_vars;
 use scopes::{upload_sc::post_scope, user::user_scope};
 
 mod auth;
@@ -8,20 +9,21 @@ mod extra;
 mod extractors;
 mod fileupload;
 mod scopes;
+mod structures;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    dotenv().expect("Error due to: .env File not found");
     HttpServer::new(|| {
         let cors = Cors::permissive();
-        let secret = dotenvy::var("SECRET").unwrap();
+        let vars_vec = vec!["SECRETARGON", "AD", "SALT"];
         App::new()
             .wrap(cors)
-            .app_data(web::Data::new(secret))
+            .app_data(web::Data::new(vec_vars(vars_vec)))
+            .app_data(web::Data::new(var("SECRET").unwrap()))
             .service(post_scope())
             .service(user_scope())
     })
-    .bind(("127.0.0.1", 8090))?
+    .bind((var("HOST").unwrap(), var("PORT").unwrap().parse().unwrap()))?
     .run()
     .await
 }
