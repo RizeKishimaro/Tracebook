@@ -62,8 +62,8 @@ pub async fn sign_up(
                     let data: BTreeMap<String, Value> = [
                         ("user_id".into(), id.clone().into()),
                         ("emnum".into(), body.emnum.clone().into()),
-                        ("username".into(), hash_pass.into()),
-                        ("password".into(), body.password.clone().into()),
+                        ("username".into(), body.username.clone().into()),
+                        ("password".into(), hash_pass.into()),
                         ("sex".into(), format!("{:?}", body.sex).into()),
                     ]
                     .into();
@@ -73,7 +73,8 @@ pub async fn sign_up(
                     let resul = ds.execute(&sql, ses, Some(var), false).await;
 
                     match resul {
-                        Ok(_) => {
+                        Ok(r) => {
+                            println!("{r:?}");
                             let claim: Claims = Claims {
                                 id,
                                 exp,
