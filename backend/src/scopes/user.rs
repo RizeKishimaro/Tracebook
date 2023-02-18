@@ -28,9 +28,10 @@ pub async fn branch(
         body_idk.password.clone(),
         body_idk.emnum.clone()
     );
-    let (argon_sec, argon_ad) = (
+    let (argon_sec, argon_ad, argon_selt) = (
         format!("{}{}", argon_data[0].clone(), extra_sec),
         format!("{}{}", argon_data[1].clone(), extra_sec),
+        format!("{}{}", argon_data[2].clone(), extra_sec),
     );
     let config = Config {
         ad: argon_ad.as_bytes(),
@@ -45,8 +46,8 @@ pub async fn branch(
     };
 
     match method.as_str() {
-        "login" => login(db, body, secret, argon_data.clone(), config, extra_sec).await,
-        "signup" => sign_up(db, body, secret, argon_data.clone(), extra_sec, config).await,
+        "login" => login(db, body, secret, argon_selt, config).await,
+        "signup" => sign_up(db, body, secret, argon_selt, config).await,
         "token-login" => token_login(db, body, secret).await,
         _ => HttpResponse::BadRequest().json(Response {
             message: "idk".to_string(),

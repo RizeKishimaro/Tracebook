@@ -12,8 +12,7 @@ pub async fn sign_up(
     (ds, ses): &DB,
     body: web::Json<Info>,
     secret: web::Data<String>,
-    argon_data: web::Data<Vec<String>>,
-    extra_sec: String,
+    argon_salt: String,
     argon_config: Config<'_>,
 ) -> HttpResponse {
     let body_resul = body.user.as_ref();
@@ -22,8 +21,6 @@ pub async fn sign_up(
             let id = format!("{}{}", random::<u32>(), body.username.clone());
             let exp = (Utc::now() + Duration::days(365)).timestamp() as usize;
             let sql = format!("CREATE user:{id} CONTENT $data");
-
-            let argon_salt = format!("{}{}", argon_data[2].clone(), extra_sec);
 
             let hashed_pass = hash_encoded(
                 body.password.clone().as_bytes(),
