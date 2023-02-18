@@ -39,9 +39,9 @@ pub async fn sign_up(
                         Ok(hash_emnum) => {
                             let data: BTreeMap<String, Value> = [
                                 ("user_id".into(), id.clone().into()),
-                                ("emnum".into(), hash_emnum.into()),
+                                ("emnum".into(), hash_emnum.clone().into()),
                                 ("username".into(), body.username.clone().into()),
-                                ("password".into(), hash_pass.into()),
+                                ("password".into(), hash_pass.clone().into()),
                                 ("sex".into(), format!("{:?}", body.sex).into()),
                             ]
                             .into();
@@ -56,10 +56,10 @@ pub async fn sign_up(
                                     let claim: Claims = Claims {
                                         id,
                                         exp,
-                                        emnum: body.emnum.clone(),
+                                        emnum: hash_emnum.clone(),
                                         sex: body.sex.clone(),
                                         username: body.username.clone(),
-                                        password: body.password.clone(),
+                                        password: hash_pass.clone(),
                                     };
 
                                     let token: String = encode(
@@ -74,8 +74,8 @@ pub async fn sign_up(
                                         token,
                                     })
                                 }
-                                Err(e) => HttpResponse::BadRequest().json(Response {
-                                    message: e.to_string(),
+                                Err(_) => HttpResponse::InternalServerError().json(Response {
+                                    message: "Something Went Wrong!".to_string(),
                                 }),
                             }
                         }

@@ -30,15 +30,18 @@ pub async fn token_login(
         data.password,
         data.sex
     );
-                    let resul = ds.execute(&sql, ses, None, false).await.unwrap();
-
-                    match get_value(resul) {
-                        Ok(_) => HttpResponse::Ok().json(DecodeResponse {
-                            message: "Authed".to_string(),
-                            id: data.id,
-                            token: token_stru,
+                    match ds.execute(&sql, ses, None, false).await {
+                        Ok(resul) => match get_value(resul) {
+                            Ok(_) => HttpResponse::Ok().json(DecodeResponse {
+                                message: "Authed".to_string(),
+                                id: data.id,
+                                token: token_idk,
+                            }),
+                            Err(e) => HttpResponse::BadRequest().json(Response { message: e }),
+                        },
+                        Err(_) => HttpResponse::InternalServerError().json(Response {
+                            message: "Something Went Wrong!".to_string(),
                         }),
-                        Err(e) => HttpResponse::BadRequest().json(Response { message: e }),
                     }
                 }
                 Err(e) => HttpResponse::BadRequest().json(Response {
