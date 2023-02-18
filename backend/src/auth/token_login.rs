@@ -10,18 +10,19 @@ pub async fn token_login(
     body: web::Json<Info>,
     secret: web::Data<String>,
 ) -> HttpResponse {
-    let token_stru = body.token.clone().unwrap();
-    let decoded: Result<TokenData<Claims>, Error> = decode(
-        &token_stru,
-        &DecodingKey::from_secret(secret.as_str().as_ref()),
-        &Validation::new(jsonwebtoken::Algorithm::HS256),
-    );
+    match body.token.clone() {
+        Some(token_idk) => {
+            let decoded: Result<TokenData<Claims>, Error> = decode(
+                &token_idk,
+                &DecodingKey::from_secret(secret.as_str().as_ref()),
+                &Validation::new(jsonwebtoken::Algorithm::HS256),
+            );
 
-    match decoded {
-        Ok(token) => {
-            let data = token.claims.clone();
+            match decoded {
+                Ok(token) => {
+                    let data = token.claims.clone();
 
-            let sql = format!(
+                    let sql = format!(
         "SELECT * FROM user:{} WHERE emnum = \"{}\" AND username = \"{}\" AND password = \"{}\" AND sex = \"{:?}\";",
         data.id,
         data.emnum,
@@ -29,19 +30,27 @@ pub async fn token_login(
         data.password,
         data.sex
     );
-            let resul = ds.execute(&sql, ses, None, false).await.unwrap();
-
-            match get_value(resul) {
-                Ok(_) => HttpResponse::Ok().json(DecodeResponse {
-                    message: "Authed".to_string(),
-                    id: data.id,
-                    token: token_stru,
+                    match ds.execute(&sql, ses, None, false).await {
+                        Ok(resul) => match get_value(resul) {
+                            Ok(_) => HttpResponse::Ok().json(DecodeResponse {
+                                message: "Authed".to_string(),
+                                id: data.id,
+                                token: token_idk,
+                            }),
+                            Err(e) => HttpResponse::BadRequest().json(Response { message: e }),
+                        },
+                        Err(_) => HttpResponse::InternalServerError().json(Response {
+                            message: "Something Went Wrong!".to_string(),
+                        }),
+                    }
+                }
+                Err(e) => HttpResponse::BadRequest().json(Response {
+                    message: e.to_string(),
                 }),
-                Err(e) => HttpResponse::BadRequest().json(Response { message: e }),
             }
         }
-        Err(e) => HttpResponse::BadRequest().json(Response {
-            message: e.to_string(),
+        None => HttpResponse::BadRequest().json(Response {
+            message: "WTF None?".to_string(),
         }),
     }
 }
