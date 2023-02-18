@@ -33,41 +33,54 @@ pub async fn sign_up(
 
             match hashed_pass {
                 Ok(hash_pass) => {
-                    let data: BTreeMap<String, Value> = [
-                        ("user_id".into(), id.clone().into()),
-                        ("emnum".into(), body.emnum.clone().into()),
-                        ("username".into(), body.username.clone().into()),
-                        ("password".into(), hash_pass.into()),
-                        ("sex".into(), format!("{:?}", body.sex).into()),
-                    ]
-                    .into();
+                    let hashed_emnum = hash_encoded(
+                        body.emnum.clone().as_bytes(),
+                        argon_salt.as_bytes(),
+                        &argon_config,
+                    );
+                    match hashed_emnum {
+                        Ok(hash_emnum) => {
+                            let data: BTreeMap<String, Value> = [
+                                ("user_id".into(), id.clone().into()),
+                                ("emnum".into(), hash_emnum.into()),
+                                ("username".into(), body.username.clone().into()),
+                                ("password".into(), hash_pass.into()),
+                                ("sex".into(), format!("{:?}", body.sex).into()),
+                            ]
+                            .into();
 
-                    let var: BTreeMap<String, Value> = [("data".into(), data.into())].into();
+                            let var: BTreeMap<String, Value> =
+                                [("data".into(), data.into())].into();
 
-                    let resul = ds.execute(&sql, ses, Some(var), false).await;
+                            let resul = ds.execute(&sql, ses, Some(var), false).await;
 
-                    match resul {
-                        Ok(_) => {
-                            let claim: Claims = Claims {
-                                id,
-                                exp,
-                                emnum: body.emnum.clone(),
-                                sex: body.sex.clone(),
-                                username: body.username.clone(),
-                                password: body.password.clone(),
-                            };
+                            match resul {
+                                Ok(_) => {
+                                    let claim: Claims = Claims {
+                                        id,
+                                        exp,
+                                        emnum: body.emnum.clone(),
+                                        sex: body.sex.clone(),
+                                        username: body.username.clone(),
+                                        password: body.password.clone(),
+                                    };
 
-                            let token: String = encode(
-                                &Header::default(),
-                                &claim,
-                                &EncodingKey::from_secret(secret.as_str().as_ref()),
-                            )
-                            .unwrap();
+                                    let token: String = encode(
+                                        &Header::default(),
+                                        &claim,
+                                        &EncodingKey::from_secret(secret.as_str().as_ref()),
+                                    )
+                                    .unwrap();
 
-                            HttpResponse::Ok().json(EncodeResponse {
-                                message: String::from("success"),
-                                token,
-                            })
+                                    HttpResponse::Ok().json(EncodeResponse {
+                                        message: String::from("success"),
+                                        token,
+                                    })
+                                }
+                                Err(e) => HttpResponse::BadRequest().json(Response {
+                                    message: e.to_string(),
+                                }),
+                            }
                         }
                         Err(e) => HttpResponse::BadRequest().json(Response {
                             message: e.to_string(),
