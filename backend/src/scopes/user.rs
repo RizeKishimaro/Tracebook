@@ -45,7 +45,7 @@ pub async fn branch(
     };
 
     match method.as_str() {
-        "login" => login(db, body, secret).await,
+        "login" => login(db, body, secret, argon_data.clone(), config, extra_sec).await,
         "signup" => sign_up(db, body, secret, argon_data.clone(), extra_sec, config).await,
         "token-login" => token_login(db, body, secret).await,
         _ => HttpResponse::BadRequest().json(Response {
