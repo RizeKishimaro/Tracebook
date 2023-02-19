@@ -28,7 +28,11 @@ pub async fn post(
     let sql = format!("CREATE post:{post_id} CONTENT $data;");
 
     let data_def = match model.post_type {
-        PostType::Global => todo!(),
+        PostType::Global => [
+            model.text,
+            Some(match_links(model.images)),
+            Some(match_links(model.videos)),
+        ],
         PostType::OnlyMe | PostType::Friends => {
             todo!()
         }
