@@ -28,8 +28,10 @@ pub async fn post(
     let sql = format!("CREATE post:{post_id} CONTENT $data;");
 
     let data_def = match model.post_type {
-        PostType::Global => [model.text, model.images, model.videos],
-        PostType::OnlyMe | PostType::Friends => todo!(),
+        PostType::Global => todo!(),
+        PostType::OnlyMe | PostType::Friends => {
+            todo!()
+        }
     };
 
     let data: BTreeMap<String, Value> = [
