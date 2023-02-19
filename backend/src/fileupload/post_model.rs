@@ -1,6 +1,7 @@
 use std::collections::BTreeMap;
 
 use actix_web::{web, HttpResponse};
+use argon2::hash_encoded;
 use jsonwebtoken::{decode, errors::Error, DecodingKey, TokenData, Validation};
 use rand::random;
 use surrealdb::sql::Value;
@@ -29,12 +30,19 @@ pub async fn post(
 
     let data_def = match model.post_type {
         PostType::Global => [
-            model.text,
-            Some(match_links(model.images)),
-            Some(match_links(model.videos)),
+            model.text.clone(),
+            Some(match_links(model.images.clone())),
+            Some(match_links(model.videos.clone())),
         ],
         PostType::OnlyMe | PostType::Friends => {
-            todo!()
+            let vec_data = encrypt_func(
+                secret,
+                vec![
+                    model.text.clone().unwrap_or("--! None".to_string()),
+                    match_links(model.images.clone()),
+                    match_links(model.videos.clone()),
+                ],
+            );
         }
     };
 
@@ -94,9 +102,23 @@ pub async fn post(
 
 pub fn match_links(links: Links) -> String {
     match links {
-        Links::None(_) => "None".to_string(),
+        Links::None(_) => "--! None".to_string(),
         Links::Links(links) => format!("{links:?}"),
     }
 }
 
-pub fn encrypt_func(secret: web::Data<String>, vec_data: Vec<String>) {}
+pub fn encrypt_func(
+    secret: web::Data<String>,
+    vec_data: Vec<String>,
+) -> Vec<Option<Result<String>>> {
+    vec_data
+        .iter()
+        .map(|d| match d.as_str() {
+            "--! None" => Some("--! None".to_string()),
+            _ => match hash_encoded(d.as_bytes(), secret.as_bytes(), &argon2::Config::default()) {
+                Ok(encry_data) => Some(encry_data),
+                Err(_) => None,
+            },
+        })
+        .collect()
+}
