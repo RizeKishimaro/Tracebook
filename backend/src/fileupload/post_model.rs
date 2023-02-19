@@ -92,9 +92,11 @@ pub async fn post(
     }
 }
 
-fn match_links(links: Links) -> String {
+pub fn match_links(links: Links) -> String {
     match links {
         Links::None(_) => "None".to_string(),
         Links::Links(links) => format!("{links:?}"),
     }
 }
+
+pub fn encrypt_func(secret: web::Data<String>, vec_data: Vec<String>) {}
