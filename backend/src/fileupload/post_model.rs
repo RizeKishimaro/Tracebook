@@ -29,21 +29,19 @@ pub async fn post(
     let sql = format!("CREATE post:{post_id} CONTENT $data;");
 
     let data_def = match model.post_type {
-        PostType::Global => [
-            model.text.clone(),
+        PostType::Global => vec![
+            Some(model.text.clone().unwrap_or("--! None".to_string())),
             Some(match_links(model.images.clone())),
             Some(match_links(model.videos.clone())),
         ],
-        PostType::OnlyMe | PostType::Friends => {
-            let vec_data = encrypt_func(
-                secret,
-                vec![
-                    model.text.clone().unwrap_or("--! None".to_string()),
-                    match_links(model.images.clone()),
-                    match_links(model.videos.clone()),
-                ],
-            );
-        }
+        PostType::OnlyMe | PostType::Friends => encrypt_func(
+            secret,
+            vec![
+                model.text.clone().unwrap_or("--! None".to_string()),
+                match_links(model.images.clone()),
+                match_links(model.videos.clone()),
+            ],
+        ),
     };
 
     let data: BTreeMap<String, Value> = [
@@ -107,10 +105,7 @@ pub fn match_links(links: Links) -> String {
     }
 }
 
-pub fn encrypt_func(
-    secret: web::Data<String>,
-    vec_data: Vec<String>,
-) -> Vec<Option<Result<String>>> {
+pub fn encrypt_func(secret: web::Data<String>, vec_data: Vec<String>) -> Vec<Option<String>> {
     vec_data
         .iter()
         .map(|d| match d.as_str() {
