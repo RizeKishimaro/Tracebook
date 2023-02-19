@@ -9,7 +9,7 @@ use crate::{
     extra::into_obj::{get_value, obj_str},
     structures::auth_struct::*,
     structures::{
-        post_enum::Links,
+        post_enum::{Links, PostType},
         post_struct::{Model, ResponsePost},
     },
 };
@@ -26,6 +26,11 @@ pub async fn post(
         &Validation::new(jsonwebtoken::Algorithm::HS256),
     );
     let sql = format!("CREATE post:{post_id} CONTENT $data;");
+
+    let data_def = match model.post_type {
+        PostType::Global => [model.text, model.images, model.videos],
+        PostType::OnlyMe | PostType::Friends => todo!(),
+    };
 
     let data: BTreeMap<String, Value> = [
         ("post_id".into(), post_id.into()),
