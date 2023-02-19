@@ -1,5 +1,6 @@
 <div align="center">
-## Tracebook
+
+# Tracebook
 
 Just a fun project to practice our skill
 
