@@ -44,6 +44,12 @@ pub async fn post(
         ),
     };
 
+    if let Err(_) = data_def {
+        return HttpResponse::InternalServerError().json(Response {
+            message: "Error in Encryption I don't fucking know!".to_string(),
+        });
+    }
+
     let data: BTreeMap<String, Value> = [
         ("post_id".into(), post_id.into()),
         ("post_type".into(), format!("{:?}", model.post_type).into()),
@@ -115,7 +121,7 @@ pub fn encrypt_func(
             "--! None" => "--! None".to_string(),
             _ => match hash_encoded(v.as_bytes(), secret.as_bytes(), &argon2::Config::default()) {
                 Ok(d) => d,
-                Err(e) => "--! Error".to_string(),
+                Err(_) => "--! Error".to_string(),
             },
         })
         .collect();
