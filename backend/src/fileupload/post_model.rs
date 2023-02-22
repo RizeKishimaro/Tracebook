@@ -49,9 +49,9 @@ pub async fn post(
             let data: BTreeMap<String, Value> = [
                 ("post_id".into(), post_id.into()),
                 ("post_type".into(), format!("{:?}", model.post_type).into()),
-                ("text".into(), model.text.clone().into()),
-                ("images".into(), match_links(model.images.clone()).into()),
-                ("videos".into(), match_links(model.videos.clone()).into()),
+                ("text".into(), data_defd[0].clone().into()),
+                ("images".into(), data_defd[1].clone().into()),
+                ("videos".into(), data_defd[2].clone().into()),
                 (
                     "user_poster".into(),
                     format!("user:{}", user_info.unwrap().claims.id).into(),
