@@ -63,6 +63,7 @@ pub async fn post(
             match ds.execute(&sql, ses, Some(var), false).await {
                 Ok(obj) => match get_value(obj) {
                     Ok(v) => {
+                        println!("{v:?}");
                         let keys = vec![
                             "post_id".to_string(),
                             "post_type".to_string(),
@@ -137,4 +138,8 @@ pub fn encrypt_func(
     } else {
         Ok(check_data)
     }
+}
+
+pub fn resp_vali(ptype: PostType, vali_data: Vec<String>) -> Vec<String> {
+    todo!()
 }
