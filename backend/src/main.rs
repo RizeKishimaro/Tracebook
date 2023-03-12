@@ -11,7 +11,7 @@ async fn main() {
     let (host, port) = (var("HOST").unwrap(), var("PORT").unwrap().parse().unwrap());
     HttpServer::new(|| {
         App::new()
-            .app_data(web::Data::new("SECRET"))
+            .app_data(web::Data::new(var("SECRET").unwrap()))
             .service(auth_scope())
     })
     .bind((host, port))
