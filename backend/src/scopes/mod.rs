@@ -1,2 +1,1 @@
-pub mod upload_sc;
-pub mod user;
+pub mod auth;

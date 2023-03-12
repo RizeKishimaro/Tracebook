@@ -1,29 +1,22 @@
-use actix_cors::Cors;
 use actix_web::{web, App, HttpServer};
 use dotenvy::var;
-use extra::config::vec_vars;
-use scopes::{upload_sc::post_scope, user::user_scope};
-
 mod auth;
 mod extra;
-mod extractors;
-mod fileupload;
 mod scopes;
 mod structures;
+use scopes::auth::auth_scope;
 
 #[actix_web::main]
-async fn main() -> std::io::Result<()> {
+async fn main() {
+    let (host, port) = (var("HOST").unwrap(), var("PORT").unwrap().parse().unwrap());
     HttpServer::new(|| {
-        let cors = Cors::permissive();
-        let vars_vec = vec!["SECRETARGON", "AD", "SALT"];
         App::new()
-            .wrap(cors)
-            .app_data(web::Data::new(vec_vars(vars_vec)))
-            .app_data(web::Data::new(var("SECRET").unwrap()))
-            .service(post_scope())
-            .service(user_scope())
+            .app_data(web::Data::new("SECRET"))
+            .service(auth_scope())
     })
-    .bind((var("HOST").unwrap(), var("PORT").unwrap().parse().unwrap()))?
+    .bind((host, port))
+    .unwrap()
     .run()
     .await
+    .unwrap();
 }

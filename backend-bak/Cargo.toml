@@ -7,14 +7,17 @@ edition = "2021"
 
 [dependencies]
 actix-cors = "0.6.4"
-actix-web = "4.3.1"
-anyhow = "1.0.69"
+actix-web = "4.3.0"
+anyhow = "1.0.68"
 chrono = { version = "0.4.23", default-features = false, features = ["clock"] }
 dotenvy = "0.15.6"
+hmac = "0.12.1"
 jsonwebtoken = "8.2.0"
 lazy_static = "1.4.0"
 rand = "0.8.5"
-rust-argon2 = "1.0.0"
-serde = { version = "1.0.154", features = ["derive"] }
-serde_json = "1.0.94"
+rust-argon2 = { version = "1.0.0", features = ["serde"] }
+serde = { version = "1.0.152", features = ["derive"] }
+serde_json = "1.0.93"
+sha2 = "0.10.6"
 surrealdb = "1.0.0-beta.8"
+tokio = { version = "1.25.0", features = ["rt"] }

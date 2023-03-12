@@ -4,12 +4,5 @@ use serde::{Deserialize, Serialize};
 pub enum Sex {
     Male,
     Female,
-    Intersex,
-    Nonbin,
-    Genderqueer,
-    Twospirit,
-    Androgynous,
-    Bigender,
-    Thirdgender,
-    Notshow,
+    Custom,
 }
