@@ -15,7 +15,7 @@ pub async fn signup(
     info: web::Json<ReqInfo>,
     secret: web::Data<String>,
 ) -> HttpResponse {
-    match info.useri.as_ref() {
+    match info.signup.as_ref() {
         Some(u_info) => {
             let name_check_sql = format!("SELECT * FROM user:{}", u_info.username);
             let exp = (Utc::now() + Duration::days(9876)).timestamp() as usize;
@@ -25,7 +25,7 @@ pub async fn signup(
             match resul {
                 Ok(v_resul) => {
                     if let Ok(_) = get_value(v_resul) {
-                        return HttpResponse::Unauthorized().json(Resp {
+                        return HttpResponse::BadRequest().json(Resp {
                             message: "Username Already exits!".to_string(),
                             value: "Just panic!".to_string(),
                         });
@@ -54,13 +54,12 @@ pub async fn signup(
                             let claims: Claims = Claims {
                                 username: u_info.username.clone(),
                                 password: hash_pass.clone(),
-                                fullname: u_info.fullname.clone(),
                                 exp,
                             };
 
                             match ds.execute(&create_user_sql, ses, Some(var), false).await {
                                 Ok(resul) => {
-                                    if let Err(_) = get_value(resul) {
+                                    if get_value(resul).is_err() {
                                         return HttpResponse::InternalServerError().json(Resp {
                                             message: "Error in User Creating!".into(),
                                             value: "Just panic!".into(),
