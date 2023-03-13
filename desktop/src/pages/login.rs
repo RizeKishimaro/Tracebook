@@ -1,34 +1,23 @@
 use eframe::{
-    egui::{CentralPanel, Layout, RichText, TextEdit, TopBottomPanel},
+    egui::{CentralPanel, Layout, RichText, TextEdit, TopBottomPanel, Window},
     epaint::Color32,
     App, CreationContext,
 };
-use serde::{Deserialize, Serialize};
+use ureq::json;
 
-type CLR = (u8, u8, u8);
+use crate::structures::LoginPage;
 
-#[derive(Default, Debug, Serialize, Deserialize)]
-pub struct LoginPage {
-    pub username: String,
-    pub password: String,
-    pub pass: bool,
-    pub namerror: String,
-    pub namerrclr: CLR,
-    pub nameerrvisi: bool,
-    pub passerrr: String,
-    pub passerrclr: CLR,
-    pub passerrvivi: bool,
-}
+const WARN: Color32 = Color32::from_rgb(255, 121, 0);
 
 impl LoginPage {
-    pub fn new(cc: &CreationContext<'_>) -> Self {
+    fn _new(_cc: CreationContext<'_>) -> Self {
         Self::default()
     }
 }
 
 impl App for LoginPage {
-    fn update(&mut self, ctx: &eframe::egui::Context, frame: &mut eframe::Frame) {
-        TopBottomPanel::top("head").show(ctx, |ui| {
+    fn update(&mut self, ctx: &eframe::egui::Context, _frame: &mut eframe::Frame) {
+        TopBottomPanel::top("bar").show(ctx, |ui| {
             ui.with_layout(
                 Layout::centered_and_justified(eframe::egui::Direction::LeftToRight),
                 |ui| {
@@ -37,7 +26,7 @@ impl App for LoginPage {
                             .text_style(eframe::egui::TextStyle::Monospace)
                             .strong()
                             .size(23.),
-                    );
+                    )
                 },
             )
         });
@@ -48,60 +37,72 @@ impl App for LoginPage {
             ui.with_layout(Layout::left_to_right(eframe::emath::Align::Min), |ui| {
                 ui.text_edit_singleline(&mut self.username);
                 if self.nameerrvisi {
-                    ui.group(|ui| {
-                        let vec_cl = &self.namerrclr;
-                        ui.colored_label(
-                            Color32::from_rgb(vec_cl.0, vec_cl.1, vec_cl.2),
-                            RichText::new(&self.namerror),
-                        );
-                    });
+                    ui.colored_label(
+                        WARN,
+                        RichText::new(&self.namerror)
+                            .text_style(eframe::egui::TextStyle::Monospace),
+                    );
                 }
             });
+
             ui.add_space(3.);
+
             ui.label("Password: ");
             ui.add_space(5.);
             ui.with_layout(Layout::left_to_right(eframe::emath::Align::Min), |ui| {
-                ui.add(TextEdit::singleline(&mut self.password).password(!self.pass));
-                if self.passerrvivi {
-                    ui.group(|ui| {
-                        let vec_cl = &self.passerrclr;
-                        ui.colored_label(
-                            Color32::from_rgb(vec_cl.0, vec_cl.1, vec_cl.2),
-                            RichText::new(&self.passerrr),
-                        );
-                    });
+                ui.add(TextEdit::singleline(&mut self.password).password(!self.passshow));
+                if ui.button("><").clicked() {
+                    self.passshow = !self.passshow;
                 }
-                let pass = ui.button("><");
 
-                if pass.clicked() {
-                    self.pass = !self.pass;
+                if self.passerrvisi {
+                    ui.colored_label(
+                        WARN,
+                        RichText::new(&self.passerrr)
+                            .text_style(eframe::egui::TextStyle::Monospace),
+                    );
                 }
             });
             ui.add_space(7.);
-            match (self.username.is_empty(), self.password.is_empty()) {
-                (false, false) => {
-                    self.passerrvivi = false;
-                    self.nameerrvisi = false;
-                    ui.button("Login");
-                }
-                (true, false) => {
-                    self.nameerrvisi = true;
-                    self.passerrvivi = false;
-                    self.namerror = "Username can't be empty!".to_string();
-                }
-                (false, true) => {
-                    self.passerrvivi = true;
-                    self.nameerrvisi = false;
-                    self.passerrr = "Password can't be empty!".to_string();
-                    self.passerrclr = (255, 121, 0);
-                }
-                _ => {
-                    self.nameerrvisi = true;
-                    self.namerror = "Username can't be empty!".to_string();
-                    self.namerrclr = (255, 121, 0);
-                    self.passerrvivi = true;
-                    self.passerrr = "Password can't be empty!".to_string();
-                    self.passerrclr = (255, 121, 0);
+            if self.username.is_empty() {
+                self.nameerrvisi = true;
+                self.namerror = "Username can't be empty!".into();
+            } else {
+                self.nameerrvisi = false;
+            }
+
+            if self.password.len() < 8 {
+                self.passerrvisi = true;
+                self.passerrr = "Password can't be less than 8 letters!".into();
+            } else {
+                self.passerrvisi = false;
+            }
+
+            if !self.passerrvisi && !self.nameerrvisi {
+                if ui.button("Login").clicked() {
+                    match ureq::post("http://localhost:8090/auth/login")
+                        .set("Content-Type", "application/json")
+                        .send_json(json!({
+                            "login": {
+                            "username": self.username.clone(),
+                            "password": self.password.clone()
+                        }
+                        })) {
+                        Ok(_) => todo!(),
+                        Err(ureq::Error::Status(400, _)) => {
+                            self.nameerrvisi = true;
+                            self.namerror = "User Not Found!".into();
+                        }
+                        Err(ureq::Error::Status(401, _)) => {
+                            self.passerrvisi = true;
+                            self.passerrr = "Password Incorrect!".into();
+                        }
+                        Err(_) => {
+                            Window::new("Error").show(ctx, |ui| {
+                                ui.label("Something went wrong please Try again later!");
+                            });
+                        }
+                    }
                 }
             }
         });

@@ -1,5 +1,5 @@
 use crate::{
-    auth::signup::signup,
+    auth::{login::login, signup::signup},
     structures::{ReqInfo, Resp, DB},
 };
 use actix_web::{web, HttpResponse, Scope};
@@ -21,6 +21,7 @@ pub async fn auth_branch(
 
     match method.as_str() {
         "signup" => signup(db, info, secret).await,
+        "login" => login(db, info, secret).await,
         _ => HttpResponse::NotFound().json(Resp {
             message: "Method not Found!".into(),
             value: "Just panic!".into(),

@@ -9,4 +9,4 @@ edition = "2021"
 confy = "0.5.1"
 eframe = "0.21.3"
 serde = { version = "1.0.154", features = ["derive"] }
-ureq = "2.6.2"
+ureq = { version = "2.6.2", features = ["json"] }

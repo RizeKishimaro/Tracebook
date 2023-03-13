@@ -1,4 +1,5 @@
 use actix_web::{web, App, HttpServer};
+use auth::ch_name::ch_name_fnc;
 use dotenvy::var;
 mod auth;
 mod extra;
@@ -12,6 +13,7 @@ async fn main() {
     HttpServer::new(|| {
         App::new()
             .app_data(web::Data::new(var("SECRET").unwrap()))
+            .route("/ch_name", web::route().to(ch_name_fnc))
             .service(auth_scope())
     })
     .bind((host, port))

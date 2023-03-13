@@ -38,7 +38,7 @@ pub struct Resp {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct UserInfo {
+pub struct Signup {
     pub username: String,
     pub password: String,
     pub fullname: String,
@@ -46,15 +46,26 @@ pub struct UserInfo {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Login {
+    pub username: String,
+    pub password: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ReqInfo {
     pub token: Option<String>,
-    pub useri: Option<UserInfo>,
+    pub signup: Option<Signup>,
+    pub login: Option<Login>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Claims {
     pub username: String,
     pub password: String,
-    pub fullname: String,
     pub exp: usize,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ChInfo {
+    pub username: String,
 }
