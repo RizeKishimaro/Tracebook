@@ -21,6 +21,7 @@ pub async fn login(
                     Ok(obj) => match obj.get("password") {
                         Some(password) => {
                             let pass = password.to_string();
+                            let pass = pass[1..pass.len() - 1].to_string();
                             match verify_encoded(&pass, u_info.password.as_bytes()) {
                                 Ok(verf) => {
                                     if verf {

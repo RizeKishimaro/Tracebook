@@ -88,14 +88,18 @@ impl App for LoginPage {
                             "password": self.password.clone()
                         }
                         })) {
-                        Ok(_) => todo!(),
+                        Ok(ewp) => {
+                            eprintln!("roeoew");
+                        }
                         Err(ureq::Error::Status(400, _)) => {
                             self.nameerrvisi = true;
                             self.namerror = "User Not Found!".into();
+                            eprintln!("asdwedqeqwqeqqqewname!");
                         }
                         Err(ureq::Error::Status(401, _)) => {
                             self.passerrvisi = true;
                             self.passerrr = "Password Incorrect!".into();
+                            eprintln!("asdadasdwqqweqwqwwpwd!");
                         }
                         Err(_) => {
                             Window::new("Error").show(ctx, |ui| {
