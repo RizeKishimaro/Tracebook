@@ -53,7 +53,7 @@ pub async fn signup(
 
                             let claims: Claims = Claims {
                                 username: u_info.username.clone(),
-                                password: hash_pass.clone(),
+                                password: u_info.password.clone(),
                                 exp,
                             };
 

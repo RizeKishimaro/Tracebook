@@ -1,13 +1,10 @@
 use eframe::{
-    egui::{CentralPanel, Layout, RichText, TextEdit, TopBottomPanel, Window},
-    epaint::Color32,
+    egui::{CentralPanel, Layout, RichText, TextEdit, TopBottomPanel},
     App, CreationContext,
 };
 use ureq::json;
 
-use crate::structures::LoginPage;
-
-const WARN: Color32 = Color32::from_rgb(255, 121, 0);
+use crate::structures::{err_win, AccInfo, AuthResp, LoginPage, WARN};
 
 impl LoginPage {
     fn _new(_cc: CreationContext<'_>) -> Self {
@@ -56,56 +53,52 @@ impl App for LoginPage {
                 }
 
                 if self.passerrvisi {
-                    ui.colored_label(
-                        WARN,
-                        RichText::new(&self.passerrr)
-                            .text_style(eframe::egui::TextStyle::Monospace),
-                    );
+                    ui.colored_label(WARN, RichText::new(&self.passerrr));
                 }
             });
             ui.add_space(7.);
-            if self.username.is_empty() {
-                self.nameerrvisi = true;
-                self.namerror = "Username can't be empty!".into();
-            } else {
-                self.nameerrvisi = false;
-            }
 
-            if self.password.len() < 8 {
-                self.passerrvisi = true;
-                self.passerrr = "Password can't be less than 8 letters!".into();
-            } else {
-                self.passerrvisi = false;
-            }
-
-            if !self.passerrvisi && !self.nameerrvisi {
-                if ui.button("Login").clicked() {
-                    match ureq::post("http://localhost:8090/auth/login")
-                        .set("Content-Type", "application/json")
-                        .send_json(json!({
-                            "login": {
-                            "username": self.username.clone(),
-                            "password": self.password.clone()
+            if ui.button("Login").clicked() {
+                match ureq::post("http://localhost:8090/auth/login")
+                    .set("Content-Type", "application/json")
+                    .send_json(json!({
+                        "login": {
+                        "username": self.username.clone(),
+                        "password": self.password.clone()
+                    }
+                    })) {
+                    Ok(resp) => {
+                        self.passerrvisi = false;
+                        self.nameerrvisi = false;
+                        match resp.into_json::<AuthResp>() {
+                            Ok(jresp) => {
+                                let acc_cfg = AccInfo {
+                                    authd: true,
+                                    token: jresp.value,
+                                };
+                                let oki = confy::store("tracebook", Some("AccInfo"), acc_cfg);
+                                if oki.is_err() {
+                                    self.errwin = true;
+                                    err_win(ctx, &mut self.errwin);
+                                }
+                            }
+                            Err(_) => {
+                                self.errwin = true;
+                                err_win(ctx, &mut self.errwin);
+                            }
                         }
-                        })) {
-                        Ok(ewp) => {
-                            eprintln!("roeoew");
-                        }
-                        Err(ureq::Error::Status(400, _)) => {
-                            self.nameerrvisi = true;
-                            self.namerror = "User Not Found!".into();
-                            eprintln!("asdwedqeqwqeqqqewname!");
-                        }
-                        Err(ureq::Error::Status(401, _)) => {
-                            self.passerrvisi = true;
-                            self.passerrr = "Password Incorrect!".into();
-                            eprintln!("asdadasdwqqweqwqwwpwd!");
-                        }
-                        Err(_) => {
-                            Window::new("Error").show(ctx, |ui| {
-                                ui.label("Something went wrong please Try again later!");
-                            });
-                        }
+                    }
+                    Err(ureq::Error::Status(400, _)) => {
+                        self.nameerrvisi = true;
+                        self.namerror = "User Not Found!".into();
+                    }
+                    Err(ureq::Error::Status(401, _)) => {
+                        self.passerrvisi = true;
+                        self.passerrr = "Password Incorrect!".into();
+                    }
+                    Err(_) => {
+                        self.errwin = true;
+                        err_win(ctx, &mut self.errwin);
                     }
                 }
             }

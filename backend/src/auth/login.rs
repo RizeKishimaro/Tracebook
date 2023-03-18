@@ -1,11 +1,11 @@
 use actix_web::{web, HttpResponse};
-use argon2::verify_encoded;
+use argon2::verify_encoded_ext;
 use chrono::{Duration, Utc};
 use jsonwebtoken::{encode, EncodingKey, Header};
 
 use crate::{
     extra::into_obj::get_value,
-    structures::{Claims, ReqInfo, Resp, DB},
+    structures::{Claims, ReqInfo, Resp, ARGON_DT, DB},
 };
 
 pub async fn login(
@@ -22,7 +22,12 @@ pub async fn login(
                         Some(password) => {
                             let pass = password.to_string();
                             let pass = pass[1..pass.len() - 1].to_string();
-                            match verify_encoded(&pass, u_info.password.as_bytes()) {
+                            match verify_encoded_ext(
+                                &pass,
+                                u_info.password.as_bytes(),
+                                ARGON_DT.0.as_bytes(),
+                                ARGON_DT.1.as_bytes(),
+                            ) {
                                 Ok(verf) => {
                                     if verf {
                                         let exp = (Utc::now() + Duration::days(9876)).timestamp()
