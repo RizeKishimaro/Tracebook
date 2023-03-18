@@ -9,10 +9,10 @@ use crate::{
 pub async fn ch_name_fnc(info: web::Json<ChInfo>) -> HttpResponse {
     let (ds, ses) = &(
         Datastore::new("file://tracebook.db").await.unwrap(),
-        Session::for_db("tarce", "book"),
+        Session::for_db("trace", "book"),
     );
 
-    let ch_sql = format!("SELECT * FROM user:{};", &info.username);
+    let ch_sql = format!("SELECT * FROM user:{}", &info.username);
 
     match ds.execute(&ch_sql, ses, None, false).await {
         Ok(resp_resul) => match get_value(resp_resul) {
@@ -20,10 +20,13 @@ pub async fn ch_name_fnc(info: web::Json<ChInfo>) -> HttpResponse {
                 message: "User Already Exit!".into(),
                 value: "Just panic!".into(),
             }),
-            Err(_) => HttpResponse::Ok().json(Resp {
-                message: "Name is Ok!".into(),
-                value: "Go ahead!".into(),
-            }),
+            Err(e) => {
+                println!("{e}");
+                HttpResponse::Ok().json(Resp {
+                    message: "Name is Ok!".into(),
+                    value: "Go ahead!".into(),
+                })
+            }
         },
         Err(_) => HttpResponse::InternalServerError().json(Resp {
             message: "Error in User Searching!".into(),

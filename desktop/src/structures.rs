@@ -1,6 +1,8 @@
+use eframe::egui::{Color32, Context, Window};
 use serde::{Deserialize, Serialize};
 
-type CLR = (u8, u8, u8);
+pub const WARN: Color32 = Color32::from_rgb(255, 121, 0);
+
 #[derive(Debug, Default, Serialize, Deserialize, PartialEq, Eq)]
 pub enum Sex {
     Male,
@@ -30,13 +32,12 @@ pub struct SignupPage {
     pub pass: bool,
     pub sex: Sex,
     pub namerror: String,
-    pub namerrclr: CLR,
     pub nameerrvisi: bool,
     pub nameava: Option<bool>,
     pub namechd: bool,
     pub passerrr: String,
-    pub passerrclr: CLR,
     pub passerrvivi: bool,
+    pub errwin: bool,
 }
 
 #[derive(Default, Debug, Serialize, Deserialize)]
@@ -48,6 +49,7 @@ pub struct LoginPage {
     pub passerrr: String,
     pub passerrvisi: bool,
     pub passshow: bool,
+    pub errwin: bool,
 }
 
 #[derive(Debug, Default, Serialize, Deserialize)]
@@ -60,4 +62,10 @@ pub struct AccInfo {
 pub struct MApp {
     pub pages: Pages,
     pub login: bool,
+}
+
+pub fn err_win(ctx: &Context, state: &mut bool) {
+    Window::new("Error").open(state).show(ctx, |ui| {
+        ui.label("Something went wrong please Try again later!");
+    });
 }

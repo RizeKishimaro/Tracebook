@@ -69,3 +69,11 @@ pub struct Claims {
 pub struct ChInfo {
     pub username: String,
 }
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct PostModel {
+    pub text: String,
+    pub images: Option<Vec<String>>,
+    pub videos: Option<Vec<String>>,
+    pub token: String,
+}

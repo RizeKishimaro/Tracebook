@@ -1,11 +1,10 @@
 use eframe::{
     egui::{CentralPanel, ComboBox, Layout, RichText, TextEdit, TopBottomPanel, Window},
-    epaint::Color32,
     App, CreationContext,
 };
 use ureq::{json, post};
 
-use crate::structures::{AccInfo, AuthResp, Sex::*, SignupPage};
+use crate::structures::{AccInfo, AuthResp, Sex::*, SignupPage, WARN};
 
 impl SignupPage {
     pub fn _new(_cc: &CreationContext<'_>) -> Self {
@@ -38,7 +37,7 @@ impl App for SignupPage {
                 if self.fullname.is_empty() {
                     self.fnamerrvisi = true;
                     ui.colored_label(
-                        Color32::from_rgb(255, 121, 0),
+                        WARN,
                         RichText::new("FullName can't be empty!")
                             .text_style(eframe::egui::TextStyle::Monospace),
                     );
@@ -64,21 +63,21 @@ impl App for SignupPage {
                         }
                         Err(ureq::Error::Status(400, _)) => {
                             self.namerror = "Username is Not Available!".into();
+                            self.nameava = Some(false);
+                            self.namechd = false;
                             self.nameerrvisi = true;
                         }
                         Err(_) => {
                             self.namerror = "Something is wrong Try again!".into();
+                            self.nameava = Some(false);
+                            self.namechd = false;
                             self.nameerrvisi = true;
                         }
                     }
                 }
 
                 if self.nameerrvisi {
-                    let vec_cl = &self.namerrclr;
-                    ui.colored_label(
-                        Color32::from_rgb(vec_cl.0, vec_cl.1, vec_cl.2),
-                        RichText::new(&self.namerror),
-                    );
+                    ui.colored_label(WARN, RichText::new(&self.namerror));
                 }
             });
             ui.add_space(3.);
@@ -87,11 +86,7 @@ impl App for SignupPage {
             ui.with_layout(Layout::left_to_right(eframe::emath::Align::Min), |ui| {
                 ui.add(TextEdit::singleline(&mut self.password).password(!self.pass));
                 if self.passerrvivi {
-                    let vec_cl = &self.passerrclr;
-                    ui.colored_label(
-                        Color32::from_rgb(vec_cl.0, vec_cl.1, vec_cl.2),
-                        RichText::new(&self.passerrr),
-                    );
+                    ui.colored_label(WARN, RichText::new(&self.passerrr));
                 }
                 let pass = ui.button("><");
 
@@ -116,7 +111,6 @@ impl App for SignupPage {
                     if self.password.len() < 8 {
                         self.passerrvivi = true;
                         self.passerrr = "Password Shouldn't be less than 8!".into();
-                        self.passerrclr = (255, 121, 0);
                     } else {
                         self.passerrvivi = false;
                         if !self.passerrvivi
@@ -136,7 +130,6 @@ impl App for SignupPage {
                                         }
                                     })) {
                                     Ok(resp) => {
-                                        eprintln!("{:?}", resp);
                                         let jresp: AuthResp = resp.into_json().unwrap();
                                         let acc_cfg = AccInfo {
                                             authd: true,
@@ -152,11 +145,14 @@ impl App for SignupPage {
                                         self.namerror = "Username is Not Available!".into();
                                     }
                                     Err(_) => {
-                                        Window::new("Error").show(ctx, |ui| {
-                                            ui.label(
-                                                "Something went wrong please Try again later!",
-                                            );
-                                        });
+                                        Window::new("Error").open(&mut self.errwin).show(
+                                            ctx,
+                                            |ui| {
+                                                ui.label(
+                                                    "Something went wrong please Try again later!",
+                                                );
+                                            },
+                                        );
                                     }
                                 }
                             }
@@ -176,10 +172,8 @@ impl App for SignupPage {
                 _ => {
                     self.nameerrvisi = true;
                     self.namerror = "Username can't be empty!".to_string();
-                    self.namerrclr = (255, 121, 0);
                     self.passerrvivi = true;
                     self.passerrr = "Password can't be empty!".to_string();
-                    self.passerrclr = (255, 121, 0);
                 }
             }
         });
