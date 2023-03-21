@@ -1,8 +1,10 @@
 use argon2::Config;
+use async_once::AsyncOnce;
 use dotenvy::var;
 use lazy_static::lazy_static;
 use serde::{Deserialize, Serialize};
 use surrealdb::{Datastore, Session};
+use tokio::runtime::Runtime;
 
 lazy_static! {
     pub static ref ARGON_DT: (String, String, String) = (
@@ -20,6 +22,14 @@ lazy_static! {
         time_cost: 3,
         variant: argon2::Variant::Argon2i,
         version: argon2::Version::Version13,
+    };
+    pub static ref VDB: AsyncOnce<DB> = {
+        AsyncOnce::new(async {
+            (
+                Datastore::new("file://tracebook.db").await.unwrap(),
+                Session::for_db("trace", "book"),
+            )
+        })
     };
 }
 pub type DB = (Datastore, Session);
