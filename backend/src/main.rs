@@ -9,7 +9,6 @@ mod extra;
 mod post;
 mod scopes;
 mod structures;
-use post::upload_post::post_upload;
 use scopes::{auth::auth_scope, post::post_scope};
 
 #[actix_web::main]
@@ -23,7 +22,6 @@ async fn main() {
         App::new()
             .app_data(web::Data::new(var("SECRET").unwrap()))
             .route("/ch_name", web::route().to(ch_name_fnc))
-            .route("/post", web::route().to(post_upload))
             .service(auth_scope())
             .service(post_scope())
     })
