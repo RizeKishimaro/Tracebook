@@ -4,7 +4,6 @@ use dotenvy::var;
 use lazy_static::lazy_static;
 use serde::{Deserialize, Serialize};
 use surrealdb::{Datastore, Session};
-use tokio::runtime::Runtime;
 
 lazy_static! {
     pub static ref ARGON_DT: (String, String, String) = (
@@ -86,4 +85,13 @@ pub struct PostModel {
     pub images: Option<Vec<String>>,
     pub videos: Option<Vec<String>>,
     pub token: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct PostResp {
+    pub username: String,
+    pub caption: String,
+    pub images: String,
+    pub upvote: u32,
+    pub dwvote: u32,
 }

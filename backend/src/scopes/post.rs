@@ -8,7 +8,7 @@ pub fn post_scope() -> Scope {
 }
 
 pub async fn post_branch(
-    mut payload: Multipart,
+    payload: Multipart,
     secret: web::Data<String>,
     method: web::Path<String>,
 ) -> HttpResponse {
