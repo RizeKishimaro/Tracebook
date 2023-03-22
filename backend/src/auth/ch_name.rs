@@ -1,16 +1,12 @@
 use actix_web::{web, HttpResponse};
-use surrealdb::{Datastore, Session};
 
 use crate::{
     extra::into_obj::get_value,
-    structures::{ChInfo, Resp},
+    structures::{ChInfo, Resp, VDB},
 };
 
 pub async fn ch_name_fnc(info: web::Json<ChInfo>) -> HttpResponse {
-    let (ds, ses) = &(
-        Datastore::new("file://tracebook.db").await.unwrap(),
-        Session::for_db("trace", "book"),
-    );
+    let (ds, ses) = VDB.get().await;
 
     let ch_sql = format!("SELECT * FROM user:{}", &info.username);
 
