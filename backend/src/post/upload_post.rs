@@ -1,11 +1,10 @@
 use std::{collections::BTreeMap, path::Path};
 
 use crate::{
-    extra::into_obj::{get_value, into_obj},
-    structures::{Claims, Resp, ARGON_DT, DB},
+    extra::into_obj::get_value,
+    structures::{Claims, PostResp, Resp, DB},
 };
-use argon2::verify_encoded_ext;
-use jsonwebtoken::{decode, DecodingKey, TokenData, Validation};
+use jsonwebtoken::{decode, DecodingKey, Validation};
 use mime::{IMAGE_JPEG, IMAGE_PNG};
 use rand::random;
 use surrealdb::sql::Value;
@@ -109,9 +108,6 @@ pub async fn post_upload(
         }
     }
 
-    println!("{token:?}");
-    println!("{}", file_data.is_empty());
-    println!("{:?}", caption);
     match token.clone().is_empty() {
         false => {
             let claim = decode::<Claims>(
@@ -126,48 +122,87 @@ pub async fn post_upload(
                     match ds.execute(&user_check_sql, ses, None, false).await {
                         Ok(resp) => match get_value(resp) {
                             Ok(obj) => match obj.get("password") {
-                                Some(pass) => {
-                                    let pass = pass.to_string();
-                                    let pass = pass[1..pass.len() - 1].to_string();
-                                    let verf = verify_encoded_ext(
-                                        &pass,
-                                        claims.claims.password.as_bytes(),
-                                        ARGON_DT.0.as_bytes(),
-                                        ARGON_DT.1.as_bytes(),
-                                    );
-
-                                    match verf {
-                                        Ok(bol) => {
-                                            if bol {
-                                                if let false = file_data.is_empty() {
-                                                    match File::create(name).await {
-                                                        Ok(mut file_cre) => {
-                                                            match file_cre
-                                                                .write_all(&file_data)
-                                                                .await
-                                                            {
-                                                                Ok(_) => {}
-                                                                Err(_) => {
-                                                                    return HttpResponse::InternalServerError().json(Resp {message: "Error in writing bytes as file!".into(), value: "Just panic!".into()});
-                                                                }
-                                                            }
-                                                        }
-                                                        Err(_) => {
-                                                            return HttpResponse::InternalServerError().json(Resp {message: "Error in File creating!".into(), value: "Just panic!".into()});
-                                                        }
-                                                    };
+                                Some(_) => {
+                                    if let false = file_data.is_empty() {
+                                        match File::create(name.clone()).await {
+                                            Ok(mut file_cre) => {
+                                                match file_cre.write_all(&file_data).await {
+                                                    Ok(_) => {}
+                                                    Err(_) => {
+                                                        return HttpResponse::InternalServerError().json(Resp {message: "Error in writing bytes as file!".into(), value: "Just panic!".into()});
+                                                    }
                                                 }
+                                            }
+                                            Err(_) => {
+                                                return HttpResponse::InternalServerError().json(
+                                                    Resp {
+                                                        message: "Error in File creating!".into(),
+                                                        value: "Just panic!".into(),
+                                                    },
+                                                );
+                                            }
+                                        };
+                                    }
 
-                                                todo!()
-                                            } else {
-                                                HttpResponse::Unauthorized().json(Resp {
-                                                    message: "Wrong Password!".into(),
-                                                    value: "Just panic!".into(),
-                                                })
+                                    let upload_post_sql =
+                                        format!("CREATE post:{} CONTENT $data;", post_id);
+
+                                    let data: BTreeMap<String, Value> = [
+                                        (
+                                            "owner".into(),
+                                            format!("user:{}", claims.claims.username.clone())
+                                                .into(),
+                                        ),
+                                        (
+                                            "caption".into(),
+                                            caption.clone().unwrap_or("".into()).into(),
+                                        ),
+                                        ("image".into(), name.clone().into()),
+                                        ("up".into(), 0.into()),
+                                        ("down".into(), 0.into()),
+                                    ]
+                                    .into();
+
+                                    let var: BTreeMap<String, Value> =
+                                        [("data".into(), data.into())].into();
+
+                                    match ds.execute(&upload_post_sql, ses, Some(var), false).await
+                                    {
+                                        Ok(resp) => {
+                                            match get_value(resp) {
+                                                Ok(_) => {
+                                                    let upd_user =
+                                                                format!("UPDATE user:{} SET posts += [post:{post_id}]", claims.claims.username.clone());
+
+                                                    match ds.execute(&upd_user, ses, None, false).await {
+                                                                Ok(resp) => {
+                                                                        match get_value(resp) {
+                                                                            Ok(_) => {
+                                                                                HttpResponse::Ok().json(PostResp {
+                                                                                    username: claims.claims.username.clone(),
+                                                                                    caption: caption.unwrap_or("".into()).clone(),
+                                                                                    images: name,
+                                                                                    upvote: 0,
+                                                                                    dwvote: 0,
+
+                                                                                })
+                                                                            },
+                                                                            Err(_) => HttpResponse::InternalServerError().json(Resp {message: "Error in Storing post to user!".into(), value: "Just panic!".into()})
+                                                                        }
+                                                                    },
+                                                                Err(_) => HttpResponse::InternalServerError().json(Resp {message: "Error in Storing post to user!".into(), value: "Just panic!".into()})
+                                                            }
+                                                }
+                                                Err(_) => {
+                                                    HttpResponse::InternalServerError().json(Resp {
+                                                        message: "Error in Storing post!".into(),
+                                                        value: "Just panic!".into(),
+                                                    })
+                                                }
                                             }
                                         }
                                         Err(_) => HttpResponse::InternalServerError().json(Resp {
-                                            message: "Error in Verfying password!".into(),
+                                            message: "Error in Storing post!".into(),
                                             value: "Just panic!".into(),
                                         }),
                                     }
@@ -179,7 +214,7 @@ pub async fn post_upload(
                             },
 
                             Err(e) => HttpResponse::InternalServerError().json(Resp {
-                                message: e.into(),
+                                message: e,
                                 value: "Just panic!".into(),
                             }),
                         },
