@@ -1,5 +1,3 @@
-#![allow(unused)]
-
 use anyhow::{anyhow, Result};
 use surrealdb::sql::Value::{Array, Object};
 use surrealdb::Response;
@@ -39,7 +37,11 @@ pub fn get_value(resul: Vec<Response>) -> Result<surrealdb::sql::Object, String>
     }
 }
 
-pub fn obj_str(obj: surrealdb::sql::Object, keys: Vec<String>) -> Vec<String> {
+pub fn get_vec_value(resul: Vec<Response>) -> Vec<surrealdb::sql::Object> {
+    into_obj(resul).unwrap().map(|resp| resp.unwrap()).collect()
+}
+
+pub fn _obj_str(obj: surrealdb::sql::Object, keys: Vec<String>) -> Vec<String> {
     keys.iter()
         .map(|key| obj.get(key).unwrap().to_string())
         .collect()
