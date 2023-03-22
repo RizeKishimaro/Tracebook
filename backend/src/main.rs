@@ -3,6 +3,7 @@ use std::path::Path;
 use actix_web::{web, App, HttpServer};
 use auth::ch_name::ch_name_fnc;
 use dotenvy::var;
+use post::fetch_post::fetch_post;
 use tokio::fs;
 mod auth;
 mod extra;
@@ -22,6 +23,7 @@ async fn main() {
         App::new()
             .app_data(web::Data::new(var("SECRET").unwrap()))
             .route("/ch_name", web::route().to(ch_name_fnc))
+            .route("/fetch_post", web::route().to(fetch_post))
             .service(auth_scope())
             .service(post_scope())
     })
