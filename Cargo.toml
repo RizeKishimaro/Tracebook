@@ -2,3 +2,9 @@
 members = ["backend", "frontend", "desktop"]
 default-members = ["backend"]
 
+[profile.release]
+strip = true
+opt-level = 3
+lto = true
+codegen-units = 1
+
