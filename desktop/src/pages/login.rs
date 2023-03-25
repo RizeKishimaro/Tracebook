@@ -76,7 +76,7 @@ impl App for LoginPage {
                                     authd: true,
                                     token: jresp.value,
                                 };
-                                let oki = confy::store("tracebook", Some("AccInfo"), acc_cfg);
+                                let oki = confy::store("Tracebook", Some("AccInfo"), acc_cfg);
                                 if oki.is_err() {
                                     self.errwin = true;
                                     err_win(ctx, &mut self.errwin);

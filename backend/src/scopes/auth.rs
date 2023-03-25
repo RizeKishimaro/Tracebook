@@ -13,6 +13,7 @@ pub async fn auth_branch(
     secret: web::Data<String>,
     info: web::Json<ReqInfo>,
 ) -> HttpResponse {
+    eprintln!("{:?} {:?}", secret, info);
     match method.as_str() {
         "signup" => signup(VDB.get().await, info, secret).await,
         "login" => login(VDB.get().await, info, secret).await,

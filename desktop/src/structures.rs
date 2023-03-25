@@ -21,6 +21,7 @@ pub struct AuthResp {
 pub struct Pages {
     pub signup: SignupPage,
     pub login: LoginPage,
+    pub nf: NfPage,
 }
 
 #[derive(Default, Debug, Serialize, Deserialize)]
@@ -52,7 +53,14 @@ pub struct LoginPage {
     pub errwin: bool,
 }
 
-#[derive(Debug, Default, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
+pub struct NfPage {
+    pub caption: String,
+    pub image: Option<String>,
+    pub type_supt: Option<bool>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
 pub struct AccInfo {
     pub authd: bool,
     pub token: String,
@@ -68,4 +76,23 @@ pub fn err_win(ctx: &Context, state: &mut bool) {
     Window::new("Error").open(state).show(ctx, |ui| {
         ui.label("Something went wrong please Try again later!");
     });
+}
+
+impl Default for AccInfo {
+    fn default() -> Self {
+        AccInfo {
+            authd: false,
+            token: "".into(),
+        }
+    }
+}
+
+impl Default for NfPage {
+    fn default() -> Self {
+        NfPage {
+            caption: String::new(),
+            image: None,
+            type_supt: None,
+        }
+    }
 }

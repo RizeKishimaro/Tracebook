@@ -30,6 +30,7 @@ pub async fn post_upload(
     let post_id = random::<u32>();
     let mut name = String::default();
     let mut caption = Some(String::default());
+    let mut file_name = String::default();
 
     if !Path::new(dir).exists() {
         match fs::create_dir(dir).await {
@@ -65,12 +66,16 @@ pub async fn post_upload(
                         value: "Just panic!".into(),
                     });
                 }
+
+                file_name = content_disposition.get_filename().unwrap().into();
+
                 name = format!(
                     "{}/{}-{}",
                     dir,
                     Uuid::new_v4(),
                     content_disposition.get_filename().unwrap()
                 );
+
                 while let Some(chunk) = field.try_next().await.unwrap() {
                     file_data.extend_from_slice(&chunk);
                 }
@@ -157,7 +162,7 @@ pub async fn post_upload(
                                             "caption".into(),
                                             caption.clone().unwrap_or("".into()).into(),
                                         ),
-                                        ("image".into(), name.clone().into()),
+                                        ("image".into(), file_name.clone().into()),
                                         ("up".into(), 0.into()),
                                         ("down".into(), 0.into()),
                                     ]
