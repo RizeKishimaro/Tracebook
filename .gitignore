@@ -3,3 +3,4 @@
 **/*.db
 /Cargo.lock
 /frontend/target
+**/user_uploaded_assets
