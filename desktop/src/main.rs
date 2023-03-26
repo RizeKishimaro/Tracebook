@@ -23,12 +23,12 @@ fn main() {
 
 impl App for MApp {
     fn update(&mut self, ctx: &eframe::egui::Context, frame: &mut eframe::Frame) {
-        let ri: AccInfo = match confy::load("Tracebook", Some("AccInfo")) {
+        let ri: AccInfo = match confy::load("tracebook", Some("AccInfo")) {
             Ok(aci) => aci,
             Err(_) => {
                 let path = BaseDirs::new().unwrap();
                 let path = path.config_dir().to_str().unwrap();
-                let path = format!("{}/Tracebook", &path[1..path.len() - 1]);
+                let path = format!("{}/tracebook", &path[1..path.len() - 1]);
                 remove_dir_all(path).unwrap();
                 AccInfo {
                     authd: false,
@@ -69,7 +69,7 @@ impl App for MApp {
                 })
             });
         } else {
-            todo!()
+            self.pages.nf.update(ctx, frame);
         }
     }
 }

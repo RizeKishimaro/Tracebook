@@ -76,15 +76,15 @@ impl App for LoginPage {
                                     authd: true,
                                     token: jresp.value,
                                 };
-                                let oki = confy::store("Tracebook", Some("AccInfo"), acc_cfg);
+                                let oki = confy::store("tracebook", Some("AccInfo"), acc_cfg);
                                 if oki.is_err() {
                                     self.errwin = true;
-                                    err_win(ctx, &mut self.errwin);
+                                    err_win(ctx, &mut self.errwin, "Something went wrong please Report to Developer and Try again!");
                                 }
                             }
                             Err(_) => {
                                 self.errwin = true;
-                                err_win(ctx, &mut self.errwin);
+                                err_win(ctx, &mut self.errwin, "Something went wrong please Report to Developer and Try again!");
                             }
                         }
                     }
@@ -98,7 +98,7 @@ impl App for LoginPage {
                     }
                     Err(_) => {
                         self.errwin = true;
-                        err_win(ctx, &mut self.errwin);
+                        err_win(ctx, &mut self.errwin, "Something went wrong please Report to Developer and Try again!");
                     }
                 }
             }

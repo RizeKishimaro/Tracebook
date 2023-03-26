@@ -135,7 +135,7 @@ impl App for SignupPage {
                                             authd: true,
                                             token: jresp.value,
                                         };
-                                        confy::store("Tracebook", Some("AccInfo"), acc_cfg)
+                                        confy::store("tracebook", Some("AccInfo"), acc_cfg)
                                             .unwrap();
                                     }
                                     Err(ureq::Error::Status(400, _)) => {

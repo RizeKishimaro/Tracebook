@@ -30,7 +30,6 @@ pub async fn post_upload(
     let post_id = random::<u32>();
     let mut name = String::default();
     let mut caption = Some(String::default());
-    let mut file_name = String::default();
 
     if !Path::new(dir).exists() {
         match fs::create_dir(dir).await {
@@ -67,11 +66,8 @@ pub async fn post_upload(
                     });
                 }
 
-                file_name = content_disposition.get_filename().unwrap().into();
-
                 name = format!(
-                    "{}/{}-{}",
-                    dir,
+                    "{}-{}",
                     Uuid::new_v4(),
                     content_disposition.get_filename().unwrap()
                 );
@@ -123,13 +119,14 @@ pub async fn post_upload(
             match claim {
                 Ok(claims) => {
                     let user_check_sql =
-                        format!("SELECT password FROM user:{};", claims.claims.username);
+                        format!("SELECT fullname FROM user:{};", claims.claims.username);
                     match ds.execute(&user_check_sql, ses, None, false).await {
                         Ok(resp) => match get_value(resp) {
-                            Ok(obj) => match obj.get("password") {
-                                Some(_) => {
+                            Ok(obj) => match obj.get("fullname") {
+                                Some(fullname) => {
                                     if let false = file_data.is_empty() {
-                                        match File::create(name.clone()).await {
+                                        match File::create(format!("{dir}/{}", name.clone())).await
+                                        {
                                             Ok(mut file_cre) => {
                                                 match file_cre.write_all(&file_data).await {
                                                     Ok(_) => {}
@@ -158,11 +155,12 @@ pub async fn post_upload(
                                             format!("user:{}", claims.claims.username.clone())
                                                 .into(),
                                         ),
+                                        ("fullname".into(), fullname.clone().to_string().into()),
                                         (
                                             "caption".into(),
                                             caption.clone().unwrap_or("".into()).into(),
                                         ),
-                                        ("image".into(), file_name.clone().into()),
+                                        ("image".into(), name.clone().into()),
                                         ("up".into(), 0.into()),
                                         ("down".into(), 0.into()),
                                     ]
@@ -184,6 +182,7 @@ pub async fn post_upload(
                                                                         match get_value(resp) {
                                                                             Ok(_) => {
                                                                                 HttpResponse::Ok().json(PostResp {
+                                                                                    fullname: fullname.clone().to_string(),
                                                                                     username: claims.claims.username.clone(),
                                                                                     caption: caption.unwrap_or("".into()).clone(),
                                                                                     images: name,

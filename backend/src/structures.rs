@@ -89,6 +89,7 @@ pub struct PostModel {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct PostResp {
+    pub fullname: String,
     pub username: String,
     pub caption: String,
     pub images: String,
