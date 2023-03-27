@@ -2,7 +2,10 @@
 name = "desktop"
 version = "0.1.0"
 edition = "2021"
-
+description = "The Desktop App For Tracebook"
+authors = ["Linus Walker", "Rize Kishimaro", "Ger Vaf", "Phyo Kyaw Than", "Kyaw Lwin Soe"]
+license = "MIT"
+readme = "The Desktop App for Tracebook"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
