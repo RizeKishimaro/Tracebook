@@ -6,7 +6,7 @@
 pkgname=backend
 pkgver=0.1.0
 pkgrel=1
-pkgdesc="The Backend Server For Tracebook"
+pkgdesc="Backend Server For Tracebook"
 license=("MIT")
 arch=("x86_64")
 makedepends=("cargo")
