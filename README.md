@@ -83,7 +83,18 @@ So you can run just ./blabla...
 
 ## Work Note
 
-When You run backend, server will start in localhost:8090<br>
+First you need to make .env file which include like this:
+
+```
+SECRET="SECRET KEY FOR JWT!"
+HOST="127.0.0.1"
+PORT="8090"
+SECRETARGON="SECRET KEY FOR ARGON ENCRYPTION"
+SALT="SALT KEY FOR ARGON ENCRYPTION"
+AD="AD KEY FOR ARGON ENCRYPTION"
+```
+
+When You run backend, server will start in 127.0.0.1:8090(localhost:8090)<br>
 Than run desktop
 
 ## Preview
