@@ -16,13 +16,10 @@ pub async fn ch_name_fnc(info: web::Json<ChInfo>) -> HttpResponse {
                 message: "User Already Exit!".into(),
                 value: "Just panic!".into(),
             }),
-            Err(e) => {
-                println!("{e}");
-                HttpResponse::Ok().json(Resp {
-                    message: "Name is Ok!".into(),
-                    value: "Go ahead!".into(),
-                })
-            }
+            Err(_) => HttpResponse::Ok().json(Resp {
+                message: "Name is Ok!".into(),
+                value: "Go ahead!".into(),
+            }),
         },
         Err(_) => HttpResponse::InternalServerError().json(Resp {
             message: "Error in User Searching!".into(),

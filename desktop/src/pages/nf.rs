@@ -125,6 +125,7 @@ impl App for NfPage {
                                         ))
                                         .size(8.),
                                     );
+                                    ui.add_space(3.);
                                     if !i.caption.is_empty() {
                                         ui.colored_label(
                                             WHITE,
@@ -157,6 +158,8 @@ impl App for NfPage {
                                             Err(_) => err_win(ctx, &mut self.err_win, "Something went wrong Please try again and report to Developer Team!")
                                         }
                                     }
+                                    ui.add_space(PADDING);
+                                    ui.add(Separator::default());
                                 }
                             }
                             Err(_) => err_win(

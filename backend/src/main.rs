@@ -1,24 +1,20 @@
-use std::{fs::File, io::Read, path::Path};
+use std::{fs::File, io::Read};
 
 use actix_web::{get, web, App, HttpResponse, HttpServer};
 use auth::ch_name::ch_name_fnc;
 use dotenvy::var;
 use post::fetch_post::fetch_post;
 use serde::{Deserialize, Serialize};
-use tokio::fs;
 mod auth;
 mod extra;
 mod post;
 mod scopes;
 mod structures;
 use scopes::{auth::auth_scope, post::post_scope};
+use structures::Resp;
 
 #[actix_web::main]
 async fn main() {
-    if !Path::new("./blablauplo").exists() {
-        fs::create_dir("./blablauplo").await.unwrap();
-    }
-
     let (host, port) = (var("HOST").unwrap(), var("PORT").unwrap().parse().unwrap());
     HttpServer::new(|| {
         App::new()
@@ -44,8 +40,17 @@ struct ByteResp {
 #[get("/images/{name}")]
 async fn get_img(name: web::Path<String>) -> HttpResponse {
     let mut bytes = Vec::new();
-    File::open(format!("./user_uploaded_assets/{}", name.as_str()))
-        .unwrap()
-        .read_to_end(&mut bytes);
-    HttpResponse::Ok().json(ByteResp { value: bytes })
+    match File::open(format!("./user_uploaded_assets/{}", name.as_str())) {
+        Ok(mut idk) => match idk.read_to_end(&mut bytes) {
+            Ok(_) => HttpResponse::Ok().json(ByteResp { value: bytes }),
+            Err(_) => HttpResponse::InternalServerError().json(Resp {
+                message: "Error in Reading File byte!".into(),
+                value: "Just panic!".into(),
+            }),
+        },
+        Err(_) => HttpResponse::InternalServerError().json(Resp {
+            message: "Error in Reading File!".into(),
+            value: "Just panic!".into(),
+        }),
+    }
 }

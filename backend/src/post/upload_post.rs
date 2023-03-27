@@ -59,7 +59,6 @@ pub async fn post_upload(
                     });
                 }
                 if !file_type.contains(filet.unwrap()) {
-                    println!("Ft err");
                     return HttpResponse::InternalServerError().json(Resp {
                         message: "File Type Not Supported!".into(),
                         value: "Just panic!".into(),
