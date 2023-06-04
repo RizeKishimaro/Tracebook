@@ -4,3 +4,4 @@
 /Cargo.lock
 /frontend/target
 **/user_uploaded_assets
+/node_modules
